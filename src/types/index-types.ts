@@ -1,4 +1,4 @@
-enum TECH_SYSTEM_ID {
+export enum TECH_SYSTEM_ID {
     VTSP1 = 1,
     VSTP1,
     VSTP2,
@@ -13,7 +13,7 @@ enum TECH_SYSTEM_ID {
     'VT-P',
 }
 
-enum TECH_SYSTEM_VAL {
+export enum TECH_SYSTEM_VAL {
     VTSP1 = 'В+Т+С+П',
     VSTP1 = 'В+С+Т+П',
     VSTP2 = 'В+С+Т+П',
@@ -28,7 +28,7 @@ enum TECH_SYSTEM_VAL {
     'VT-P' = 'ВТ+П',
 }
 
-interface CommonData {
+export interface CommonData {
     CountMonth: number;
     FirstMonth: number;
     markCar: string;
@@ -37,6 +37,6 @@ interface CommonData {
     ZoneLength: number;
     ShiftsNumber: number;
     replaceableMachinePerfomance: number;
-    TechSystem: TECH_SYSTEM_ID;
-    N: TECH_SYSTEM_VAL;
+    TechSystem: TECH_SYSTEM_VAL;
+    N: TECH_SYSTEM_ID;
 }
