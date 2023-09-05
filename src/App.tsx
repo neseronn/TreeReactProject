@@ -7,7 +7,7 @@ const { Header, Content, Footer } = Layout;
 
 function App() {
     return (
-        <Layout className='layout' style={{ height: '100vh' }}>
+        <Layout className='layout' style={{ height: '100%' }}>
             <Header
                 style={{
                     display: 'flex',
@@ -73,12 +73,13 @@ function App() {
                     </div>
                 </div>
             </Content>
-            {/* <Footer
+            <Footer
                 style={{
                     textAlign: 'center',
+                    color: '#686868',
                 }}>
                 ©2023
-            </Footer> */}
+            </Footer>
         </Layout>
     );
 }

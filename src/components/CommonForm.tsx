@@ -1,18 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
-import {
-    CommonData,
-    TECH_SYSTEM_ID,
-    TECH_SYSTEM_VAL,
-} from '../types/index-types';
+import { CommonInputData } from '../types/index-types';
+
+const techSystem = [
+    'В+Т+С+П',
+    'В+С+Т+П',
+    'В+С+Т+П',
+    'В+Т+С+П',
+    'В+Т+С',
+    'В+Т+П',
+    'ВСР+Т+П',
+    'В+Т',
+    'ВСР+Т',
+    'ВТ+СР+П',
+    'ВТ+СР',
+    'ВТ+П',
+];
 
 const CommonForm = ({ setIsVisible, isVisible }: any) => {
-    const [form] = Form.useForm<CommonData>();
+    const [form] = Form.useForm<CommonInputData>();
     const values = Form.useWatch([], form);
+    const techVal = Form.useWatch(['tech'], form);
+    const [submittable, setSubmittable] = useState(true);
+
+    useEffect(() => {
+        console.log(values);
+        // form.validateFields({ validateOnly: true }).then(
+        //     // onfulfilled
+        //     () => {
+        //         setSubmittable(true);
+        //     },
+        //     // onrejected
+        //     () => {
+        //         setSubmittable(false);
+        //     }
+        // );
+    }, [values]);
+
+    useEffect(() => {}, []);
+
+    const onFinish = (values: CommonInputData) => {
+        console.log(values);
+        // dispatch(addTechSystem(values));
+        // form.resetFields();
+    };
 
     return (
         <Form
             form={form}
+            onFinish={onFinish}
+            autoComplete='off'
             layout='vertical'
             style={{
                 width: 350,
@@ -163,6 +200,7 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
             <Form.Item
                 label='Технологическая система'
                 name='tech'
+                // name='tech'
                 rules={[
                     {
                         required: true,
@@ -171,119 +209,48 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
                 ]}
                 style={{ width: '100%' }}>
                 <Radio.Group
-                // onChange={() => {}}
-                // value={}
-                >
+                    // name='tech'
+                    // onChange={() => {}}
+                    value={techVal}>
                     <Space direction='vertical'>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VTSP1,
-                                N: TECH_SYSTEM_ID.VTSP1,
-                            }}>
-                            {TECH_SYSTEM_VAL.VTSP1}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VSTP1,
-                                N: TECH_SYSTEM_ID.VSTP1,
-                            }}>
-                            {TECH_SYSTEM_VAL.VSTP1}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VSTP2,
-                                N: TECH_SYSTEM_ID.VSTP2,
-                            }}>
-                            {TECH_SYSTEM_VAL.VSTP2}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VTSP2,
-                                N: TECH_SYSTEM_ID.VTSP2,
-                            }}>
-                            {TECH_SYSTEM_VAL.VTSP2}
-                        </Radio>
-                    </Space>
-                    <Space direction='vertical'>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VTS,
-                                N: TECH_SYSTEM_ID.VTS,
-                            }}>
-                            {TECH_SYSTEM_VAL.VTS}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VTP,
-                                N: TECH_SYSTEM_ID.VTP,
-                            }}>
-                            {TECH_SYSTEM_VAL.VTP}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VSRTP,
-                                N: TECH_SYSTEM_ID.VSRTP,
-                            }}>
-                            {TECH_SYSTEM_VAL.VSRTP}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VT,
-                                N: TECH_SYSTEM_ID.VT,
-                            }}>
-                            {TECH_SYSTEM_VAL.VT}
-                        </Radio>
-                    </Space>
-                    <Space direction='vertical'>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VSRT,
-                                N: TECH_SYSTEM_ID.VSRT,
-                            }}>
-                            {TECH_SYSTEM_VAL.VSRT}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VTSRP,
-                                N: TECH_SYSTEM_ID.VTSRP,
-                            }}>
-                            {TECH_SYSTEM_VAL.VTSRP}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL.VTSR,
-                                N: TECH_SYSTEM_ID.VTSR,
-                            }}>
-                            {TECH_SYSTEM_VAL.VTSR}
-                        </Radio>
-                        <Radio
-                            value={{
-                                TechSystem: TECH_SYSTEM_VAL['VT-P'],
-                                N: TECH_SYSTEM_ID['VT-P'],
-                            }}>
-                            {TECH_SYSTEM_VAL['VT-P']}
-                        </Radio>
-                    </Space>
-                    {/* <Space direction='vertical'>
-                        {(
-                            Object.keys(TECH_SYSTEM_VAL) as Array<
-                                keyof typeof TECH_SYSTEM_VAL
-                            >
-                        ).map((key, i) => (
-                            <Radio key={i} value={key}>
-                                {TECH_SYSTEM_VAL[key]}
+                        {techSystem.slice(0, 4).map((val, i) => (
+                            <Radio key={i} value={i}>
+                                {val}
                             </Radio>
                         ))}
-                    </Space> */}
+                    </Space>
+                    <Space direction='vertical'>
+                        {techSystem.slice(4, 8).map((val) => (
+                            <Radio
+                                key={techSystem.indexOf(val)}
+                                value={techSystem.indexOf(val)}>
+                                {val}
+                            </Radio>
+                        ))}
+                    </Space>
+                    <Space direction='vertical'>
+                        {techSystem.slice(8, 12).map((val, i) => (
+                            <Radio
+                                key={techSystem.indexOf(val)}
+                                value={techSystem.indexOf(val)}>
+                                {val}
+                            </Radio>
+                        ))}
+                    </Space>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}>
-                <Space>
+            // style={{
+            //     display: 'flex',
+            //     justifyContent: 'space-between',
+            // }}
+            >
+                <Space
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}>
                     <Button
                         type='primary'
                         htmlType='submit'
