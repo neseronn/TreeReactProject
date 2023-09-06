@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 import { CommonInputData } from '../types/index-types';
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 const techSystem = [
     'В+Т+С+П',
@@ -17,7 +19,7 @@ const techSystem = [
     'ВТ+П',
 ];
 
-const CommonForm = ({ setIsVisible, isVisible }: any) => {
+const CommonForm = ({ setIsVisible }: any) => {
     const [form] = Form.useForm<CommonInputData>();
     const values = Form.useWatch([], form);
     const techVal = Form.useWatch(['tech'], form);
@@ -25,22 +27,22 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
 
     useEffect(() => {
         console.log(values);
-        // form.validateFields({ validateOnly: true }).then(
-        //     // onfulfilled
-        //     () => {
-        //         setSubmittable(true);
-        //     },
-        //     // onrejected
-        //     () => {
-        //         setSubmittable(false);
-        //     }
-        // );
+        form.validateFields({ validateOnly: true }).then(
+            () => {
+                setSubmittable(true);
+                // ставить таблицу !disabled
+                console.log(values);
+            },
+            () => {
+                setSubmittable(false);
+                // ставить таблицу disabled
+            }
+        );
     }, [values]);
-
-    useEffect(() => {}, []);
 
     const onFinish = (values: CommonInputData) => {
         console.log(values);
+        // setIsVisible(true);
         // dispatch(addTechSystem(values));
         // form.resetFields();
     };
@@ -53,11 +55,16 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
             layout='vertical'
             style={{
                 width: 350,
+                minWidth: 350,
                 padding: 20,
                 backgroundColor: 'white',
                 margin: '0 auto',
                 borderRadius: 6,
             }}>
+            <Title level={4} style={{ textAlign: 'center' }}>
+                Введите общие данные
+            </Title>
+
             <Form.Item
                 label='Количество месяцев'
                 name='CountMonth'
@@ -200,7 +207,6 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
             <Form.Item
                 label='Технологическая система'
                 name='tech'
-                // name='tech'
                 rules={[
                     {
                         required: true,
@@ -208,10 +214,7 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
                     },
                 ]}
                 style={{ width: '100%' }}>
-                <Radio.Group
-                    // name='tech'
-                    // onChange={() => {}}
-                    value={techVal}>
+                <Radio.Group value={techVal}>
                     <Space direction='vertical'>
                         {techSystem.slice(0, 4).map((val, i) => (
                             <Radio key={i} value={i}>
@@ -240,12 +243,7 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
                 </Radio.Group>
             </Form.Item>
 
-            <Form.Item
-            // style={{
-            //     display: 'flex',
-            //     justifyContent: 'space-between',
-            // }}
-            >
+            <Form.Item>
                 <Space
                     style={{
                         display: 'flex',
@@ -255,10 +253,10 @@ const CommonForm = ({ setIsVisible, isVisible }: any) => {
                         type='primary'
                         htmlType='submit'
                         onClick={(e) => {
-                            // setIsVisible(!isVisible);
-                            console.log(values);
+                            submittable && setIsVisible(true);
+                            // console.log(values);
                         }}>
-                        Подтвердить ввод
+                        Подтвердить
                     </Button>
                     <Button htmlType='reset'>Очистить</Button>
                 </Space>

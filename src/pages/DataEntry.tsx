@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CommonForm from '../components/CommonForm';
+import AdditionalForm from '../components/AdditionalForm';
 
 const hidden = {
     transform: 'translateX(-100%)',
@@ -11,16 +12,9 @@ const DataEntry = () => {
 
     return (
         <>
-            <CommonForm setIsVisible={setIsVisible} isVisible={isVisible} />
+            <CommonForm setIsVisible={setIsVisible} />
 
-            {isVisible && (
-                <div
-                    style={{
-                        width: '100%',
-                    }}>
-                    Табличечка ЪЪЪ
-                </div>
-            )}
+            {isVisible && <AdditionalForm />}
         </>
     );
 };

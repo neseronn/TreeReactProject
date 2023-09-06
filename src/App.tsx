@@ -59,9 +59,10 @@ function App() {
                         style={{
                             // padding: 20,
                             // minHeight: 600,
-                            background: '#e1e1e1',
+                            // background: '#e1e1e1',
                             width: '100%',
                             display: 'flex',
+                            columnGap: 20,
                             transition: 'width 0.5s ease-in-out',
                             overflow: 'hidden',
                         }}>
