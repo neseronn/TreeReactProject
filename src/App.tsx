@@ -1,11 +1,46 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, Link } from 'react-router-dom';
+import { HomeOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Button } from 'antd';
 import CommonForm from './components/CommonForm';
 import DataEntry from './pages/DataEntry';
+import ResultsPage from './pages/ResultsPage';
+import { useEffect } from 'react';
 
 const { Header, Content, Footer } = Layout;
 
+const breadcrumbNames: Record<string, string> = {
+    '/results': 'Результаты расчетов',
+};
+
 function App() {
+    const location = useLocation();
+    const pathSnippets = location.pathname.split('/').filter((i) => i);
+
+    useEffect(() => {
+        // console.log(extraBreadcrumbItems);
+        // console.log(breadcrumbItems);
+    }, []);
+
+    const extraBreadcrumbItems = pathSnippets.map((_, index) => {
+        const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+        console.log(url);
+        return {
+            key: url,
+            title: <Link to={url}>{breadcrumbNames[url]}</Link>,
+        };
+    });
+
+    const breadcrumbItems = [
+        {
+            title: <HomeOutlined />,
+            key: 'Home',
+        },
+        {
+            title: <Link to='/'>Ввод данных</Link>,
+            key: 'Entry',
+        },
+    ].concat(extraBreadcrumbItems);
+
     return (
         <Layout className='layout' style={{ height: '100%' }}>
             <Header
@@ -18,7 +53,7 @@ function App() {
                 }}>
                 <Menu
                     mode='horizontal'
-                    defaultSelectedKeys={['1']}
+                    defaultSelectedKeys={['0']}
                     className='menu'
                     style={{
                         width: '100%',
@@ -26,16 +61,9 @@ function App() {
                         justifyContent: 'space-between',
                         // maxHeight: '48px',
                     }}
-                    // items={[
-                    //     { key: 0, label: 'Главная' },
-                    //     { key: 1, label: 'История' },
-                    // ]}
-                >
-                    <Menu.Item key='1'>Главная</Menu.Item>
-                    <Menu.Item key='2'>
-                        <Button>История</Button>
-                    </Menu.Item>
-                </Menu>
+                    items={[{ key: 0, label: 'Главная' }]}
+                />
+                <Button>История</Button>
             </Header>
             <Content
                 style={{
@@ -44,22 +72,19 @@ function App() {
                 <Breadcrumb
                     style={{
                         margin: '10px 0',
-                    }}>
-                    <Breadcrumb.Item>Главная</Breadcrumb.Item>
-                    <Breadcrumb.Item>Ввод данных</Breadcrumb.Item>
-                </Breadcrumb>
+                    }}
+                    items={breadcrumbItems}
+                />
                 <div
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        // height: '100%',
-                        // width: '100%',
                     }}>
                     <div
                         style={{
                             // padding: 20,
                             // minHeight: 600,
-                            // background: '#e1e1e1',
+                            background: '#e1e1e1',
                             width: '100%',
                             display: 'flex',
                             columnGap: 20,
@@ -69,7 +94,11 @@ function App() {
                         <Routes>
                             <Route path='/' element={<DataEntry />} />
                             {/* <Route path='/:id' element={<ArticlePage />} /> */}
-                            {/* <Route path='/results' element={<ArticlePage />} /> */}
+                            <Route path='/results' element={<ResultsPage />} />
+                            {/* <Route
+                                path='/results/:id'
+                                element={<ResultsPage />}
+                            /> */}
                         </Routes>
                     </div>
                 </div>

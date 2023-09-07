@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 import { CommonInputData } from '../types/index-types';
+import { setCommonData } from '../store/inputSlice';
+import { useTypedSelector } from '../store/hooks';
 import { Typography } from 'antd';
+import { AppDispatch } from '../store/store';
+import { useDispatch } from 'react-redux';
 const { Title } = Typography;
 
 const techSystem = [
@@ -20,9 +24,13 @@ const techSystem = [
 ];
 
 const CommonForm = ({ setIsVisible }: any) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const { DataCalculated } = useTypedSelector(
+        (store) => store.inputData.data
+    );
+
     const [form] = Form.useForm<CommonInputData>();
     const values = Form.useWatch([], form);
-    const techVal = Form.useWatch(['tech'], form);
     const [submittable, setSubmittable] = useState(true);
 
     useEffect(() => {
@@ -31,7 +39,9 @@ const CommonForm = ({ setIsVisible }: any) => {
             () => {
                 setSubmittable(true);
                 // ставить таблицу !disabled
-                console.log(values);
+                console.log('Всё введено, можно подтверждать');
+                dispatch(setCommonData(values));
+                console.log('Данные сохранены в redux');
             },
             () => {
                 setSubmittable(false);
@@ -41,8 +51,7 @@ const CommonForm = ({ setIsVisible }: any) => {
     }, [values]);
 
     const onFinish = (values: CommonInputData) => {
-        console.log(values);
-        // setIsVisible(true);
+        // console.log(values);
         // dispatch(addTechSystem(values));
         // form.resetFields();
     };
@@ -214,7 +223,7 @@ const CommonForm = ({ setIsVisible }: any) => {
                     },
                 ]}
                 style={{ width: '100%' }}>
-                <Radio.Group value={techVal}>
+                <Radio.Group>
                     <Space direction='vertical'>
                         {techSystem.slice(0, 4).map((val, i) => (
                             <Radio key={i} value={i}>

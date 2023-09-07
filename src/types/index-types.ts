@@ -22,5 +22,22 @@ export interface CommonInputData {
     ZoneLength: number;
     ShiftsNumber: number;
     replaceableMachinePerfomance: number;
-    N: number;
+    N: number | null;
+}
+
+export interface MonthInputData {
+    id?: number;
+    MainCountCars: number[];
+    MainCountShift: number[];
+    MainShiftProduction: number[];
+    AdditionalCountCars: number[];
+    AdditionalCountShift: number[];
+    AdditionalShiftProduction: number[];
+    TP: number;
+}
+
+export interface AllMonthInputData {
+    MainMarkCars: string[];
+    AdditionalMarkCars: string[];
+    DATA: Array<MonthInputData>;
 }

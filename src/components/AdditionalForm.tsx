@@ -12,9 +12,7 @@ const AdditionalForm = () => {
                 backgroundColor: 'white',
                 margin: '0 auto',
                 borderRadius: 6,
-            }}>
-                
-        </div>
+            }}></div>
     );
 };
 
