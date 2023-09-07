@@ -60,6 +60,7 @@ const CommonForm = ({ setIsVisible }: any) => {
         <Form
             form={form}
             onFinish={onFinish}
+            initialValues={DataCalculated}
             autoComplete='off'
             layout='vertical'
             style={{
