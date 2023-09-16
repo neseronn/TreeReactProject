@@ -179,14 +179,14 @@ const MonthsFormList = () => {
     // ) {
     //   console.log(values.MainMarkCars.splice(2, 2));
     // }
-    if (tech.length == 0){
+    if (tech.length == 0) {
       setTech(techSystem[DataCalculated.N].split('+'));
     }
     setSome(tech.length);
-    
+
     setTech(techSystem[DataCalculated.N].split('+'));
-    console.log("Я увидел изменение N")
-    console.log(some)
+    console.log('Я увидел изменение N');
+    console.log(some);
     // DataMonthInfo
     // dispatch(changeDataMonthInfo());
 
@@ -194,27 +194,35 @@ const MonthsFormList = () => {
   }, [DataCalculated.N]);
 
   useEffect(() => {
-    console.log("Системы в радио")
-    console.log(techSystem[DataCalculated.N].split('+').length)
-    console.log("Ниже some ")
-    console.log(some)
+    console.log('Системы в радио');
+    console.log(techSystem[DataCalculated.N].split('+').length);
+    console.log('Ниже some ');
+    console.log(some);
 
     // setTech(techSystem[DataCalculated.N].split('+'));
     // dispatch(changeArrLen({ isIncrease: false, len: tech.length }));
     if (some > techSystem[DataCalculated.N].split('+').length) {
-      dispatch(changeArrLen({ isIncrease: false, len: techSystem[DataCalculated.N].split('+').length }));
+      dispatch(
+        changeArrLen({
+          isIncrease: false,
+          len: techSystem[DataCalculated.N].split('+').length,
+        })
+      );
     } else if (some < techSystem[DataCalculated.N].split('+').length) {
-      dispatch(changeArrLen({ isIncrease: true, len: techSystem[DataCalculated.N].split('+').length }));
+      dispatch(
+        changeArrLen({
+          isIncrease: true,
+          len: techSystem[DataCalculated.N].split('+').length,
+        })
+      );
     }
     form.resetFields();
-
   }, [tech]);
 
-  useEffect(()=>{
-    console.log("В редаксе всех месяцов")
+  useEffect(() => {
+    console.log('В редаксе всех месяцов');
     form.resetFields();
-
-  }, [DataMonthInfo])
+  }, [DataMonthInfo]);
   // useEffect(() => {
   //   // let newValues = { ...values };
   //   // if (techSystem[DataCalculated.N].split('+').length + 1 === tech.length) {
