@@ -123,49 +123,45 @@ export const inputSlice = createSlice({
         }
 
         for (let i = 0; i < data.DATA.length; i++) {
-            try {
-            while (payload.len > data.DATA[i].MainCountCars.length) {
-              data.DATA[i].MainCountCars.push(0);
-              data.DATA[i].MainCountShift.push(0);
-              data.DATA[i].MainShiftProduction.push(0);
-              data.DATA[i].AdditionalCountCars.push(0);
-              data.DATA[i].AdditionalCountShift.push(0);
-              data.DATA[i].AdditionalShiftProduction.push(0);
+          try {
+            while (payload.len > data?.DATA[i].MainCountCars.length) {
+              data.DATA[i].MainCountCars.push('');
+              data.DATA[i].MainCountShift.push('');
+              data.DATA[i].MainShiftProduction.push('');
+              data.DATA[i].AdditionalCountCars.push('');
+              data.DATA[i].AdditionalCountShift.push('');
+              data.DATA[i].AdditionalShiftProduction.push('');
             }
-          }
-            catch{
-            }
-      }
+          } catch {}
+        }
       } else {
         // Уменьшить размер массива
         data.MainMarkCars = data.MainMarkCars.slice(0, payload.len);
         data.AdditionalMarkCars = data.AdditionalMarkCars.slice(0, payload.len);
         for (let i = 0; i < data.DATA.length; i++) {
-          try{
-          data.DATA[i].MainCountCars = data.DATA[i].MainCountCars.slice(
-            0,
-            payload.len
-          );
-          data.DATA[i].MainCountShift = data.DATA[i].MainCountShift.slice(
-            0,
-            payload.len
-          );
-          data.DATA[i].MainShiftProduction = data.DATA[
-            i
-          ].MainShiftProduction.slice(0, payload.len);
-          data.DATA[i].AdditionalCountCars = data.DATA[
-            i
-          ].AdditionalCountCars.slice(0, payload.len);
-          data.DATA[i].AdditionalCountShift = data.DATA[
-            i
-          ].AdditionalCountShift.slice(0, payload.len);
-          data.DATA[i].AdditionalShiftProduction = data.DATA[
-            i
-          ].AdditionalShiftProduction.slice(0, payload.len);
+          try {
+            data.DATA[i].MainCountCars = data.DATA[i].MainCountCars.slice(
+              0,
+              payload.len
+            );
+            data.DATA[i].MainCountShift = data.DATA[i].MainCountShift.slice(
+              0,
+              payload.len
+            );
+            data.DATA[i].MainShiftProduction = data.DATA[
+              i
+            ].MainShiftProduction.slice(0, payload.len);
+            data.DATA[i].AdditionalCountCars = data.DATA[
+              i
+            ].AdditionalCountCars.slice(0, payload.len);
+            data.DATA[i].AdditionalCountShift = data.DATA[
+              i
+            ].AdditionalCountShift.slice(0, payload.len);
+            data.DATA[i].AdditionalShiftProduction = data.DATA[
+              i
+            ].AdditionalShiftProduction.slice(0, payload.len);
+          } catch {}
         }
-        catch{
-        }
-      }
       }
     },
     // setMonthData: (state, { payload }: PayloadAction<MonthPayload>) => {

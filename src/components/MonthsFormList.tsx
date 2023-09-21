@@ -69,16 +69,6 @@ const gridStyleTop: React.CSSProperties = {
   padding: 0,
 };
 
-// const gridStyleTop3: React.CSSProperties = {
-//   width: '10%',
-//   display: 'flex',
-//   alignItems: 'center',
-//   justifyContent: 'center',
-//   textAlign: 'center',
-//   height: 40,
-//   padding: 0,
-// };
-
 const flexCenter = {
   display: 'flex',
   alignItems: 'center',
@@ -142,22 +132,16 @@ const MonthsFormList = () => {
   // };
 
   useEffect(() => {
-    // if (values.DATA) dispatch(setDATA(values.DATA));
     form.resetFields();
-    // form.setFields()
 
     console.log('fields reset');
-    // console.log(DataMonthInfo.DATA);
   }, [tech.length]);
-
-  const formRef = useRef(form); // Создайте ссылку на форму
 
   useEffect(() => {
     setMonthNames(
       calcMonthNames(DataCalculated.FirstMonth, DataCalculated.CountMonth)
     );
     // form.resetFields();
-    // Вызываем remove для первого поля в списке
 
     console.log('DataCalculated.CountMonth: reset fields');
   }, [DataCalculated.CountMonth, DataCalculated.FirstMonth]);
@@ -220,148 +204,8 @@ const MonthsFormList = () => {
   }, [tech]);
 
   useEffect(() => {
-    console.log('В редаксе всех месяцов');
     form.resetFields();
   }, [DataMonthInfo]);
-  // useEffect(() => {
-  //   // let newValues = { ...values };
-  //   // if (techSystem[DataCalculated.N].split('+').length + 1 === tech.length) {
-  //   //   console.log('Я на 1 меньшеы');
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(newValues.AdditionalMarkCars);
-  //   //   console.log(newValues.DATA);
-  //   //   console.log('выще то что в форме');
-
-  //   //   console.log(tech.length);
-
-  //   //   console.log(techSystem[DataCalculated.N].split('+').length);
-  //   //   newValues.MainMarkCars.length = newValues.MainMarkCars.length - 1;
-  //   //   newValues.AdditionalMarkCars.length = newValues.AdditionalMarkCars.length - 1;
-  //   //   for (let i = 0; i < newValues.DATA.length; i++) {
-  //   //     newValues.DATA[i].MainCountCars.length =
-  //   //       newValues.DATA[i].MainCountCars.length - 1;
-  //   //     newValues.DATA[i].MainCountShift.length =
-  //   //       newValues.DATA[i].MainCountShift.length - 1;
-  //   //     newValues.DATA[i].MainShiftProduction.length =
-  //   //       newValues.DATA[i].MainShiftProduction.length - 1;
-
-  //   //     newValues.DATA[i].AdditionalCountCars.length =
-  //   //       newValues.DATA[i].AdditionalCountCars.length - 1;
-  //   //     newValues.DATA[i].AdditionalCountShift.length =
-  //   //       newValues.DATA[i].AdditionalCountShift.length - 1;
-  //   //     newValues.DATA[i].AdditionalShiftProduction.length =
-  //   //       newValues.DATA[i].AdditionalShiftProduction.length - 1;
-  //   //   }
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(newValues.AdditionalMarkCars);
-  //   //   console.log(newValues.DATA);
-
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   setTech(techSystem[DataCalculated.N].split('+'));
-  //   //   dispatch(changeDataMonthInfo(newValues));
-  //   // } else if (
-  //   //   techSystem[DataCalculated.N].split('+').length + 2 ===
-  //   //   tech.length
-  //   // ) {
-  //   //   console.log('Я на 2 меньшеы');
-
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(newValues.AdditionalMarkCars);
-  //   //   console.log(newValues.DATA);
-  //   //   console.log('выще то что в форме');
-
-  //   //   console.log(tech.length);
-
-  //   //   console.log(techSystem[DataCalculated.N].split('+').length);
-  //   //   newValues.MainMarkCars.length = newValues.MainMarkCars.length - 2;
-  //   //   newValues.AdditionalMarkCars.length = newValues.AdditionalMarkCars.length - 2;
-  //   //   for (let i = 0; i < newValues.DATA.length; i++) {
-  //   //     newValues.DATA[i].MainCountCars.length =
-  //   //       newValues.DATA[i].MainCountCars.length - 2;
-  //   //     newValues.DATA[i].MainCountShift.length =
-  //   //       newValues.DATA[i].MainCountShift.length - 2;
-  //   //     newValues.DATA[i].MainShiftProduction.length =
-  //   //       newValues.DATA[i].MainShiftProduction.length - 2;
-
-  //   //     newValues.DATA[i].AdditionalCountCars.length =
-  //   //       newValues.DATA[i].AdditionalCountCars.length - 2;
-  //   //     newValues.DATA[i].AdditionalCountShift.length =
-  //   //       newValues.DATA[i].AdditionalCountShift.length - 2;
-  //   //     newValues.DATA[i].AdditionalShiftProduction.length =
-  //   //       newValues.DATA[i].AdditionalShiftProduction.length - 2;
-  //   //   }
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(newValues.AdditionalMarkCars);
-  //   //   console.log(newValues.DATA);
-
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   dispatch(changeDataMonthInfo(newValues));
-  //   //   setTech(techSystem[DataCalculated.N].split('+'));
-  //   // } else if (
-  //   //   techSystem[DataCalculated.N].split('+').length - 2 ===
-  //   //   tech.length
-  //   // ) {
-  //   //   console.log('Я на 2 больше');
-
-  //   //   newValues.MainMarkCars.splice(2, 0, '', '');
-  //   //   newValues.AdditionalMarkCars.splice(2, 0, '', '');
-  //   //   for (let i = 0; i < newValues.DATA.length; i++) {
-  //   //     newValues.DATA[i].MainCountCars.splice(2, 0, 0, 0);
-  //   //     newValues.DATA[i].MainCountShift.splice(2, 0, 0, 0);
-  //   //     newValues.DATA[i].MainShiftProduction.splice(2, 0, 0, 0);
-  //   //     newValues.DATA[i].AdditionalCountCars.splice(2, 0, 0, 0);
-  //   //     newValues.DATA[i].AdditionalCountShift.splice(2, 0, 0, 0);
-  //   //     newValues.DATA[i].AdditionalShiftProduction.splice(2, 0, 0, 0);
-  //   //   }
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(newValues.AdditionalMarkCars);
-  //   //   console.log(newValues.DATA);
-
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(tech.length);
-
-  //   //   console.log(techSystem[DataCalculated.N].split('+').length);
-  //   //   dispatch(changeDataMonthInfo(newValues));
-  //   //   setTech(techSystem[DataCalculated.N].split('+'));
-  //   // } else if (
-  //   //   techSystem[DataCalculated.N].split('+').length - 1 ===
-  //   //   tech.length
-  //   // ) {
-  //   //   console.log('Я на 1 больше');
-
-  //   //   newValues.MainMarkCars.splice(tech.length, 0, '');
-  //   //   newValues.AdditionalMarkCars.splice(tech.length, 0, '');
-  //   //   for (let i = 0; i < newValues.DATA.length; i++) {
-  //   //     newValues.DATA[i].MainCountCars.splice(tech.length, 0, 0);
-  //   //     newValues.DATA[i].MainCountShift.splice(tech.length, 0, 0);
-  //   //     newValues.DATA[i].MainShiftProduction.splice(tech.length, 0, 0);
-  //   //     newValues.DATA[i].AdditionalCountCars.splice(tech.length, 0, 0);
-  //   //     newValues.DATA[i].AdditionalCountShift.splice(tech.length, 0, 0);
-  //   //     newValues.DATA[i].AdditionalShiftProduction.splice(tech.length, 0, 0);
-  //   //   }
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(newValues.AdditionalMarkCars);
-  //   //   console.log(newValues.DATA);
-
-  //   //   console.log(newValues.MainMarkCars);
-  //   //   console.log(tech.length);
-
-  //   //   console.log(techSystem[DataCalculated.N].split('+').length);
-  //   //   dispatch(changeDataMonthInfo(newValues));
-  //   //   setTech(techSystem[DataCalculated.N].split('+'));
-  //   // } else {
-  //   //   console.log('Одинаковые');
-  //   //   console.log(tech.length);
-  //   //   console.log(techSystem[DataCalculated.N].split('+').length);
-  //   //   setTech(techSystem[DataCalculated.N].split('+'));
-  //   //   console.log(tech.length);
-  //   // }
-
-  //   // dispatch(changeDataMonthInfo(newValues));
-  //   // dispatch(changeDataMonthInfo());
-  //   setTech(techSystem[DataCalculated.N].split('+'));
-  //   form.resetFields();
-  // }, [DataCalculated.N]);
 
   // Обработчик изменения значений в форме
   const handleFormValuesChange = (
@@ -554,7 +398,6 @@ const MonthsFormList = () => {
                       <Form.Item
                         style={{ flex: '1 0 20%', marginBottom: '0px' }}
                         key={i}
-                        // preserve={false}
                         name={[field.name]}
                         rules={[
                           {
@@ -597,6 +440,11 @@ const MonthsFormList = () => {
                         rules={[
                           {
                             required: true,
+                            message: '',
+                          },
+                          {
+                            required: true,
+                            len: 0,
                             message: '',
                           },
                         ]}>

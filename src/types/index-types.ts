@@ -39,12 +39,12 @@ export interface ChangedCommonInputData {
 
 export interface MonthInputData {
   id?: number;
-  MainCountCars: number[];
-  MainCountShift: number[];
-  MainShiftProduction: number[];
-  AdditionalCountCars: number[];
-  AdditionalCountShift: number[];
-  AdditionalShiftProduction: number[];
+  MainCountCars: Array<number | ''>;
+  MainCountShift: Array<number | ''>;
+  MainShiftProduction: Array<number | ''>;
+  AdditionalCountCars: Array<number | ''>;
+  AdditionalCountShift: Array<number | ''>;
+  AdditionalShiftProduction: Array<number | ''>;
   TP: number;
 }
 

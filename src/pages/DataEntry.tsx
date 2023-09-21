@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import CommonForm from '../components/CommonForm';
-import AdditionalForm from '../components/AdditionalForm';
 import { useTypedSelector } from '../store/hooks';
 import MonthsFormList from '../components/MonthsFormList';
 import { setIsVisible } from '../store/inputSlice';
