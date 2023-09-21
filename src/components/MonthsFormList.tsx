@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
   Table,
@@ -125,16 +126,16 @@ const MonthsFormList = () => {
   //     }
   //   );
   // }, [values]);
-
-  // const onFinish = (values: AllMonthInputData) => {
-  //   console.log(values);
-  //   // form.resetFields();
-  // };
+  const navigate = useNavigate();
+  const onFinish = (values: AllMonthInputData) => {
+    console.log('FINISH');
+    navigate('/results');
+  };
 
   useEffect(() => {
     form.resetFields();
 
-    console.log('fields reset');
+    console.log('fields reset (bc tech.length changed)');
   }, [tech.length]);
 
   useEffect(() => {
@@ -146,45 +147,34 @@ const MonthsFormList = () => {
     console.log('DataCalculated.CountMonth: reset fields');
   }, [DataCalculated.CountMonth, DataCalculated.FirstMonth]);
 
-  useEffect(() => {
-    if (DataCalculated.CountMonth > values?.DATA.length) {
-      console.log('DataCalculated.CountMonth: delete last in redux');
-      // dispatch(removeLastMonthData());
-    }
-  }, [DataCalculated.CountMonth]);
+  // useEffect(() => {
+  //   if (DataCalculated.CountMonth > values?.DATA.length) {
+  //     console.log('DataCalculated.CountMonth: delete last in redux');
+  //     // dispatch(removeLastMonthData());
+  //   }
+  // }, [DataCalculated.CountMonth]);
 
   useEffect(() => {
-    // if (techSystem[DataCalculated.N].split('+').length + 1 === tech.length) {
-    //   (values.MainMarkCars.splice(3, 1));
-    //   console.log(values.MainMarkCars.splice(3, 1));
-    // } else if (
-    //   techSystem[DataCalculated.N].split('+').length + 2 ===
-    //   tech.length
-    // ) {
-    //   console.log(values.MainMarkCars.splice(2, 2));
-    // }
     if (tech.length == 0) {
       setTech(techSystem[DataCalculated.N].split('+'));
     }
+    // Ставим предыдущую длину
     setSome(tech.length);
-
+    // Обновляем на текущую (текущий массив с новой длиной)
     setTech(techSystem[DataCalculated.N].split('+'));
     console.log('Я увидел изменение N');
     console.log(some);
-    // DataMonthInfo
-    // dispatch(changeDataMonthInfo());
 
-    form.resetFields();
+    // form.resetFields();
   }, [DataCalculated.N]);
 
   useEffect(() => {
-    console.log('Системы в радио');
-    console.log(techSystem[DataCalculated.N].split('+').length);
-    console.log('Ниже some ');
-    console.log(some);
+    console.log(
+      'Выбранная система (в радио ):' +
+        techSystem[DataCalculated.N].split('+').length
+    );
+    console.log('some (предыдущая длина массива букв): ' + some);
 
-    // setTech(techSystem[DataCalculated.N].split('+'));
-    // dispatch(changeArrLen({ isIncrease: false, len: tech.length }));
     if (some > techSystem[DataCalculated.N].split('+').length) {
       dispatch(
         changeArrLen({
@@ -200,12 +190,12 @@ const MonthsFormList = () => {
         })
       );
     }
-    form.resetFields();
-  }, [tech]);
+    // form.resetFields();
+  }, [tech.length]);
 
   useEffect(() => {
     form.resetFields();
-  }, [DataMonthInfo]);
+  }, [DataMonthInfo.MainMarkCars.length]);
 
   // Обработчик изменения значений в форме
   const handleFormValuesChange = (
@@ -235,94 +225,6 @@ const MonthsFormList = () => {
         margin: '0 auto',
         borderRadius: 6,
       }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          // columnGap: '15rem',
-          // backgroundColor: '#f2f2f2',
-        }}>
-        <Title level={3} style={{ textAlign: 'center' }}>
-          Введите данные по машинам
-        </Title>
-        {/* Поменять на submit button, onsubmit - запрос на вычисления и переход на след страницу */}
-        <Link to={'/results'}>
-          <Button>Рассчитать</Button>
-        </Link>
-      </div>
-
-      <Affix offsetTop={16}>
-        <Card
-          size='small'
-          style={{
-            overflow: 'hidden',
-            padding: 0,
-            backgroundColor: '#fafafa',
-            boxSizing: 'border-box',
-          }}>
-          <div style={{ display: 'flex', width: '100%' }}>
-            <Card.Grid
-              hoverable={false}
-              style={{
-                ...gridStyleTop,
-                flexBasis: '50%',
-              }}>
-              <Typography.Text strong>Основные</Typography.Text>
-            </Card.Grid>
-
-            <Card.Grid
-              hoverable={false}
-              style={{
-                ...gridStyleTop,
-                flexBasis: '50%',
-              }}>
-              <Typography.Text strong>Дополнительные</Typography.Text>
-            </Card.Grid>
-          </div>
-
-          <Card.Grid
-            hoverable={false}
-            style={{
-              ...gridStyleTop,
-              flexBasis: '10%',
-              flexGrow: 1,
-            }}>
-            <Typography.Text strong>Параметры</Typography.Text>
-          </Card.Grid>
-          {tech.map((car, index) => (
-            <Card.Grid
-              key={index}
-              hoverable={false}
-              style={{
-                ...gridStyleTop,
-                flexBasis: '10%',
-                flexGrow: 1,
-              }}>
-              <Typography.Text strong>{car}</Typography.Text>
-            </Card.Grid>
-          ))}
-
-          <Card.Grid
-            hoverable={false}
-            style={{ ...gridStyleTop, flexBasis: '10%', flexGrow: 1 }}>
-            <Typography.Text strong>Параметры</Typography.Text>
-          </Card.Grid>
-          {tech.map((car, index) => (
-            <Card.Grid
-              key={index}
-              hoverable={false}
-              style={{
-                ...gridStyleTop,
-                flexBasis: '10%',
-                flexGrow: 1,
-              }}>
-              <Typography.Text strong>{car}</Typography.Text>
-            </Card.Grid>
-          ))}
-        </Card>
-      </Affix>
-
       <Form
         onValuesChange={handleFormValuesChange}
         labelCol={
@@ -341,27 +243,9 @@ const MonthsFormList = () => {
         }
         form={form}
         name='AllMonthInputData'
-        // onFinish={onFinish}
-        // style={{ maxWidth: 900 }}
+        onFinish={onFinish}
         labelWrap
-        preserve={false}
         autoComplete='off'
-        // initialValues={
-        //   DataMonthInfo.DATA
-        //     ? DataMonthInfo
-        //     : {
-        //         MainMarkCars: Array(tech.length).fill(''),
-        //         AdditionalMarkCars: Array(tech.length).fill(''),
-        //         DATA: Array(DataCalculated.CountMonth).fill({
-        //           // MainCountCars: Array(tech.length).fill(null),
-        //           MainCountShift: Array(tech.length).fill(null),
-        //           MainShiftProduction: Array(tech.length).fill(null),
-        //           AdditionalCountCars: Array(tech.length).fill(null),
-        //           AdditionalCountShift: Array(tech.length).fill(null),
-        //           AdditionalShiftProduction: Array(tech.length).fill(null),
-        //         }),
-        //       }
-        // }
         // initialValues={
         //   DataMonthInfo?.DATA?.length > 0
         //     ? DataMonthInfo
@@ -375,6 +259,94 @@ const MonthsFormList = () => {
         //       }
         // }
         style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            // columnGap: '15rem',
+            // backgroundColor: '#f2f2f2',
+          }}>
+          <Title level={3} style={{ textAlign: 'center' }}>
+            Введите данные по машинам
+          </Title>
+          <Button type='primary' htmlType='submit'>
+            Рассчитать
+          </Button>
+          {/* </Link> */}
+        </div>
+
+        <Affix offsetTop={16}>
+          <Card
+            size='small'
+            style={{
+              overflow: 'hidden',
+              padding: 0,
+              backgroundColor: '#fafafa',
+              boxSizing: 'border-box',
+            }}>
+            <div style={{ display: 'flex', width: '100%' }}>
+              <Card.Grid
+                hoverable={false}
+                style={{
+                  ...gridStyleTop,
+                  flexBasis: '50%',
+                }}>
+                <Typography.Text strong>Основные</Typography.Text>
+              </Card.Grid>
+
+              <Card.Grid
+                hoverable={false}
+                style={{
+                  ...gridStyleTop,
+                  flexBasis: '50%',
+                }}>
+                <Typography.Text strong>Дополнительные</Typography.Text>
+              </Card.Grid>
+            </div>
+
+            <Card.Grid
+              hoverable={false}
+              style={{
+                ...gridStyleTop,
+                flexBasis: '10%',
+                flexGrow: 1,
+              }}>
+              <Typography.Text strong>Параметры</Typography.Text>
+            </Card.Grid>
+            {tech.map((car, index) => (
+              <Card.Grid
+                key={index}
+                hoverable={false}
+                style={{
+                  ...gridStyleTop,
+                  flexBasis: '10%',
+                  flexGrow: 1,
+                }}>
+                <Typography.Text strong>{car}</Typography.Text>
+              </Card.Grid>
+            ))}
+
+            <Card.Grid
+              hoverable={false}
+              style={{ ...gridStyleTop, flexBasis: '10%', flexGrow: 1 }}>
+              <Typography.Text strong>Параметры</Typography.Text>
+            </Card.Grid>
+            {tech.map((car, index) => (
+              <Card.Grid
+                key={index}
+                hoverable={false}
+                style={{
+                  ...gridStyleTop,
+                  flexBasis: '10%',
+                  flexGrow: 1,
+                }}>
+                <Typography.Text strong>{car}</Typography.Text>
+              </Card.Grid>
+            ))}
+          </Card>
+        </Affix>
+
         <Card size='small' style={{ padding: '0', overflow: 'hidden' }}>
           <Card.Grid
             hoverable={false}
@@ -397,7 +369,7 @@ const MonthsFormList = () => {
                     {fields.map((field, i) => (
                       <Form.Item
                         style={{ flex: '1 0 20%', marginBottom: '0px' }}
-                        key={i}
+                        key={field.key + i}
                         name={[field.name]}
                         rules={[
                           {
@@ -442,11 +414,6 @@ const MonthsFormList = () => {
                             required: true,
                             message: '',
                           },
-                          {
-                            required: true,
-                            len: 0,
-                            message: '',
-                          },
                         ]}>
                         <Input placeholder={`${tech[field.key]}`} />
                       </Form.Item>
@@ -473,6 +440,7 @@ const MonthsFormList = () => {
               style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
               {fields.map((field, i) => (
                 <Card
+                  key={field.key}
                   size='default'
                   style={{ overflow: 'hidden' }}
                   title={
