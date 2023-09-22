@@ -1,0 +1,74 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  MonthPairData,
+  ProductionVolume,
+  ResultData,
+} from '../types/result-types';
+import { calculateData } from './asyncActions.ts/inputData';
+
+interface ResultState {
+  result: ResultData;
+  isCalculated: boolean;
+  isSuccess: boolean;
+  isLoading: boolean;
+  error: null | string | any;
+}
+
+const initialState: ResultState = {
+  result: {
+    production_volume: [],
+    about_additional_work_cars: [],
+  },
+  isCalculated: false,
+  isSuccess: false,
+  isLoading: false,
+  error: null,
+};
+
+export const resultSlice = createSlice({
+  name: 'resultData',
+  initialState,
+  reducers: {
+    // setSmth: (state, { payload }: PayloadAction<types>) => {
+    //     state.smth = payload;
+    // },
+    setSuccess: (state, { payload }: PayloadAction<boolean>) => {
+      state.isSuccess = false;
+    },
+    setCalculated: (state, { payload }: PayloadAction<boolean>) => {
+      state.isCalculated = false;
+    },
+  },
+  extraReducers(builder) {
+    builder.addCase(
+      calculateData.fulfilled,
+      (state, { payload }: PayloadAction<ResultData>) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isCalculated = true;
+        state.result = payload;
+      }
+    );
+    builder.addCase(calculateData.pending, (state) => {
+      state.isLoading = true;
+      state.isSuccess = false;
+      state.isCalculated = false;
+    });
+    builder.addCase(calculateData.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isCalculated = false;
+      // state.error = payload;
+      if (action.payload) {
+        // Здесь мы имеем доступ к ошибкам, переданным в `createAsyncThunk()`
+        state.error = action.payload;
+      } else {
+        state.error = action.error.message;
+      }
+    });
+  },
+});
+
+export const { setSuccess, setCalculated } = resultSlice.actions;
+
+export default resultSlice.reducer;

@@ -1,11 +1,12 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { configureStore, Action } from '@reduxjs/toolkit';
 import inputSlice from './inputSlice';
-// import counterReducer from './counterSlice';
+import resultSlice from './resultSlice';
 
 export const store = configureStore({
-    reducer: {
-        inputData: inputSlice,
-    },
+  reducer: {
+    inputData: inputSlice,
+    resultData: resultSlice,
+  },
 });
 
 export type AppDispatch = typeof store.dispatch;

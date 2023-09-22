@@ -59,3 +59,8 @@ export interface ChangedAllMonthInputData {
   AdditionalMarkCars?: string[];
   DATA?: MonthInputData[];
 }
+
+export interface inputData {
+  DataCalculated: CommonInputData;
+  DataMonthInfo: AllMonthInputData;
+}

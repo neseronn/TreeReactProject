@@ -29,7 +29,6 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
 
   const [form] = Form.useForm<CommonInputData>();
   const values = Form.useWatch([], form);
-  // const countMonth = Form.useWatch(['CountMonth'], form);
   const [submittable, setSubmittable] = useState(true);
 
   // Обработчик изменения значений в форме
@@ -46,16 +45,13 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
     form.setFieldValue('CountMonth', DataCalculated.CountMonth);
   }, [DataCalculated.CountMonth]);
 
-  // Валидация, сохранение данных и открытие второй формы
+  // Валидация, открытие второй формы
   useEffect(() => {
     console.log(values);
-    // dispatch(setCommonData(values));
     form.validateFields({ validateOnly: true }).then(
       () => {
         setSubmittable(true);
-        // ставить таблицу !disabled
         console.log('Всё введено, можно подтверждать');
-
         // console.log('Данные сохранены в redux');
       },
       () => {
@@ -69,11 +65,6 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
     console.log('Данные при первом рендере:');
     console.log(values);
   }, []);
-
-  // useEffect(() => {
-  //   if (DataCalculated?.CountMonth)
-  //     form.setFieldValue('CountMonth', DataCalculated.CountMonth);
-  // }, [DataCalculated?.CountMonth]);
 
   const onFinish = (values: CommonInputData) => {
     // console.log(values);

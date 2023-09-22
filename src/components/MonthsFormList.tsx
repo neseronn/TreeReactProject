@@ -1,13 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
-  Table,
   Input,
   Form,
-  Row,
-  Col,
   Typography,
   Card,
   Space,
@@ -19,9 +15,6 @@ import { useTypedSelector } from '../store/hooks';
 import {
   AllMonthInputData,
   ChangedAllMonthInputData,
-  ChangedCommonInputData,
-  CommonInputData,
-  MonthInputData,
 } from '../types/index-types';
 import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
@@ -29,11 +22,9 @@ import {
   changeArrLen,
   changeCommonData,
   changeDataMonthInfo,
-  removeLastMonthData,
-  // setDATA,
-  // setMonthData,
 } from '../store/inputSlice';
 import { CloseOutlined } from '@ant-design/icons';
+import { setCalculated } from '../store/resultSlice';
 
 const techSystem = [
   'В+Т+С+П',
@@ -76,12 +67,6 @@ const flexCenter = {
   justifyContent: 'center',
 };
 
-const CardCol = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
-
 const calcMonthNames = (firstMonth: number, countMonth: number): string[] => {
   const monthNames = [];
   for (let i = firstMonth; i < Number(countMonth) + Number(firstMonth); i++) {
@@ -94,47 +79,33 @@ const calcMonthNames = (firstMonth: number, countMonth: number): string[] => {
   return monthNames;
 };
 
-const MonthsFormList = () => {
-  // const { tech } = useTypedSelector((store) => store.inputData);
+interface MonthsFormListProps {
+  onFinish: (values: AllMonthInputData) => void;
+  onFinishFailed: (errorInfo: any) => void;
+}
+
+const MonthsFormList: React.FC<MonthsFormListProps> = ({
+  onFinish,
+  onFinishFailed,
+}) => {
   const { DataCalculated, DataMonthInfo } = useTypedSelector(
     (store) => store.inputData.data
   );
+  const isCalculated = useTypedSelector(
+    (store) => store.resultData.isCalculated
+  );
   const dispatch = useDispatch<AppDispatch>();
-  // const handleChangeMonthData = (index: number, data: MonthInputData) => {
-  //   dispatch(setMonthData({ index, data }));
-  // };
 
-  // Названия месяцов для карточек
+  // Названия месяцев для карточек
   const [monthNames, setMonthNames] = useState<string[]>([]);
   const [tech, setTech] = useState<string[]>([]);
 
   const [form] = Form.useForm<AllMonthInputData>();
   const values = Form.useWatch([], form);
   const [some, setSome] = useState<number>(0);
-  // const [submittable, setSubmittable] = useState(true);
-
-  // useEffect(() => {
-  //   console.log(values);
-  //   form.validateFields({ validateOnly: true }).then(
-  //     () => {
-  //       setSubmittable(true);
-  //       console.log('Всё в ТАБЛИЦЕ введено, можно подтверждать');
-  //       console.log('Данные ТАБЛИЦЫ сохранены в redux');
-  //     },
-  //     () => {
-  //       setSubmittable(false);
-  //     }
-  //   );
-  // }, [values]);
-  const navigate = useNavigate();
-  const onFinish = (values: AllMonthInputData) => {
-    console.log('FINISH');
-    navigate('/results');
-  };
 
   useEffect(() => {
     form.resetFields();
-
     console.log('fields reset (bc tech.length changed)');
   }, [tech.length]);
 
@@ -143,16 +114,8 @@ const MonthsFormList = () => {
       calcMonthNames(DataCalculated.FirstMonth, DataCalculated.CountMonth)
     );
     // form.resetFields();
-
     console.log('DataCalculated.CountMonth: reset fields');
   }, [DataCalculated.CountMonth, DataCalculated.FirstMonth]);
-
-  // useEffect(() => {
-  //   if (DataCalculated.CountMonth > values?.DATA.length) {
-  //     console.log('DataCalculated.CountMonth: delete last in redux');
-  //     // dispatch(removeLastMonthData());
-  //   }
-  // }, [DataCalculated.CountMonth]);
 
   useEffect(() => {
     if (tech.length == 0) {
@@ -164,7 +127,6 @@ const MonthsFormList = () => {
     setTech(techSystem[DataCalculated.N].split('+'));
     console.log('Я увидел изменение N');
     console.log(some);
-
     // form.resetFields();
   }, [DataCalculated.N]);
 
@@ -190,7 +152,6 @@ const MonthsFormList = () => {
         })
       );
     }
-    // form.resetFields();
   }, [tech.length]);
 
   useEffect(() => {
@@ -203,10 +164,7 @@ const MonthsFormList = () => {
     allValues: AllMonthInputData
   ) => {
     dispatch(changeDataMonthInfo(allValues));
-    console.log('changedValues:');
-    console.log(changedValues);
-    console.log('allValues:');
-    console.log(allValues);
+    isCalculated && dispatch(setCalculated(false));
 
     console.log('handleFormValuesChange: сохранены в redux');
   };
@@ -244,28 +202,15 @@ const MonthsFormList = () => {
         form={form}
         name='AllMonthInputData'
         onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
         labelWrap
         autoComplete='off'
-        // initialValues={
-        //   DataMonthInfo?.DATA?.length > 0
-        //     ? DataMonthInfo
-        //     : {
-        //         // MainMarkCars: [],
-        //         // AdditionalMarkCars: [],
-        //         DATA:
-        //           // Array.from({ length: DataCalculated.CountMonth }, () => null)
-        //           Array(DataCalculated.CountMonth).fill(null),
-        //         // Array(DataCalculated.CountMonth).fill(null),
-        //       }
-        // }
         style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            // columnGap: '15rem',
-            // backgroundColor: '#f2f2f2',
           }}>
           <Title level={3} style={{ textAlign: 'center' }}>
             Введите данные по машинам
@@ -273,7 +218,6 @@ const MonthsFormList = () => {
           <Button type='primary' htmlType='submit'>
             Рассчитать
           </Button>
-          {/* </Link> */}
         </div>
 
         <Affix offsetTop={16}>
@@ -427,14 +371,7 @@ const MonthsFormList = () => {
 
         <Form.List
           name='DATA'
-          initialValue={
-            // DataMonthInfo.DATA
-            //   ? DataMonthInfo.DATA
-            //   :
-            Array(DataCalculated.CountMonth).fill(null)
-          }
-          // initialValue={Array(monthNames.length).fill(null)}
-        >
+          initialValue={Array(DataCalculated.CountMonth).fill(null)}>
           {(fields, { add, remove }) => (
             <div
               style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
@@ -554,9 +491,7 @@ const MonthsFormList = () => {
                           DataMonthInfo.DATA[field.key]
                             ? DataMonthInfo.DATA[field.key].AdditionalCountCars
                             : Array(tech.length).fill(null)
-                        }
-                        // initialValue={Array(tech.length).fill(null)}
-                      >
+                        }>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
                             {subfields.map((subfield) => (
@@ -600,37 +535,30 @@ const MonthsFormList = () => {
                           DataMonthInfo.DATA[field.key]
                             ? DataMonthInfo.DATA[field.key].MainCountShift
                             : Array(tech.length).fill(null)
-                        }
-                        // initialValue={Array(tech.length).fill(null)}
-                      >
+                        }>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
-                            {subfields.map(
-                              // ({ key, name, fieldKey, ...restField }) => (
-                              (subfield) => (
-                                <Form.Item
-                                  style={{
-                                    flex: '1 0 20%',
-                                    marginBottom: 0,
-                                  }}
-                                  preserve={false}
-                                  key={subfield.key}
-                                  // label={`${tech[subfield.key]}`}
-                                  // {...subfield.restField}
-                                  name={subfield.name}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: '',
-                                    },
-                                  ]}>
-                                  <InputNumber
-                                    style={{ width: '100%' }}
-                                    placeholder={`${tech[subfield.key]}`}
-                                  />
-                                </Form.Item>
-                              )
-                            )}
+                            {subfields.map((subfield) => (
+                              <Form.Item
+                                style={{
+                                  flex: '1 0 20%',
+                                  marginBottom: 0,
+                                }}
+                                preserve={false}
+                                key={subfield.key}
+                                name={subfield.name}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: '',
+                                  },
+                                ]}>
+                                <InputNumber
+                                  style={{ width: '100%' }}
+                                  placeholder={`${tech[subfield.key]}`}
+                                />
+                              </Form.Item>
+                            ))}
                           </Space.Compact>
                         )}
                       </Form.List>
@@ -651,37 +579,30 @@ const MonthsFormList = () => {
                           DataMonthInfo.DATA[field.key]
                             ? DataMonthInfo.DATA[field.key].AdditionalCountShift
                             : Array(tech.length).fill(null)
-                        }
-                        // initialValue={Array(tech.length).fill(null)}
-                      >
+                        }>
                         {(subfields, subOps) => (
                           <Space.Compact block>
-                            {subfields.map(
-                              // ({ key, name, fieldKey, ...restField }) => (
-                              (subfield) => (
-                                <Form.Item
-                                  style={{
-                                    flex: '1 0 20%',
-                                    marginBottom: 0,
-                                  }}
-                                  preserve={false}
-                                  key={subfield.key}
-                                  // label={`${tech[subfield.key]}`}
-                                  // {...subfield.restField}
-                                  name={subfield.name}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: '',
-                                    },
-                                  ]}>
-                                  <InputNumber
-                                    style={{ width: '100%' }}
-                                    placeholder={`${tech[subfield.key]}`}
-                                  />
-                                </Form.Item>
-                              )
-                            )}
+                            {subfields.map((subfield) => (
+                              <Form.Item
+                                style={{
+                                  flex: '1 0 20%',
+                                  marginBottom: 0,
+                                }}
+                                preserve={false}
+                                key={subfield.key}
+                                name={subfield.name}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: '',
+                                  },
+                                ]}>
+                                <InputNumber
+                                  style={{ width: '100%' }}
+                                  placeholder={`${tech[subfield.key]}`}
+                                />
+                              </Form.Item>
+                            ))}
                           </Space.Compact>
                         )}
                       </Form.List>
@@ -704,34 +625,27 @@ const MonthsFormList = () => {
                           DataMonthInfo.DATA[field.key]
                             ? DataMonthInfo.DATA[field.key].MainShiftProduction
                             : Array(tech.length).fill(null)
-                        }
-                        // initialValue={Array(tech.length).fill(null)}
-                      >
+                        }>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
-                            {subfields.map(
-                              // ({ key, name, fieldKey, ...restField }) => (
-                              (subfield) => (
-                                <Form.Item
-                                  style={{ flex: '1 0 20%', marginBottom: 0 }}
-                                  preserve={false}
-                                  key={subfield.key}
-                                  // label={`${tech[subfield.key]}`}
-                                  // {...subfield.restField}
-                                  name={subfield.name}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: '',
-                                    },
-                                  ]}>
-                                  <InputNumber
-                                    style={{ width: '100%' }}
-                                    placeholder={`${tech[subfield.key]}`}
-                                  />
-                                </Form.Item>
-                              )
-                            )}
+                            {subfields.map((subfield) => (
+                              <Form.Item
+                                style={{ flex: '1 0 20%', marginBottom: 0 }}
+                                preserve={false}
+                                key={subfield.key}
+                                name={subfield.name}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: '',
+                                  },
+                                ]}>
+                                <InputNumber
+                                  style={{ width: '100%' }}
+                                  placeholder={`${tech[subfield.key]}`}
+                                />
+                              </Form.Item>
+                            ))}
                           </Space.Compact>
                         )}
                       </Form.List>
@@ -755,34 +669,27 @@ const MonthsFormList = () => {
                             ? DataMonthInfo.DATA[field.key]
                                 .AdditionalShiftProduction
                             : Array(tech.length).fill(null)
-                        }
-                        // initialValue={Array(tech.length).fill(null)}
-                      >
+                        }>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
-                            {subfields.map(
-                              // ({ key, name, fieldKey, ...restField }) => (
-                              (subfield) => (
-                                <Form.Item
-                                  style={{ flex: '1 0 20%', marginBottom: 0 }}
-                                  preserve={false}
-                                  key={subfield.key}
-                                  // label={`${tech[subfield.key]}`}
-                                  // {...subfield.restField}
-                                  name={subfield.name}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: '',
-                                    },
-                                  ]}>
-                                  <InputNumber
-                                    style={{ width: '100%' }}
-                                    placeholder={`${tech[subfield.key]}`}
-                                  />
-                                </Form.Item>
-                              )
-                            )}
+                            {subfields.map((subfield) => (
+                              <Form.Item
+                                style={{ flex: '1 0 20%', marginBottom: 0 }}
+                                preserve={false}
+                                key={subfield.key}
+                                name={subfield.name}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: '',
+                                  },
+                                ]}>
+                                <InputNumber
+                                  style={{ width: '100%' }}
+                                  placeholder={`${tech[subfield.key]}`}
+                                />
+                              </Form.Item>
+                            ))}
                           </Space.Compact>
                         )}
                       </Form.List>
@@ -795,7 +702,6 @@ const MonthsFormList = () => {
                 type='dashed'
                 onClick={() => {
                   add();
-                  // form.resetFields();
                   dispatch(
                     changeCommonData({
                       CountMonth: DataCalculated.CountMonth + 1,
@@ -817,13 +723,6 @@ const MonthsFormList = () => {
           )}
         </Form.Item>
       </Form>
-
-      {/* <Button
-                    htmlType='submit'
-                    // onSubmit={}
-                >
-                    Готово
-                </Button> */}
     </div>
   );
 };

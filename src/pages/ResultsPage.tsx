@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useTypedSelector } from '../store/hooks';
 import { Typography } from 'antd';
+import ResultDisplay from '../components/ResultDisplay';
 
 const ResultsPage: React.FC = ({}) => {
-  const { data } = useTypedSelector((store) => store.inputData);
+  const { result } = useTypedSelector((store) => store.resultData);
 
   // React.useEffect(() => {
   //
@@ -11,10 +12,11 @@ const ResultsPage: React.FC = ({}) => {
 
   return (
     <>
-      <p>Результаты ЪЪЪ</p>
-      <Typography>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </Typography>
+      <ResultDisplay result={result} type='с замещением' />
+      <ResultDisplay result={result} type='без замещения' />
+      {/* <Typography>
+        <pre>{JSON.stringify(result, null, 2)}</pre>
+      </Typography> */}
     </>
   );
 };
