@@ -1,27 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 import { ChangedCommonInputData, CommonInputData } from '../types/index-types';
-import { changeCommonData, setCommonData } from '../store/inputSlice';
+import { changeCommonData } from '../store/inputSlice';
 import { useTypedSelector } from '../store/hooks';
 import { Typography } from 'antd';
 import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
+import { techSystem } from '../common/index';
 const { Title } = Typography;
-
-const techSystem = [
-  'В+Т+С+П',
-  'В+С+Т+П',
-  'В+С+Т+П',
-  'В+Т+С+П',
-  'В+Т+С',
-  'В+Т+П',
-  'ВСР+Т+П',
-  'В+Т',
-  'ВСР+Т',
-  'ВТ+СР+П',
-  'ВТ+СР',
-  'ВТ+П',
-];
 
 const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -78,7 +64,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
       onFinish={onFinish}
       initialValues={DataCalculated}
       onValuesChange={handleFormValuesChange}
-      // autoComplete='off'
+      autoComplete='off'
       layout='vertical'
       style={{
         width: 350,
@@ -87,6 +73,8 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
         backgroundColor: 'white',
         margin: '0 auto',
         borderRadius: 6,
+        height: 'max-content',
+        // zIndex: 0,
       }}>
       <Title level={4} style={{ textAlign: 'center' }}>
         Введите общие данные
@@ -285,7 +273,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
               submittable && dispatch(setIsVisible(true));
               window.scrollTo({
                 top: 0,
-                behavior: 'smooth', // Добавляем плавную анимацию скролла
+                behavior: 'smooth', // плавная анимация скролла
               });
               // console.log(values);
             }}>

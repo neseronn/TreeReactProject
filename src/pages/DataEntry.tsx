@@ -21,22 +21,6 @@ const DataEntry: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
 
-  const openMessage = () => {
-    messageApi.open({
-      key,
-      type: 'loading',
-      content: 'Loading...',
-    });
-    setTimeout(() => {
-      messageApi.open({
-        key,
-        type: 'success',
-        content: 'Loaded!',
-        duration: 2,
-      });
-    }, 1000);
-  };
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,7 +79,6 @@ const DataEntry: React.FC = () => {
       {contextHolder}
       <CommonForm setIsVisible={setIsVisible} />
 
-      {/* {isVisible && <AdditionalForm />} */}
       {isVisible && (
         <MonthsFormList onFinish={onFinish} onFinishFailed={onFinishFailed} />
       )}

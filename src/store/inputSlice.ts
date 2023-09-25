@@ -7,6 +7,30 @@ import {
   CommonInputData,
   MonthInputData,
 } from '../types/index-types';
+const primer1 = {
+  MainMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
+  AdditionalMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
+  DATA: [
+    {
+      MainCountCars: [64, 87, 48, 200],
+      MainCountShift: [1, 1, 2, 1],
+      MainShiftProduction: [1, 1, 1, 0.5],
+      AdditionalCountCars: [64, 87, 48, 200],
+      AdditionalCountShift: [1, 1, 1, 1],
+      AdditionalShiftProduction: [1, 1, 1, 0.5],
+      TP: 20,
+    },
+    // {
+    //   MainCountCars: [64.0, 87.0, 48.0, 200.0],
+    //   MainCountShift: [1.0, 1.0, 2.0, 1.0],
+    //   MainShiftProduction: [1.0, 1.0, 1.0, 0.5],
+    //   AdditionalCountCars: [64.0, 87.0, 48.0, 200.0],
+    //   AdditionalCountShift: [1.0, 1.0, 2.0, 1.0],
+    //   AdditionalShiftProduction: [1.0, 1.0, 1.0, 0.5],
+    //   TP: 24,
+    // },
+  ],
+};
 
 interface MonthPayload {
   index: number;
@@ -32,9 +56,9 @@ const initialState: InputState = {
   data: {
     // DataCalculated: {} as CommonInputData,
     DataCalculated: {
-      CountMonth: 1,
-      AvgStock: 240,
+      CountMonth: 2,
       FirstMonth: 1,
+      AvgStock: 240,
       markCar: 'Маз',
       N: 0,
       replaceableMachinePerfomance: 56,
@@ -49,23 +73,23 @@ const initialState: InputState = {
         AdditionalMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
         DATA: [
           {
-            MainCountCars: [64, 87, 48, 200],
+            MainCountCars: [1, 1, 1, 0.5],
             MainCountShift: [1, 1, 2, 1],
-            MainShiftProduction: [1, 1, 1, 0.5],
-            AdditionalCountCars: [64, 87, 48, 200],
+            MainShiftProduction: [64, 87, 48, 200],
+            AdditionalCountCars: [1, 1, 1, 0.5],
             AdditionalCountShift: [1, 1, 1, 1],
-            AdditionalShiftProduction: [1, 1, 1, 0.5],
+            AdditionalShiftProduction: [64, 87, 48, 200],
             TP: 20,
           },
-          // {
-          //   MainCountCars: [64.0, 87.0, 48.0, 200.0],
-          //   MainCountShift: [1.0, 1.0, 2.0, 1.0],
-          //   MainShiftProduction: [1.0, 1.0, 1.0, 0.5],
-          //   AdditionalCountCars: [64.0, 87.0, 48.0, 200.0],
-          //   AdditionalCountShift: [1.0, 1.0, 2.0, 1.0],
-          //   AdditionalShiftProduction: [1.0, 1.0, 1.0, 0.5],
-          //   TP: 24,
-          // },
+          {
+            MainCountCars: [1, 1, 1, 0.5],
+            MainCountShift: [1, 1, 2, 1],
+            MainShiftProduction: [64, 87, 48, 200],
+            AdditionalCountCars: [1, 1, 1, 0.5],
+            AdditionalCountShift: [1, 1, 1, 1],
+            AdditionalShiftProduction: [64, 87, 48, 200],
+            TP: 20,
+          },
         ],
       },
   },
@@ -94,17 +118,10 @@ export const inputSlice = createSlice({
     },
 
     // Данные по машинам (месяцам)
-    // setDataMonthInfo: (
-    //   state,
-    //   { payload }: PayloadAction<AllMonthInputData>
-    // ) => {
-    //   state.data.DataMonthInfo = payload;
-    // },
     changeDataMonthInfo: (
       state,
       { payload }: PayloadAction<AllMonthInputData>
     ) => {
-      // state.data.DataMonthInfo = { ...state.data.DataMonthInfo, ...payload };
       state.data.DataMonthInfo = payload;
     },
     changeArrLen: (
@@ -164,16 +181,6 @@ export const inputSlice = createSlice({
         }
       }
     },
-    // setMonthData: (state, { payload }: PayloadAction<MonthPayload>) => {
-    //   state.data.DataMonthInfo.DATA[payload.index] = payload.data;
-    // },
-
-    // setDATA: (state, { payload }: PayloadAction<MonthInputData[]>) => {
-    //   state.data.DataMonthInfo.DATA = payload;
-    // },
-    removeLastMonthData: (state, action) => {
-      state.data.DataMonthInfo.MainMarkCars.pop();
-    },
 
     setIsVisible: (state, { payload }: PayloadAction<boolean>) => {
       state.isVisible = payload;
@@ -188,11 +195,8 @@ export const inputSlice = createSlice({
 export const {
   setCommonData,
   changeCommonData,
-  // setMonthData,
   changeDataMonthInfo,
   changeArrLen,
-
-  removeLastMonthData,
   setIsVisible,
 } = inputSlice.actions;
 

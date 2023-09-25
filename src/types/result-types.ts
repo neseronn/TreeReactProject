@@ -22,9 +22,22 @@ export interface Pair {
 export type MonthPairData = Pair[];
 
 // Данные по необходимому числу дополнительных дней работы машин
-// export type AboutAdditionalWorkCars = MonthPairData[];
 
-export interface ResultData {
-  production_volume: ProductionVolume[];
-  about_additional_work_cars: MonthPairData[];
+export interface MonthData {
+  production_volume: ProductionVolume;
+  about_additional_work_cars: MonthPairData;
+}
+
+export type ResultData = MonthData[];
+
+export interface RowTable {
+  car: string;
+  MainMarkCars: string;
+  MainCountCars: number;
+  MainCountShift: number;
+  MainShiftProduction: number;
+  AdditionalMarkCars: string;
+  AdditionalCountCars: number;
+  AdditionalCountShift: number;
+  AdditionalShiftProduction: number;
 }

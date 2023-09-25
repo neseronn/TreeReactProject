@@ -8,21 +8,13 @@ export const calculateData = createAsyncThunk<ResultData, inputData>(
   'resultData/calculate',
   async (data, thunkApi) => {
     try {
-      // const response = await instance.post('/calculating/', { data: data });
-      const response = await axios.post(
-        'http://127.0.0.1:8000/api/v1/calculating/',
-        { ...data }
-      );
-      // const response = await fetch(
+      const response = await instance.post('/calculating/', { ...data });
+      // const response = await axios.post(
       //   'http://127.0.0.1:8000/api/v1/calculating/',
-      //   {
-      //     method: 'post',
-      //     body: JSON.stringify(data),
-      //   }
+      //   { ...data }
       // );
+      console.log(response);
       return response.data;
-      // console.log(response);
-      // return response.json();
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.message);
       // return thunkApi.rejectWithValue(error.message);

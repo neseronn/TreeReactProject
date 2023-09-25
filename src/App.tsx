@@ -5,6 +5,7 @@ import CommonForm from './components/CommonForm';
 import DataEntry from './pages/DataEntry';
 import ResultsPage from './pages/ResultsPage';
 import { useEffect } from 'react';
+// import style from './App.module.css';
 
 const { Header, Content, Footer } = Layout;
 
@@ -42,7 +43,12 @@ function App() {
   ].concat(extraBreadcrumbItems);
 
   return (
-    <Layout className='layout' style={{ height: '100%' }}>
+    <Layout
+      className='layout'
+      style={{
+        height: '100%',
+        minHeight: '100vh',
+      }}>
       <Header
         style={{
           display: 'flex',
@@ -50,6 +56,8 @@ function App() {
           backgroundColor: 'white',
           maxHeight: '48px',
           overflow: 'hidden',
+          zIndex: 11,
+          boxShadow: 'rgba(90, 90, 90, 0.2) 0px -10px 20px 1px',
         }}>
         <Menu
           mode='horizontal'
@@ -59,7 +67,6 @@ function App() {
             width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
-            // maxHeight: '48px',
           }}
           items={[{ key: 0, label: 'Главная' }]}
         />
@@ -67,11 +74,12 @@ function App() {
       </Header>
       <Content
         style={{
-          padding: '0 20px',
+          padding: '12px 30px 0 30px',
         }}>
         <Breadcrumb
           style={{
-            margin: '10px 0',
+            marginBottom: '12px',
+            // margin: '58px 0 10px 0',
           }}
           items={breadcrumbItems}
         />
@@ -82,14 +90,13 @@ function App() {
           }}>
           <div
             style={{
-              // padding: 20,
-              // minHeight: 600,
-              background: '#e1e1e1',
               width: '100%',
               display: 'flex',
+              // justifyContent: 'center',
+              // maxHeight: '100vh',
+              // overflowY: 'scroll',
               columnGap: 20,
               transition: 'width 0.5s ease-in-out',
-              overflow: 'hidden',
             }}>
             <Routes>
               <Route path='/' element={<DataEntry />} />
@@ -107,6 +114,11 @@ function App() {
         style={{
           textAlign: 'center',
           color: '#686868',
+          padding: '16px',
+          // position: 'fixed',
+          // right: 0,
+          // left: 0,
+          // bottom: 0,
         }}>
         ©2023
       </Footer>

@@ -15,10 +15,7 @@ interface ResultState {
 }
 
 const initialState: ResultState = {
-  result: {
-    production_volume: [],
-    about_additional_work_cars: [],
-  },
+  result: [] as ResultData,
   isCalculated: false,
   isSuccess: false,
   isLoading: false,
@@ -58,7 +55,6 @@ export const resultSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.isCalculated = false;
-      // state.error = payload;
       if (action.payload) {
         // Здесь мы имеем доступ к ошибкам, переданным в `createAsyncThunk()`
         state.error = action.payload;

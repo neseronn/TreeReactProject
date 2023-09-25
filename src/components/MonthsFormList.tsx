@@ -25,21 +25,7 @@ import {
 } from '../store/inputSlice';
 import { CloseOutlined } from '@ant-design/icons';
 import { setCalculated } from '../store/resultSlice';
-
-const techSystem = [
-  'В+Т+С+П',
-  'В+С+Т+П',
-  'В+С+Т+П',
-  'В+Т+С+П',
-  'В+Т+С',
-  'В+Т+П',
-  'ВСР+Т+П',
-  'В+Т',
-  'ВСР+Т',
-  'ВТ+СР+П',
-  'ВТ+СР',
-  'ВТ+П',
-];
+import { techSystem, calcMonthNames } from '../common/index';
 
 const gridStyleHead: React.CSSProperties = {
   width: '20%',
@@ -65,18 +51,6 @@ const flexCenter = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-};
-
-const calcMonthNames = (firstMonth: number, countMonth: number): string[] => {
-  const monthNames = [];
-  for (let i = firstMonth; i < Number(countMonth) + Number(firstMonth); i++) {
-    // Получение названия месяца на русском языке
-    let monthName = new Date(2023, i - 1, 1).toLocaleString('ru', {
-      month: 'long',
-    });
-    monthNames.push(monthName);
-  }
-  return monthNames;
 };
 
 interface MonthsFormListProps {
@@ -168,7 +142,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
 
     console.log('handleFormValuesChange: сохранены в redux');
   };
-
+  // const [container, setContainer] = useState<HTMLDivElement | null>(null)
   return (
     <div
       style={{
