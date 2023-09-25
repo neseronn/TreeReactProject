@@ -7,7 +7,7 @@ import { calcMonthNames } from '../common';
 
 interface ResultDisplayProps {
   result: ResultData;
-  type: 'с замещением' | 'без замещения';
+  type: 'с учетом' | 'без учета';
 }
 
 const ResultDisplay = ({ result, type }: ResultDisplayProps) => {
@@ -33,7 +33,14 @@ const ResultDisplay = ({ result, type }: ResultDisplayProps) => {
         padding: '16px',
       }}>
       <Typography.Title level={4}>
-        Результаты моделирования {type}
+        <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
+          Математические модели расчета объемов запасов{' '}
+        </span>
+        {type + ' '}
+        наложения{' '}
+        <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
+          времени работы дополнительных машин на смежных операциях
+        </span>
       </Typography.Title>
 
       {result.map((item, i) => (

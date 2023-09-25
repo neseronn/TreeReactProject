@@ -7,15 +7,20 @@ import { Typography } from 'antd';
 import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
 import { techSystem } from '../common/index';
+import { setCalculated } from '../store/resultSlice';
 const { Title } = Typography;
 
 const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { DataCalculated } = useTypedSelector((store) => store.inputData.data);
+  const isCalculated = useTypedSelector(
+    (store) => store.resultData.isCalculated
+  );
 
   const [form] = Form.useForm<CommonInputData>();
   const values = Form.useWatch([], form);
   const [submittable, setSubmittable] = useState(true);
+  const [disabled, setDisabled] = useState(isCalculated || false);
 
   // Обработчик изменения значений в форме
   const handleFormValuesChange = (
@@ -23,6 +28,17 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
     allValues: CommonInputData
   ) => {
     dispatch(changeCommonData(changedValues));
+    if (isCalculated) {
+      if (
+        'N' in changedValues ||
+        'TotalStock' in changedValues ||
+        'AvgStock' in changedValues ||
+        'ZoneLength' in changedValues ||
+        'ShiftsNumber' in changedValues ||
+        'replaceableMachinePerfomance' in changedValues
+      )
+        dispatch(setCalculated(false));
+    }
     console.log('handleFormValuesChange: сохранены в redux');
   };
 
@@ -53,6 +69,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   }, []);
 
   const onFinish = (values: CommonInputData) => {
+    setDisabled(true);
     // console.log(values);
     // dispatch(addTechSystem(values));
     // form.resetFields();
@@ -71,7 +88,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
         minWidth: 350,
         padding: 20,
         backgroundColor: 'white',
-        margin: '0 auto',
+        margin: '0 auto 20px auto',
         borderRadius: 6,
         height: 'max-content',
         // zIndex: 0,
@@ -90,6 +107,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
           },
         ]}>
         <InputNumber
+          disabled={disabled}
           min={1}
           max={12}
           value={DataCalculated?.CountMonth}
@@ -267,7 +285,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
           }}>
           <Button
             type='primary'
-            disabled={!submittable}
+            disabled={!submittable || disabled}
             htmlType='submit'
             onClick={(e) => {
               submittable && dispatch(setIsVisible(true));

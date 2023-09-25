@@ -56,17 +56,19 @@ const flexCenter = {
 interface MonthsFormListProps {
   onFinish: (values: AllMonthInputData) => void;
   onFinishFailed: (errorInfo: any) => void;
+  loadBtn: boolean;
 }
 
 const MonthsFormList: React.FC<MonthsFormListProps> = ({
   onFinish,
   onFinishFailed,
+  loadBtn,
 }) => {
   const { DataCalculated, DataMonthInfo } = useTypedSelector(
     (store) => store.inputData.data
   );
-  const isCalculated = useTypedSelector(
-    (store) => store.resultData.isCalculated
+  const { isCalculated, isLoading } = useTypedSelector(
+    (store) => store.resultData
   );
   const dispatch = useDispatch<AppDispatch>();
 
@@ -154,7 +156,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
         overflow: 'hidden',
         padding: 20,
         backgroundColor: 'white',
-        margin: '0 auto',
+        margin: '0 auto 20px auto',
         borderRadius: 6,
       }}>
       <Form
@@ -189,8 +191,8 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
           <Title level={3} style={{ textAlign: 'center' }}>
             Введите данные по машинам
           </Title>
-          <Button type='primary' htmlType='submit'>
-            Рассчитать
+          <Button type='primary' htmlType='submit' loading={loadBtn}>
+            {isCalculated ? 'Перейти к расчетам' : 'Выполнить расчеты'}
           </Button>
         </div>
 

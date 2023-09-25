@@ -42,14 +42,16 @@ export const resultSlice = createSlice({
       (state, { payload }: PayloadAction<ResultData>) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.isCalculated = true;
         state.result = payload;
+        state.error = null;
+        state.isCalculated = true;
       }
     );
     builder.addCase(calculateData.pending, (state) => {
       state.isLoading = true;
       state.isSuccess = false;
       state.isCalculated = false;
+      state.error = null;
     });
     builder.addCase(calculateData.rejected, (state, action) => {
       state.isLoading = false;

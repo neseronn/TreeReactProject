@@ -19,18 +19,29 @@ const DataEntry: React.FC = () => {
     (store) => store.resultData
   );
   const [messageApi, contextHolder] = message.useMessage();
+  const [load, setLoad] = useState<boolean>(false);
+
   const key = 'updatable';
 
   const navigate = useNavigate();
 
+  // const loadButton = () => {
+  //   if (isLoading) {
+  //     setLoad(true);
+  //   }
+  // };
+
   useEffect(() => {
-    isLoading &&
+    if (isLoading) {
+      setLoad(true);
       messageApi.open({
         key,
         type: 'loading',
         content: 'Загрузка...',
         duration: 0,
       });
+    }
+
     isSuccess &&
       messageApi
         .open({
@@ -41,19 +52,24 @@ const DataEntry: React.FC = () => {
         })
         .then(() => {
           navigate('/results');
+          setLoad(false);
           dispatch(setSuccess(false));
         });
 
     error &&
-      messageApi.open({
-        key,
-        type: 'error',
-        content:
-          error === 'Request failed with status code 400'
-            ? 'Данные по машинам введены некорректно!'
-            : error,
-        duration: 2,
-      });
+      messageApi
+        .open({
+          key,
+          type: 'error',
+          content:
+            error === 'Request failed with status code 400'
+              ? 'Данные по машинам введены некорректно!'
+              : error,
+          duration: 2,
+        })
+        .then(() => {
+          setLoad(false);
+        });
   }, [isLoading]);
 
   const onFinish = (values: AllMonthInputData) => {
@@ -80,7 +96,7 @@ const DataEntry: React.FC = () => {
       <CommonForm setIsVisible={setIsVisible} />
 
       {isVisible && (
-        <MonthsFormList onFinish={onFinish} onFinishFailed={onFinishFailed} />
+        <MonthsFormList onFinish={onFinish} onFinishFailed={onFinishFailed} loadBtn={load}/>
       )}
     </>
   );

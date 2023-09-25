@@ -16,17 +16,18 @@ const ResultsPage: React.FC = ({}) => {
       style={{
         display: 'flex',
         flexDirection: 'row',
+        // justifyContent: 'center',
+        // alignItems: 'center',
         columnGap: '10px',
         position: 'relative',
         height: '100%',
         // width: '100%',
-        // minWidth: '100vw',
-        // minHeight: '75vh',
+        // flexGrow: 1,
         overflow: 'auto',
-        maxHeight: 'calc(100vh - 145px)',
+        maxHeight: 'calc(100vh - 94px)',
       }}>
-      <ResultDisplay result={result} type='с замещением' />
-      <ResultDisplay result={result} type='без замещения' />
+      <ResultDisplay result={result} type='с учетом' />
+      <ResultDisplay result={result} type='без учета' />
     </div>
   );
 };

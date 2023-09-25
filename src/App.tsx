@@ -87,12 +87,16 @@ function App() {
           style={{
             display: 'flex',
             flexDirection: 'column',
+            // justifyContent: 'center',
+            // alignItems: 'center',
           }}>
           <div
             style={{
               width: '100%',
               display: 'flex',
               // justifyContent: 'center',
+              // alignItems: 'center',
+
               // maxHeight: '100vh',
               // overflowY: 'scroll',
               columnGap: 20,
@@ -110,18 +114,14 @@ function App() {
           </div>
         </div>
       </Content>
-      <Footer
+      {/* <Footer
         style={{
           textAlign: 'center',
           color: '#686868',
           padding: '16px',
-          // position: 'fixed',
-          // right: 0,
-          // left: 0,
-          // bottom: 0,
         }}>
         ©2023
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 }
