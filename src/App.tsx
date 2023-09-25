@@ -4,8 +4,8 @@ import { Breadcrumb, Layout, Menu, theme, Button } from 'antd';
 import CommonForm from './components/CommonForm';
 import DataEntry from './pages/DataEntry';
 import ResultsPage from './pages/ResultsPage';
-import { useEffect } from 'react';
-// import style from './App.module.css';
+import React, { useRef, useEffect } from 'react';
+import generatePDF from 'react-to-pdf';
 
 const { Header, Content, Footer } = Layout;
 
@@ -16,6 +16,8 @@ const breadcrumbNames: Record<string, string> = {
 function App() {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
+  // const { toPDF, targetRef } = usePDF({ filename: 'results.pdf' });
+  const targetRef = useRef();
 
   useEffect(() => {
     // console.log(extraBreadcrumbItems);
@@ -56,6 +58,7 @@ function App() {
           backgroundColor: 'white',
           maxHeight: '48px',
           overflow: 'hidden',
+          columnGap: '10px',
           zIndex: 11,
           boxShadow: 'rgba(90, 90, 90, 0.2) 0px -10px 20px 1px',
         }}>
@@ -70,6 +73,10 @@ function App() {
           }}
           items={[{ key: 0, label: 'Главная' }]}
         />
+        <Button
+          onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })}>
+          Скачать PDF
+        </Button>
         <Button>История</Button>
       </Header>
       <Content
@@ -105,7 +112,10 @@ function App() {
             <Routes>
               <Route path='/' element={<DataEntry />} />
               {/* <Route path='/:id' element={<Page />} /> */}
-              <Route path='/results' element={<ResultsPage />} />
+              <Route
+                path='/results'
+                element={<ResultsPage PDFref={targetRef} />}
+              />
               {/* <Route
                                 path='/results/:id'
                                 element={<ResultsPage />}
