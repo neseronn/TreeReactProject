@@ -26,9 +26,6 @@ export const resultSlice = createSlice({
   name: 'resultData',
   initialState,
   reducers: {
-    // setSmth: (state, { payload }: PayloadAction<types>) => {
-    //     state.smth = payload;
-    // },
     setSuccess: (state, { payload }: PayloadAction<boolean>) => {
       state.isSuccess = false;
     },

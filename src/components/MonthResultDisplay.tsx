@@ -153,13 +153,13 @@ const MonthResultDisplay = ({
   };
 
   let children: Array<{ title: string; dataIndex: string; key: string }> = [];
-  if ('t1' in monthData.about_additional_work_cars[0]) {
+  if ('t1' in monthData.about_additional_work_with[0]) {
     children.push(t1Col);
   }
-  if ('t3' in monthData.about_additional_work_cars[0]) {
+  if ('t3' in monthData.about_additional_work_with[0]) {
     children.push(t3Col);
   }
-  if ('t4' in monthData.about_additional_work_cars[0]) {
+  if ('t4' in monthData.about_additional_work_with[0]) {
     children.push(t4Col);
   }
 
@@ -191,127 +191,131 @@ const MonthResultDisplay = ({
   ];
 
   return (
-    <div
-    // style={{ width: '50%' }}
-    >
-      <Space direction='vertical' size={10}>
-        <Divider
-          orientation='left'
-          children={
-            <Typography.Text strong style={{ fontSize: '16px' }}>
-              <span style={{ textTransform: 'capitalize' }}>{monthName}</span>,{' '}
-              {TP} дней работы
-            </Typography.Text>
-          }
-        />
-        <Descriptions
-          size='small'
-          layout='horizontal'
-          bordered
-          items={[
-            {
-              key: 1,
-              label: 'Исходные данные',
-              // span: 24,
-              children: (
-                <>
-                  <DescriptionItem
-                    title='Общий запас на лесосеке'
-                    content={TotalStock}
-                    unit='кбм'
-                  />
-                  <DescriptionItem
-                    title='Средний запас на лесосеке'
-                    content={AvgStock}
-                    unit='кбм'
-                  />
-                  <DescriptionItem
-                    title='Длина зоны вырубки'
-                    content={ZoneLength}
-                    unit='м'
-                  />
-                  <DescriptionItem
-                    title='Число смен в один день на вывозке'
-                    content={ShiftsNumber}
-                  />
-                  <DescriptionItem
-                    title='Сменная производительность машин на вывозке'
-                    content={replaceableMachinePerfomance}
-                    unit='кбм в смену'
-                  />
-                </>
-              ),
-            },
-          ]}
-        />
+    <>
+      <Divider
+        orientation='left'
+        children={
+          <Typography.Text strong style={{ fontSize: '16px' }}>
+            <span style={{ textTransform: 'capitalize' }}>{monthName}</span>,{' '}
+            {TP} дней работы
+          </Typography.Text>
+        }
+      />
+      <Descriptions
+        size='small'
+        layout='horizontal'
+        bordered
+        items={[
+          {
+            key: 1,
+            label: 'Исходные данные',
+            children: (
+              <>
+                <DescriptionItem
+                  title='Общий запас на лесосеке'
+                  content={TotalStock}
+                  unit='кбм'
+                />
+                <DescriptionItem
+                  title='Средний запас на лесосеке'
+                  content={AvgStock}
+                  unit='кбм'
+                />
+                <DescriptionItem
+                  title='Длина зоны вырубки'
+                  content={ZoneLength}
+                  unit='м'
+                />
+                <DescriptionItem
+                  title='Число смен в один день на вывозке'
+                  content={ShiftsNumber}
+                />
+                <DescriptionItem
+                  title='Сменная производительность машин на вывозке'
+                  content={replaceableMachinePerfomance}
+                  unit='кбм в смену'
+                />
+              </>
+            ),
+          },
+        ]}
+      />
 
-        <Table
-          // title={() => (
-          //   <Typography.Text strong>
-          //     <span style={{ textTransform: 'capitalize' }}>{monthName}</span>,{' '}
-          //     {TP} дней работы
-          //   </Typography.Text>
-          // )}
-          columns={columns}
-          dataSource={rows}
-          bordered
-          size='small'
-          pagination={false}
-        />
+      <Table
+        columns={columns}
+        dataSource={rows}
+        bordered
+        size='small'
+        pagination={false}
+      />
 
-        <Table
-          // style={{ marginTop: '14px' }}
-          title={() => (
-            <Typography.Text strong>
+      <Table
+        title={() => (
+          <Typography.Text strong>
+            <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
               Необходимое число дополнительных дней работы машин
-            </Typography.Text>
-          )}
-          columns={columnsDop}
-          dataSource={monthData.about_additional_work_cars}
-          bordered
-          size='small'
-          pagination={false}
-        />
+            </span>{' '}
+            (С УЧЕТОМ НАЛОЖЕНИЯ)
+          </Typography.Text>
+        )}
+        columns={columnsDop}
+        dataSource={monthData.about_additional_work_with}
+        bordered
+        size='small'
+        pagination={false}
+      />
+      <Table
+        title={() => (
+          <Typography.Text strong>
+            <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
+              Необходимое число дополнительных дней работы машин
+            </span>{' '}
+            (БЕЗ УЧЕТА НАЛОЖЕНИЯ)
+          </Typography.Text>
+        )}
+        columns={columnsDop}
+        dataSource={monthData.about_additional_work_without}
+        bordered
+        size='small'
+        pagination={false}
+      />
 
-        <Descriptions
-          size='small'
-          layout='horizontal'
-          bordered
-          items={[
-            {
-              key: '3',
-              label: 'Объём производства',
-              // span: 24,
-              children: (
-                <>
-                  <DescriptionItem
-                    title='Объём производства основных машин'
-                    content={monthData.production_volume.Qo}
-                    unit='м³'
-                  />
-                  <DescriptionItem
-                    title='Объём производства дополнительных машин'
-                    content={monthData.production_volume.Qd}
-                    unit='м³'
-                  />
-                  <DescriptionItem
-                    title='Итого объём производства'
-                    content={monthData.production_volume.Pm}
-                    unit='м³'
-                  />
-                  <DescriptionItem
-                    title='Ежедневная потребность машин на вывозке'
-                    content={monthData.production_volume.Nm}
-                    unit='м³'
-                  />
-                </>
-              ),
-            },
-          ]}
-        />
-      </Space>
-      {/* <Divider /> */}
-    </div>
+      <Descriptions
+        size='small'
+        layout='horizontal'
+        bordered
+        items={[
+          {
+            key: '3',
+            label: 'Объём производства',
+            children: (
+              <>
+                <DescriptionItem
+                  title='Объём производства основных машин'
+                  content={monthData.production_volume.Qo}
+                  unit='м³'
+                />
+                <DescriptionItem
+                  title='Объём производства дополнительных машин'
+                  content={monthData.production_volume.Qd}
+                  unit='м³'
+                />
+                <DescriptionItem
+                  title='Итого объём производства'
+                  content={monthData.production_volume.Pm}
+                  unit='м³'
+                />
+                <DescriptionItem
+                  title='Ежедневная потребность машин на вывозке'
+                  content={monthData.production_volume.Nm}
+                  unit='м³'
+                />
+              </>
+            ),
+          },
+        ]}
+      />
+    </>
   );
 };
 

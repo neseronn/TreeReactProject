@@ -22,12 +22,10 @@ const ResultDisplay = ({ result, type }: ResultDisplayProps) => {
   return (
     <div
       style={{
-        // width: 'max-content',
-        // width: '50%',
-        // flexShrink: 1,
-        // minWidth: 'min-content',
-        height: '100%',
-
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        rowGap: '14px',
         backgroundColor: 'white',
         borderRadius: '8px',
         padding: '16px',

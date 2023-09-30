@@ -17,7 +17,7 @@ function App() {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   // const { toPDF, targetRef } = usePDF({ filename: 'results.pdf' });
-  const targetRef = useRef();
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // console.log(extraBreadcrumbItems);
@@ -73,8 +73,7 @@ function App() {
           }}
           items={[{ key: 0, label: 'Главная' }]}
         />
-        <Button
-          onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })}>
+        <Button onClick={() => generatePDF(ref, { filename: 'page.pdf' })}>
           Скачать PDF
         </Button>
         <Button>История</Button>
@@ -93,15 +92,20 @@ function App() {
         <div
           style={{
             display: 'flex',
+            // width: '100%',
             flexDirection: 'column',
             // justifyContent: 'center',
             // alignItems: 'center',
           }}>
           <div
+            ref={ref}
             style={{
               width: '100%',
+              maxWidth: 'max-content',
+              // minWidth: 'min-content',
               display: 'flex',
-              // justifyContent: 'center',
+              margin: '0 auto',
+              justifyContent: 'center',
               // alignItems: 'center',
 
               // maxHeight: '100vh',
@@ -112,10 +116,7 @@ function App() {
             <Routes>
               <Route path='/' element={<DataEntry />} />
               {/* <Route path='/:id' element={<Page />} /> */}
-              <Route
-                path='/results'
-                element={<ResultsPage PDFref={targetRef} />}
-              />
+              <Route path='/results' element={<ResultsPage />} />
               {/* <Route
                                 path='/results/:id'
                                 element={<ResultsPage />}

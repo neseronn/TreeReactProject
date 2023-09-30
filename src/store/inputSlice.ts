@@ -12,12 +12,21 @@ const primer1 = {
   AdditionalMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
   DATA: [
     {
-      MainCountCars: [64, 87, 48, 200],
+      MainCountCars: [1, 1, 1, 0.5],
       MainCountShift: [1, 1, 2, 1],
-      MainShiftProduction: [1, 1, 1, 0.5],
-      AdditionalCountCars: [64, 87, 48, 200],
+      MainShiftProduction: [64, 87, 48, 200],
+      AdditionalCountCars: [1, 1, 1, 0.5],
       AdditionalCountShift: [1, 1, 1, 1],
-      AdditionalShiftProduction: [1, 1, 1, 0.5],
+      AdditionalShiftProduction: [64, 87, 48, 200],
+      TP: 20,
+    },
+    {
+      MainCountCars: [1, 1, 1, 0.5],
+      MainCountShift: [1, 1, 2, 1],
+      MainShiftProduction: [64, 87, 48, 200],
+      AdditionalCountCars: [1, 1, 1, 0.5],
+      AdditionalCountShift: [1, 1, 1, 1],
+      AdditionalShiftProduction: [64, 87, 48, 200],
       TP: 20,
     },
     // {
@@ -56,7 +65,7 @@ const initialState: InputState = {
   data: {
     // DataCalculated: {} as CommonInputData,
     DataCalculated: {
-      CountMonth: 2,
+      CountMonth: 1,
       FirstMonth: 1,
       AvgStock: 240,
       markCar: 'Маз',
@@ -73,21 +82,12 @@ const initialState: InputState = {
         AdditionalMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
         DATA: [
           {
-            MainCountCars: [1, 1, 1, 0.5],
+            MainCountCars: [64, 87, 48, 200],
             MainCountShift: [1, 1, 2, 1],
-            MainShiftProduction: [64, 87, 48, 200],
-            AdditionalCountCars: [1, 1, 1, 0.5],
+            MainShiftProduction: [1, 1, 1, 0.5],
+            AdditionalCountCars: [64, 87, 48, 200],
             AdditionalCountShift: [1, 1, 1, 1],
-            AdditionalShiftProduction: [64, 87, 48, 200],
-            TP: 20,
-          },
-          {
-            MainCountCars: [1, 1, 1, 0.5],
-            MainCountShift: [1, 1, 2, 1],
-            MainShiftProduction: [64, 87, 48, 200],
-            AdditionalCountCars: [1, 1, 1, 0.5],
-            AdditionalCountShift: [1, 1, 1, 1],
-            AdditionalShiftProduction: [64, 87, 48, 200],
+            AdditionalShiftProduction: [1, 1, 1, 0.5],
             TP: 20,
           },
         ],
