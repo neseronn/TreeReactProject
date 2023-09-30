@@ -23,7 +23,7 @@ import {
   changeCommonData,
   changeDataMonthInfo,
 } from '../store/inputSlice';
-import { CloseOutlined } from '@ant-design/icons';
+import { CalculatorOutlined, CloseOutlined } from '@ant-design/icons';
 import { setCalculated } from '../store/resultSlice';
 import { techSystem, calcMonthNames } from '../common/index';
 
@@ -191,7 +191,11 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
           <Title level={3} style={{ textAlign: 'center' }}>
             Введите данные по машинам
           </Title>
-          <Button type='primary' htmlType='submit' loading={loadBtn}>
+          <Button
+            type='primary'
+            icon={isCalculated ? '' : <CalculatorOutlined />}
+            htmlType='submit'
+            loading={loadBtn}>
             {isCalculated ? 'Перейти к расчетам' : 'Выполнить расчеты'}
           </Button>
         </div>

@@ -1,10 +1,15 @@
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
-import { HomeOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme, Button } from 'antd';
+import {
+  DownloadOutlined,
+  HistoryOutlined,
+  HomeOutlined,
+  SaveOutlined,
+} from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, theme, Button, Drawer, Empty } from 'antd';
 import CommonForm from './components/CommonForm';
 import DataEntry from './pages/DataEntry';
 import ResultsPage from './pages/ResultsPage';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import generatePDF from 'react-to-pdf';
 
 const { Header, Content, Footer } = Layout;
@@ -17,6 +22,14 @@ function App() {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const ref = useRef<HTMLDivElement | null>(null);
+
+  const [openHistory, setOpenHistory] = useState<boolean>(false);
+  const showDrawer = () => {
+    setOpenHistory(true);
+  };
+  const onClose = () => {
+    setOpenHistory(false);
+  };
 
   useEffect(() => {
     // console.log(extraBreadcrumbItems);
@@ -75,12 +88,15 @@ function App() {
         {location.pathname === '/results' && (
           <Button
             type='primary'
+            icon={<DownloadOutlined />}
             onClick={() => generatePDF(ref, { filename: 'page.pdf' })}>
             Скачать PDF
           </Button>
         )}
 
-        <Button>История</Button>
+        <Button icon={<HistoryOutlined />} onClick={showDrawer}>
+          История
+        </Button>
       </Header>
       <Content
         style={{
@@ -116,6 +132,18 @@ function App() {
           </div>
         </div>
       </Content>
+      <Drawer
+        size='large'
+        title='Сохраненные вычисления'
+        placement='right'
+        onClose={onClose}
+        open={openHistory}>
+        <Empty
+          description={
+            <span style={{ color: '#80878f' }}>Нет сохраненных данных</span>
+          }
+        />
+      </Drawer>
       {/* <Footer
         style={{
           textAlign: 'center',
