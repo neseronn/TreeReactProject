@@ -1,4 +1,4 @@
-import { configureStore, Action } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import inputSlice from './inputSlice';
 import resultSlice from './resultSlice';
 

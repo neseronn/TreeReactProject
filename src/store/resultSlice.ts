@@ -1,9 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  MonthPairData,
-  ProductionVolume,
-  ResultData,
-} from '../types/result-types';
+import { ResultData } from '../types/result-types';
 import { calculateData } from './asyncActions.ts/inputData';
 
 interface ResultState {

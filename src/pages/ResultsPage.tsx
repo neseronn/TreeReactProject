@@ -1,8 +1,5 @@
-import React, { MutableRefObject, useState, useRef } from 'react';
 import { useTypedSelector } from '../store/hooks';
-import { Button, Typography } from 'antd';
-import ResultDisplay from '../components/ResultDisplay';
-import generatePDF from 'react-to-pdf';
+import { Typography } from 'antd';
 import MonthResultDisplay from '../components/MonthResultDisplay';
 import { calcMonthNames } from '../common';
 
@@ -16,10 +13,6 @@ const ResultsPage = () => {
     (store) => store.inputData.data.DataCalculated
   );
   const monthNames = calcMonthNames(FirstMonth, CountMonth);
-
-  // React.useEffect(() => {
-  //
-  // }, []);
 
   return (
     <>
@@ -66,7 +59,6 @@ const ResultsPage = () => {
         <pre>{JSON.stringify(result, null, 2)}</pre>
       </Typography> */}
         </div>
-        {/* <ResultDisplay result={result} type='с учетом' /> */}
       </div>
     </>
   );

@@ -16,7 +16,6 @@ const breadcrumbNames: Record<string, string> = {
 function App() {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
-  // const { toPDF, targetRef } = usePDF({ filename: 'results.pdf' });
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -73,9 +72,14 @@ function App() {
           }}
           items={[{ key: 0, label: 'Главная' }]}
         />
-        <Button onClick={() => generatePDF(ref, { filename: 'page.pdf' })}>
-          Скачать PDF
-        </Button>
+        {location.pathname === '/results' && (
+          <Button
+            type='primary'
+            onClick={() => generatePDF(ref, { filename: 'page.pdf' })}>
+            Скачать PDF
+          </Button>
+        )}
+
         <Button>История</Button>
       </Header>
       <Content
@@ -85,42 +89,29 @@ function App() {
         <Breadcrumb
           style={{
             marginBottom: '12px',
-            // margin: '58px 0 10px 0',
           }}
           items={breadcrumbItems}
         />
         <div
           style={{
             display: 'flex',
-            // width: '100%',
             flexDirection: 'column',
-            // justifyContent: 'center',
-            // alignItems: 'center',
           }}>
           <div
             ref={ref}
             style={{
               width: '100%',
               maxWidth: 'max-content',
-              // minWidth: 'min-content',
               display: 'flex',
               margin: '0 auto',
               justifyContent: 'center',
-              // alignItems: 'center',
-
-              // maxHeight: '100vh',
-              // overflowY: 'scroll',
               columnGap: 20,
               transition: 'width 0.5s ease-in-out',
             }}>
             <Routes>
               <Route path='/' element={<DataEntry />} />
-              {/* <Route path='/:id' element={<Page />} /> */}
+              {/* <Route path='/:id' element={<DataEntry />} /> */}
               <Route path='/results' element={<ResultsPage />} />
-              {/* <Route
-                                path='/results/:id'
-                                element={<ResultsPage />}
-                            /> */}
             </Routes>
           </div>
         </div>

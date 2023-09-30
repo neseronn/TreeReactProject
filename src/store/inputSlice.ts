@@ -1,8 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import DataEntry from './../pages/DataEntry';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   AllMonthInputData,
-  ChangedAllMonthInputData,
   ChangedCommonInputData,
   CommonInputData,
   MonthInputData,
