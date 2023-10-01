@@ -26,6 +26,10 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
     error: errorSave,
   } = useTypedSelector((store) => store.inputData);
 
+  const id = useTypedSelector(
+    (store) => store.inputData.data.DataAboutRecord?.id
+  );
+
   useEffect(() => {
     open && dispatch(getSaves());
   }, [open]);
@@ -34,8 +38,8 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
     onClose();
   }, [isSaveSuccess]);
 
-  const onSelectSavedData = (id: number) => {
-    dispatch(getSaveById(id));
+  const onSelectSavedData = (id: number | null) => {
+    id && dispatch(getSaveById(id));
     navigate('/');
   };
 
@@ -53,7 +57,7 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
           }
         />
       ) : isLoading ? (
-        <Spin />
+        <Spin size='large' style={{ width: '100%' }} />
       ) : (
         isSuccess && (
           <>
@@ -63,7 +67,8 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
               bordered
               renderItem={(item) => (
                 <SaveItem
-                  key={item.name + item.id}
+                  key={'saveitem' + item.id}
+                  currentId={id}
                   item={item}
                   selectSave={onSelectSavedData}
                 />

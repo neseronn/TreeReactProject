@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 import { ChangedCommonInputData, CommonInputData } from '../types/index-types';
-import { changeCommonData } from '../store/inputSlice';
+import { changeCommonData, setIsChanged } from '../store/inputSlice';
 import { useTypedSelector } from '../store/hooks';
 import { Typography } from 'antd';
 import { AppDispatch } from '../store/store';
@@ -12,10 +12,11 @@ const { Title } = Typography;
 
 const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { DataCalculated, dataAboutRecord } = useTypedSelector(
+  const { DataCalculated, DataAboutRecord } = useTypedSelector(
     (store) => store.inputData.data
   );
   const isSuccess = useTypedSelector((store) => store.inputData.isSuccess);
+  const isChanged = useTypedSelector((store) => store.inputData.isChanged);
   const isCalculated = useTypedSelector(
     (store) => store.resultData.isCalculated
   );
@@ -25,11 +26,23 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   const [submittable, setSubmittable] = useState(true);
   const [disabled, setDisabled] = useState(isCalculated || false);
 
+  const [savedValues, setSavedValues] = useState<null | CommonInputData>(null);
+
   // Обработчик изменения значений в форме
   const handleFormValuesChange = (
     changedValues: ChangedCommonInputData,
     allValues: CommonInputData
   ) => {
+    if (isSuccess) {
+      if (JSON.stringify(allValues) !== JSON.stringify(savedValues)) {
+        dispatch(setIsChanged(true));
+      } else if (
+        isChanged &&
+        JSON.stringify(allValues) === JSON.stringify(savedValues)
+      ) {
+        dispatch(setIsChanged(false));
+      }
+    }
     dispatch(changeCommonData(changedValues));
     if (isCalculated) {
       if (
@@ -47,8 +60,8 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
 
   // Для обновления количества месяцев при добавлении/удалении карточки месяца
   useEffect(() => {
-    form.setFieldValue('CountMonth', DataCalculated.CountMonth);
-  }, [DataCalculated.CountMonth]);
+    form.setFieldValue('CountMonth', DataCalculated?.CountMonth);
+  }, [DataCalculated?.CountMonth]);
 
   // Валидация, открытие второй формы
   useEffect(() => {
@@ -74,6 +87,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   useEffect(() => {
     if (isSuccess) {
       // form.resetFields();
+      setSavedValues(DataCalculated);
       setDisabled(true);
       form.setFieldsValue(DataCalculated);
     }

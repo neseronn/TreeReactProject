@@ -1,4 +1,4 @@
-import { Save } from './history-types';
+import { EditSave, Save } from './history-types';
 
 export enum TECH_SYSTEM_VAL {
   VTSP1 = 'В+Т+С+П',
@@ -63,13 +63,13 @@ export interface ChangedAllMonthInputData {
 }
 
 export interface InputData {
-  dataAboutRecord?: Save;
+  DataAboutRecord: Save;
   DataCalculated: CommonInputData;
   DataMonthInfo: AllMonthInputData;
 }
 
-export interface SavedInputData {
-  dataAboutRecord: Save;
+export interface SaveInputData {
+  DataAboutRecord: EditSave;
   DataCalculated: CommonInputData;
   DataMonthInfo: AllMonthInputData;
 }

@@ -9,38 +9,45 @@ import { Save } from '../types/history-types';
 
 interface SaveItemProps {
   item: Save;
-  selectSave: (id: number) => void;
+  selectSave: (id: number | null) => void;
+  currentId: number | null;
 }
 
-const SaveItem = ({ item, selectSave }: SaveItemProps) => {
+const SaveItem = ({ item, selectSave, currentId }: SaveItemProps) => {
   return (
     <List.Item
       actions={[
         <Space>
           <CalendarOutlined />
-          {new Date(item.date).toLocaleString('ru-RU')}
+          {item.date && new Date(item.date).toLocaleString('ru-RU')}
         </Space>,
       ]}
       extra={[
-        <Button
-          key={'select' + item.id}
-          type='link'
-          size='large'
-          onClick={() => selectSave(item.id)}>
-          Выбрать
-        </Button>,
-        <Popconfirm
-          key={'Popconfirm' + item.id}
-          title='Вы действительно хотите удалить это сохранение?'
-          okText='Да'
-          cancelText='Отмена'
-          placement='left'
-          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-          // onConfirm={handleOk}
-          // okButtonProps={{ loading: confirmLoading }}
-        >
-          <Button type='link' size='large' icon={<DeleteOutlined />} danger />
-        </Popconfirm>,
+        <Space key={'Space' + item.id}>
+          <Button
+            type='default'
+            size='large'
+            // disabled={currentId === item.id && isChanged ?  }
+            onClick={() => selectSave(item.id)}>
+            {currentId === item.id ? 'Используется' : 'Получить данные'}
+          </Button>
+          <Popconfirm
+            title='Вы действительно хотите удалить это сохранение?'
+            okText='Да'
+            cancelText='Отмена'
+            placement='left'
+            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            // onConfirm={handleOk}
+            // okButtonProps={{ loading: confirmLoading }}
+          >
+            <Button
+              type='default'
+              size='large'
+              icon={<DeleteOutlined />}
+              danger
+            />
+          </Popconfirm>
+        </Space>,
       ]}>
       <List.Item.Meta
         title={item.name}

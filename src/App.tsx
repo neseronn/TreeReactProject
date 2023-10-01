@@ -3,6 +3,7 @@ import {
   DownloadOutlined,
   HistoryOutlined,
   HomeOutlined,
+  SaveFilled,
   SaveOutlined,
 } from '@ant-design/icons';
 import {
@@ -22,6 +23,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import generatePDF from 'react-to-pdf';
 import { useTypedSelector } from './store/hooks';
 import HistoryDrawer from './components/HistoryDrawer';
+import Alert from 'antd/es/alert/Alert';
+import SaveModal from './components/SaveModal';
 
 const { Header, Content, Footer } = Layout;
 
@@ -33,6 +36,14 @@ function App() {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const ref = useRef<HTMLDivElement | null>(null);
+  const { isSuccess, isChanged } = useTypedSelector((store) => store.inputData);
+  const data = useTypedSelector((store) => store.inputData.data);
+  const [menu, setMenu] = useState([{ key: 0, label: 'Новое вычисление' }]);
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
   const [openHistory, setOpenHistory] = useState<boolean>(false);
   const showDrawer = () => {
@@ -67,6 +78,21 @@ function App() {
     },
   ].concat(extraBreadcrumbItems);
 
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setMenu([
+  //       {
+  //         key: 0,
+  //         label: `Вычисление от ${new Date(
+  //           DataAboutRecord.date
+  //         ).toLocaleString()}`,
+  //       },
+  //     ]);
+  //   }
+  // }, [isSuccess]);
+
+  useEffect(() => {}, [isChanged]);
+
   return (
     <Layout
       className='layout'
@@ -94,8 +120,20 @@ function App() {
             display: 'flex',
             justifyContent: 'space-between',
           }}
-          items={[{ key: 0, label: 'Главная' }]}
+          items={menu}
         />
+
+        {location.pathname === '/results' && (
+          <Button
+            type='primary'
+            icon={<SaveFilled />}
+            onClick={() => {
+              setOpenModal(true);
+            }}>
+            Сохранить расчёт
+          </Button>
+        )}
+
         {location.pathname === '/results' && (
           <Button
             type='primary'
@@ -127,7 +165,26 @@ function App() {
           style={{
             display: 'flex',
             flexDirection: 'column',
+            rowGap: '14px',
           }}>
+          {data.DataAboutRecord?.date && data.DataAboutRecord?.id && (
+            <Alert
+              message={
+                "Исходные данные были взяты из '" +
+                data.DataAboutRecord.name +
+                "' от " +
+                new Date(data.DataAboutRecord.date).toLocaleString()
+              }
+              description={data.DataAboutRecord.comment}
+              type={isChanged ? 'warning' : 'info'}
+              showIcon
+            />
+          )}
+
+          {openModal && (
+            <SaveModal open={openModal} handleCancel={closeModal} />
+          )}
+
           <div
             ref={ref}
             style={{

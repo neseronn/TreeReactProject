@@ -4,6 +4,6 @@ export interface EditSave {
 }
 
 export interface Save extends EditSave {
-  id: number;
-  date: string;
+  id: number | null;
+  date: string | null;
 }

@@ -2,11 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosResponse } from 'axios';
 import { instance } from '../../api';
 import { ResultData } from '../../types/result-types';
-import {
-  AllMonthInputData,
-  InputData,
-  SavedInputData,
-} from '../../types/index-types';
+import { AllMonthInputData, InputData } from '../../types/index-types';
 
 export const calculateData = createAsyncThunk<ResultData, InputData>(
   'resultData/calculate',
@@ -27,7 +23,7 @@ export const calculateData = createAsyncThunk<ResultData, InputData>(
 );
 
 export const getSaveById = createAsyncThunk<
-  SavedInputData,
+  InputData,
   number,
   {
     rejectValue: string;

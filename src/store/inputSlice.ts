@@ -4,11 +4,10 @@ import {
   ChangedCommonInputData,
   CommonInputData,
   InputData,
-  MonthInputData,
-  SavedInputData,
 } from '../types/index-types';
 import { getSaveById } from './asyncActions.ts/inputData';
-import { Save } from '../types/history-types';
+import { EditSave, Save } from '../types/history-types';
+import { saveCalculated } from './asyncActions.ts/history';
 
 const primer1 = {
   MainMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
@@ -44,16 +43,31 @@ const primer1 = {
   ],
 };
 
-interface InputState {
-  data: InputData | SavedInputData;
+interface NewSave {
   isLoading: boolean;
   isSuccess: boolean;
+  error: null | string | undefined;
+}
+
+interface InputState {
+  newSave: NewSave;
+  data: InputData;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isChanged: boolean;
   error: null | string | undefined;
   isVisible: boolean;
 }
 
 const initialState: InputState = {
+  newSave: {} as NewSave,
   data: {
+    DataAboutRecord: {
+      id: null,
+      name: '',
+      comment: '',
+      date: null,
+    },
     DataCalculated: {} as CommonInputData,
     // DataCalculated: {
     //   CountMonth: 1,
@@ -84,6 +98,7 @@ const initialState: InputState = {
         ],
       },
   },
+  isChanged: false,
   isLoading: false,
   isSuccess: false,
   isVisible: false,
@@ -104,9 +119,12 @@ export const inputSlice = createSlice({
     ) => {
       state.data.DataCalculated = { ...state.data.DataCalculated, ...payload };
     },
-    // Внешние общие данные
-    setTechSystem: (state, { payload }: PayloadAction<string[]>) => {
-      // state.tech = payload;
+    setIsChanged: (state, { payload }: PayloadAction<boolean>) => {
+      state.isChanged = payload;
+    },
+    setDataAboutRecord: (state, { payload }: PayloadAction<EditSave>) => {
+      state.data.DataAboutRecord.name = payload.name;
+      state.data.DataAboutRecord.comment = payload.comment;
     },
 
     // Данные по машинам (месяцам)
@@ -182,11 +200,12 @@ export const inputSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(
       getSaveById.fulfilled,
-      (state, { payload }: PayloadAction<SavedInputData>) => {
+      (state, { payload }: PayloadAction<InputData>) => {
         state.data = payload;
         state.isLoading = false;
         state.isSuccess = true;
         state.isVisible = true;
+        state.isChanged = false;
         state.error = null;
       }
     );
@@ -204,6 +223,30 @@ export const inputSlice = createSlice({
         state.error = action.error.message;
       }
     });
+
+    builder.addCase(
+      saveCalculated.fulfilled,
+      (state, { payload }: PayloadAction<InputData>) => {
+        state.data = payload;
+        state.newSave.isLoading = false;
+        state.newSave.isSuccess = true;
+        state.newSave.error = null;
+      }
+    );
+    builder.addCase(saveCalculated.pending, (state) => {
+      state.newSave.isLoading = true;
+      state.newSave.isSuccess = false;
+      state.newSave.error = null;
+    });
+    builder.addCase(saveCalculated.rejected, (state, action) => {
+      state.newSave.isLoading = false;
+      state.newSave.isSuccess = false;
+      if (action.payload) {
+        state.newSave.error = action.payload;
+      } else {
+        state.newSave.error = action.error.message;
+      }
+    });
   },
 });
 
@@ -213,6 +256,8 @@ export const {
   changeDataMonthInfo,
   changeArrLen,
   setIsVisible,
+  setIsChanged,
+  setDataAboutRecord,
 } = inputSlice.actions;
 
 export default inputSlice.reducer;

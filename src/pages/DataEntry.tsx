@@ -87,6 +87,7 @@ const DataEntry: React.FC = () => {
   return (
     <>
       {contextHolder}
+
       <CommonForm setIsVisible={setIsVisible} />
 
       {isVisible && (
