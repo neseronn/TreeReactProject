@@ -144,7 +144,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
 
     console.log('handleFormValuesChange: сохранены в redux');
   };
-  // const [container, setContainer] = useState<HTMLDivElement | null>(null)
+  
   return (
     <div
       style={{

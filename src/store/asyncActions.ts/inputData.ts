@@ -2,9 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosResponse } from 'axios';
 import { instance } from '../../api';
 import { ResultData } from '../../types/result-types';
-import { AllMonthInputData, inputData } from '../../types/index-types';
+import {
+  AllMonthInputData,
+  InputData,
+  SavedInputData,
+} from '../../types/index-types';
 
-export const calculateData = createAsyncThunk<ResultData, inputData>(
+export const calculateData = createAsyncThunk<ResultData, InputData>(
   'resultData/calculate',
   async (data, thunkApi) => {
     try {
@@ -21,3 +25,19 @@ export const calculateData = createAsyncThunk<ResultData, inputData>(
     }
   }
 );
+
+export const getSaveById = createAsyncThunk<
+  SavedInputData,
+  number,
+  {
+    rejectValue: string;
+  }
+>('inputData/getSaveById', async (id, thunkApi) => {
+  try {
+    const response = await instance.get(`/save_calculated/${id}/`);
+    console.log(response);
+    return response.data;
+  } catch (error: any) {
+    return thunkApi.rejectWithValue(error.message);
+  }
+});

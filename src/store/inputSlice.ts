@@ -3,8 +3,13 @@ import {
   AllMonthInputData,
   ChangedCommonInputData,
   CommonInputData,
+  InputData,
   MonthInputData,
+  SavedInputData,
 } from '../types/index-types';
+import { getSaveById } from './asyncActions.ts/inputData';
+import { Save } from '../types/history-types';
+
 const primer1 = {
   MainMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
   AdditionalMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
@@ -39,40 +44,28 @@ const primer1 = {
   ],
 };
 
-interface MonthPayload {
-  index: number;
-  data: MonthInputData;
-}
-
-interface MarkCars {
-  MainMarkCars: string[];
-  AdditionalMarkCars: string[];
-}
-
 interface InputState {
-  data: {
-    DataCalculated: CommonInputData;
-    DataMonthInfo: AllMonthInputData;
-  };
+  data: InputData | SavedInputData;
   isLoading: boolean;
+  isSuccess: boolean;
+  error: null | string | undefined;
   isVisible: boolean;
-  error: null | string;
 }
 
 const initialState: InputState = {
   data: {
-    // DataCalculated: {} as CommonInputData,
-    DataCalculated: {
-      CountMonth: 1,
-      FirstMonth: 1,
-      AvgStock: 240,
-      markCar: 'Маз',
-      N: 0,
-      replaceableMachinePerfomance: 56,
-      ShiftsNumber: 2,
-      TotalStock: 100000,
-      ZoneLength: 50,
-    },
+    DataCalculated: {} as CommonInputData,
+    // DataCalculated: {
+    //   CountMonth: 1,
+    //   FirstMonth: 1,
+    //   AvgStock: 240,
+    //   markCar: 'Маз',
+    //   N: 1,
+    //   replaceableMachinePerfomance: 56,
+    //   ShiftsNumber: 2,
+    //   TotalStock: 555555,
+    //   ZoneLength: 50,
+    // },
     DataMonthInfo:
       // {} as AllMonthInputData,
       {
@@ -92,6 +85,7 @@ const initialState: InputState = {
       },
   },
   isLoading: false,
+  isSuccess: false,
   isVisible: false,
   error: null,
 };
@@ -183,10 +177,33 @@ export const inputSlice = createSlice({
     setIsVisible: (state, { payload }: PayloadAction<boolean>) => {
       state.isVisible = payload;
     },
+  },
 
-    // setSmth: (state, { payload }: PayloadAction<types>) => {
-    //     state.smth = payload;
-    // },
+  extraReducers(builder) {
+    builder.addCase(
+      getSaveById.fulfilled,
+      (state, { payload }: PayloadAction<SavedInputData>) => {
+        state.data = payload;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isVisible = true;
+        state.error = null;
+      }
+    );
+    builder.addCase(getSaveById.pending, (state) => {
+      state.isLoading = true;
+      state.isSuccess = false;
+      state.error = null;
+    });
+    builder.addCase(getSaveById.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error.message;
+      }
+    });
   },
 });
 

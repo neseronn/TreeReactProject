@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ResultData } from '../types/result-types';
-import { calculateData } from './asyncActions.ts/inputData';
 import { Save } from '../types/history-types';
+import { getSaves } from './asyncActions.ts/history';
 
 interface HistoryState {
   saves: Save[];
@@ -26,33 +25,32 @@ export const historySlice = createSlice({
     // },
   },
   extraReducers(builder) {
-    // builder.addCase(
-    //   calculateData.fulfilled,
-    //   (state, { payload }: PayloadAction<ResultData>) => {
-    //     state.isLoading = false;
-    //     state.isSuccess = true;
-    //     state.result = payload;
-    //     state.error = null;
-    //     state.isCalculated = true;
-    //   }
-    // );
-    // builder.addCase(calculateData.pending, (state) => {
-    //   state.isLoading = true;
-    //   state.isSuccess = false;
-    //   state.isCalculated = false;
-    //   state.error = null;
-    // });
-    // builder.addCase(calculateData.rejected, (state, action) => {
-    //   state.isLoading = false;
-    //   state.isSuccess = false;
-    //   state.isCalculated = false;
-    //   if (action.payload) {
-    //     // Здесь мы имеем доступ к ошибкам, переданным в `createAsyncThunk()`
-    //     state.error = action.payload;
-    //   } else {
-    //     state.error = action.error.message;
-    //   }
-    // });
+    builder.addCase(
+      getSaves.fulfilled,
+      (state, { payload }: PayloadAction<Save[]>) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.saves = payload;
+        state.error = null;
+      }
+    );
+    builder.addCase(getSaves.pending, (state) => {
+      state.saves = [];
+      state.isLoading = true;
+      state.isSuccess = false;
+      state.error = null;
+    });
+    builder.addCase(getSaves.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.saves = [];
+      if (action.payload) {
+        // Здесь мы имеем доступ к ошибкам, переданным в `createAsyncThunk()`
+        state.error = action.payload;
+      } else {
+        state.error = action.error.message;
+      }
+    });
   },
 });
 

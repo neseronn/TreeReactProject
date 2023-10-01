@@ -12,7 +12,10 @@ const { Title } = Typography;
 
 const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { DataCalculated } = useTypedSelector((store) => store.inputData.data);
+  const { DataCalculated, dataAboutRecord } = useTypedSelector(
+    (store) => store.inputData.data
+  );
+  const isSuccess = useTypedSelector((store) => store.inputData.isSuccess);
   const isCalculated = useTypedSelector(
     (store) => store.resultData.isCalculated
   );
@@ -67,6 +70,14 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
     console.log('Данные при первом рендере:');
     console.log(values);
   }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      // form.resetFields();
+      setDisabled(true);
+      form.setFieldsValue(DataCalculated);
+    }
+  }, [isSuccess]);
 
   const onFinish = (values: CommonInputData) => {
     setDisabled(true);

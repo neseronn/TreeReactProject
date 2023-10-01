@@ -5,12 +5,23 @@ import {
   HomeOutlined,
   SaveOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme, Button, Drawer, Empty } from 'antd';
+import {
+  Breadcrumb,
+  Layout,
+  Menu,
+  theme,
+  Button,
+  Drawer,
+  Empty,
+  Spin,
+} from 'antd';
 import CommonForm from './components/CommonForm';
 import DataEntry from './pages/DataEntry';
 import ResultsPage from './pages/ResultsPage';
 import React, { useRef, useEffect, useState } from 'react';
 import generatePDF from 'react-to-pdf';
+import { useTypedSelector } from './store/hooks';
+import HistoryDrawer from './components/HistoryDrawer';
 
 const { Header, Content, Footer } = Layout;
 
@@ -89,7 +100,11 @@ function App() {
           <Button
             type='primary'
             icon={<DownloadOutlined />}
-            onClick={() => generatePDF(ref, { filename: 'page.pdf' })}>
+            onClick={() =>
+              generatePDF(ref, {
+                filename: 'Расчёты от ' + new Date().toLocaleString() + '.pdf',
+              })
+            }>
             Скачать PDF
           </Button>
         )}
@@ -132,18 +147,7 @@ function App() {
           </div>
         </div>
       </Content>
-      <Drawer
-        size='large'
-        title='Сохраненные вычисления'
-        placement='right'
-        onClose={onClose}
-        open={openHistory}>
-        <Empty
-          description={
-            <span style={{ color: '#80878f' }}>Нет сохраненных данных</span>
-          }
-        />
-      </Drawer>
+      <HistoryDrawer open={openHistory} onClose={onClose} />
       {/* <Footer
         style={{
           textAlign: 'center',

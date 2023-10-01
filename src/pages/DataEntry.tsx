@@ -25,12 +25,6 @@ const DataEntry: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // const loadButton = () => {
-  //   if (isLoading) {
-  //     setLoad(true);
-  //   }
-  // };
-
   useEffect(() => {
     if (isLoading) {
       setLoad(true);
@@ -96,7 +90,11 @@ const DataEntry: React.FC = () => {
       <CommonForm setIsVisible={setIsVisible} />
 
       {isVisible && (
-        <MonthsFormList onFinish={onFinish} onFinishFailed={onFinishFailed} loadBtn={load}/>
+        <MonthsFormList
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          loadBtn={load}
+        />
       )}
     </>
   );
