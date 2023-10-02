@@ -106,7 +106,6 @@ export const inputSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.isVisible = false;
-
       state.newSave = {} as NewSave;
     },
     clearCarsData: (state) => {
@@ -125,7 +124,6 @@ export const inputSlice = createSlice({
           () => ''
         );
       });
-      // state.data.DataMonthInfo.DATA.map((elem) => elem.map(() => ''));
       state.isChanged = true;
     },
     // Основные данные

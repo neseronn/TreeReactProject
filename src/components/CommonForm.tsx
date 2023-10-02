@@ -12,6 +12,7 @@ import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
 import { techSystem } from '../common/index';
 import { setCalculated } from '../store/resultSlice';
+import { ClearOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 const CommonForm: React.FC<any> = ({ setIsVisible }) => {
@@ -331,7 +332,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
             }}>
             Подтвердить
           </Button>
-          <Button htmlType='reset' onClick={onReset}>
+          <Button htmlType='reset' onClick={onReset} icon={<ClearOutlined />}>
             Очистить
           </Button>
         </Space>
