@@ -3,10 +3,11 @@ import { Alert, Drawer, Empty, List, Spin, Space } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../store/hooks';
 import { AppDispatch } from '../store/store';
-import { getSaves } from '../store/asyncActions.ts/history';
+import { deleteSaveById, getSaves } from '../store/asyncActions.ts/history';
 import { getSaveById } from '../store/asyncActions.ts/inputData';
 import SaveItem from './SaveItem';
 import { useNavigate } from 'react-router';
+import { setDeleteError, setDeleteSuccess } from '../store/historySlice';
 
 interface HistoryDrawerProps {
   open: boolean;
@@ -14,17 +15,18 @@ interface HistoryDrawerProps {
 }
 
 const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading, isSuccess, saves } = useTypedSelector(
     (store) => store.historyData
   );
 
-  const {
-    isLoading: isSaveLoading,
-    isSuccess: isSaveSuccess,
-    error: errorSave,
-  } = useTypedSelector((store) => store.inputData);
+  const { isSuccess: isSaveSuccess } = useTypedSelector(
+    (store) => store.inputData
+  );
+  const [messageVisible, setMessageVisible] = useState(false);
+  const { deleteLoading, deleteSuccess, deleteError } = useTypedSelector(
+    (store) => store.historyData
+  );
 
   const id = useTypedSelector(
     (store) => store.inputData.data.DataAboutRecord?.id
@@ -32,19 +34,31 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
 
   useEffect(() => {
     open && dispatch(getSaves());
+    if (!open) {
+      dispatch(setDeleteSuccess(false));
+      dispatch(setDeleteError(false));
+    }
   }, [open]);
 
   useEffect(() => {
     onClose();
   }, [isSaveSuccess]);
 
+  useEffect(() => {
+    deleteLoading && setMessageVisible(true);
+    if (deleteSuccess) dispatch(getSaves());
+  }, [deleteLoading]);
+
   const onSelectSavedData = (id: number | null) => {
     id && dispatch(getSaveById(id));
   };
 
   const handleDeleteSave = (id: number | null) => {
-    // id && dispatch(getSaveById(id));
-    // navigate('/');
+    id && dispatch(deleteSaveById(id));
+  };
+
+  const handleCloseMessage = () => {
+    setMessageVisible(false);
   };
 
   return (
@@ -65,20 +79,43 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
       ) : (
         isSuccess && (
           <>
-            <List
-              itemLayout='vertical'
-              dataSource={saves}
-              bordered
-              renderItem={(item) => (
-                <SaveItem
-                  key={'saveitem' + item.id}
-                  currentId={id}
-                  item={item}
-                  selectSave={onSelectSavedData}
-                  handleDelete={handleDeleteSave}
+            <Spin spinning={deleteLoading} size='large' tip='Идёт удаление...'>
+              <Space direction='vertical' style={{ width: '100%' }}>
+                {messageVisible && deleteSuccess && (
+                  <Alert
+                    afterClose={handleCloseMessage}
+                    message='Сохранение успешно удалено'
+                    type='success'
+                    closable
+                    showIcon
+                  />
+                )}
+                {messageVisible && deleteError && (
+                  <Alert
+                    afterClose={handleCloseMessage}
+                    message='Ошибка удаления'
+                    description={deleteError}
+                    type='error'
+                    closable
+                    showIcon
+                  />
+                )}
+                <List
+                  itemLayout='vertical'
+                  dataSource={saves}
+                  bordered
+                  renderItem={(item) => (
+                    <SaveItem
+                      key={'saveitem' + item.id}
+                      currentId={id}
+                      item={item}
+                      selectSave={onSelectSavedData}
+                      handleDelete={handleDeleteSave}
+                    />
+                  )}
                 />
-              )}
-            />
+              </Space>
+            </Spin>
           </>
         )
       )}

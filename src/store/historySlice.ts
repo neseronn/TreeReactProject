@@ -10,7 +10,6 @@ interface HistoryState {
   deleteLoading: boolean;
   deleteSuccess: boolean;
   deleteError: null | string | any;
-  deleteStatus: string;
 }
 
 const initialState: HistoryState = {
@@ -21,16 +20,18 @@ const initialState: HistoryState = {
   deleteLoading: false,
   deleteSuccess: false,
   deleteError: null,
-  deleteStatus: '',
 };
 
 export const historySlice = createSlice({
   name: 'historyData',
   initialState,
   reducers: {
-    // setSuccess: (state, { payload }: PayloadAction<boolean>) => {
-    //   state.isSuccess = false;
-    // },
+    setDeleteSuccess: (state, { payload }: PayloadAction<boolean>) => {
+      state.deleteSuccess = payload;
+    },
+    setDeleteError: (state, { payload }: PayloadAction<null | boolean>) => {
+      state.deleteError = payload;
+    },
   },
   extraReducers(builder) {
     builder.addCase(
@@ -65,12 +66,10 @@ export const historySlice = createSlice({
       (state, { payload }: PayloadAction<string>) => {
         state.deleteLoading = false;
         state.deleteSuccess = true;
-        // state.deleteStatus = payload;
         state.deleteError = null;
       }
     );
     builder.addCase(deleteSaveById.pending, (state) => {
-      // state.deleteStatus = '';
       state.deleteLoading = true;
       state.deleteSuccess = false;
       state.deleteError = null;
@@ -78,7 +77,6 @@ export const historySlice = createSlice({
     builder.addCase(deleteSaveById.rejected, (state, action) => {
       state.deleteLoading = false;
       state.deleteSuccess = false;
-      // state.deleteStatus = '';
       if (action.payload) {
         state.deleteError = action.payload;
       } else {
@@ -88,6 +86,6 @@ export const historySlice = createSlice({
   },
 });
 
-export const {} = historySlice.actions;
+export const { setDeleteSuccess, setDeleteError } = historySlice.actions;
 
 export default historySlice.reducer;

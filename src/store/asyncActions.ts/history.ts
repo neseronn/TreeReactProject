@@ -44,9 +44,7 @@ export const saveCalculated = createAsyncThunk<
 export const deleteSaveById = createAsyncThunk<
   any,
   number,
-  {
-    rejectValue: string;
-  }
+  { rejectValue: string }
 >('historyData/deleteSaveById', async (id, thunkApi) => {
   try {
     const response = await instance.delete(`/save_calculated/${id}/`);
