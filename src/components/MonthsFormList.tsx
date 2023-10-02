@@ -9,6 +9,7 @@ import {
   Space,
   Affix,
   InputNumber,
+  Popconfirm,
 } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { useTypedSelector } from '../store/hooks';
@@ -24,7 +25,12 @@ import {
   changeDataMonthInfo,
   clearCarsData,
 } from '../store/inputSlice';
-import { CalculatorOutlined, ClearOutlined, CloseOutlined } from '@ant-design/icons';
+import {
+  CalculatorOutlined,
+  ClearOutlined,
+  CloseOutlined,
+  QuestionCircleOutlined,
+} from '@ant-design/icons';
 import { setCalculated } from '../store/resultSlice';
 import { techSystem, calcMonthNames } from '../common/index';
 
@@ -68,6 +74,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
   const { DataCalculated, DataMonthInfo } = useTypedSelector(
     (store) => store.inputData.data
   );
+  const isSuccess = useTypedSelector((store) => store.inputData.isSuccess);
   const { isCalculated, isLoading } = useTypedSelector(
     (store) => store.resultData
   );
@@ -86,11 +93,15 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
     console.log('fields reset (bc tech.length changed)');
   }, [tech.length]);
 
+  // Для удаления лишних пустых форм месяцев
+  useEffect(() => {
+    form.setFieldsValue(DataMonthInfo);
+  }, [isSuccess]);
+
   useEffect(() => {
     setMonthNames(
       calcMonthNames(DataCalculated.FirstMonth, DataCalculated.CountMonth)
     );
-    // form.resetFields();
     console.log('DataCalculated.CountMonth: reset fields');
   }, [DataCalculated.CountMonth, DataCalculated.FirstMonth]);
 
@@ -154,7 +165,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
 
   const onReset = () => {
     dispatch(clearCarsData());
-    // setDisabled(false);
   };
 
   return (
@@ -418,8 +428,24 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                   extra={
                     fields.indexOf(field) === fields.length - 1 &&
                     fields.length > 1 ? (
-                      <CloseOutlined
-                        onClick={() => {
+                      <Popconfirm
+                        title={
+                          <Typography.Title level={5}>
+                            Вы действительно хотите удалить месяц? Данные по
+                            нему также удалятся
+                          </Typography.Title>
+                        }
+                        okText='Да'
+                        cancelText='Отмена'
+                        placement='left'
+                        icon={
+                          <QuestionCircleOutlined
+                            style={{ color: 'red', fontSize: '20px' }}
+                          />
+                        }
+                        okButtonProps={{ danger: true, size: 'large' }}
+                        cancelButtonProps={{ size: 'large' }}
+                        onConfirm={() => {
                           remove(field.name);
                           dispatch(
                             changeCommonData({
@@ -427,7 +453,19 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                             })
                           );
                         }}
-                      />
+                        // okButtonProps={{ loading: confirmLoading }}
+                      >
+                        <CloseOutlined
+                        // onClick={() => {
+                        //   remove(field.name);
+                        //   dispatch(
+                        //     changeCommonData({
+                        //       CountMonth: DataCalculated.CountMonth - 1,
+                        //     })
+                        //   );
+                        // }}
+                        />
+                      </Popconfirm>
                     ) : null
                   }>
                   <Card.Grid
