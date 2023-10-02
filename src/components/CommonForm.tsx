@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
 import { ChangedCommonInputData, CommonInputData } from '../types/index-types';
-import { changeCommonData, setIsChanged } from '../store/inputSlice';
+import {
+  changeCommonData,
+  clearAllData,
+  setIsChanged,
+} from '../store/inputSlice';
 import { useTypedSelector } from '../store/hooks';
 import { Typography } from 'antd';
 import { AppDispatch } from '../store/store';
@@ -98,6 +102,11 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
     // console.log(values);
     // dispatch(addTechSystem(values));
     // form.resetFields();
+  };
+
+  const onReset = () => {
+    dispatch(clearAllData());
+    setDisabled(false);
   };
 
   return (
@@ -322,7 +331,9 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
             }}>
             Подтвердить
           </Button>
-          <Button htmlType='reset'>Очистить</Button>
+          <Button htmlType='reset' onClick={onReset}>
+            Очистить
+          </Button>
         </Space>
       </Form.Item>
     </Form>

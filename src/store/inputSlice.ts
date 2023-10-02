@@ -72,23 +72,21 @@ const initialState: InputState = {
       date: null,
     },
     DataCalculated: {} as CommonInputData,
-    DataMonthInfo:
-      // {} as AllMonthInputData,
-      {
-        MainMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
-        AdditionalMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
-        DATA: [
-          {
-            MainCountCars: [64, 87, 48, 200],
-            MainCountShift: [1, 1, 2, 1],
-            MainShiftProduction: [1, 1, 1, 0.5],
-            AdditionalCountCars: [64, 87, 48, 200],
-            AdditionalCountShift: [1, 1, 1, 1],
-            AdditionalShiftProduction: [1, 1, 1, 0.5],
-            TP: 20,
-          },
-        ],
-      },
+    DataMonthInfo: {
+      MainMarkCars: [],
+      AdditionalMarkCars: [],
+      DATA: [
+        {
+          MainCountCars: [],
+          MainCountShift: [],
+          MainShiftProduction: [],
+          AdditionalCountCars: [],
+          AdditionalCountShift: [],
+          AdditionalShiftProduction: [],
+          TP: 0,
+        },
+      ],
+    },
   },
   isChanged: false,
   isLoading: false,
@@ -101,6 +99,35 @@ export const inputSlice = createSlice({
   name: 'inputData',
   initialState,
   reducers: {
+    clearAllData: (state) => {
+      state.data = initialState.data;
+      state.error = null;
+      state.isChanged = false;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isVisible = false;
+
+      state.newSave = {} as NewSave;
+    },
+    clearCarsData: (state) => {
+      state.data.DataMonthInfo.MainMarkCars =
+        state.data.DataMonthInfo.MainMarkCars.map(() => '');
+      state.data.DataMonthInfo.AdditionalMarkCars =
+        state.data.DataMonthInfo.AdditionalMarkCars.map(() => '');
+      state.data.DataMonthInfo.DATA.forEach((obj) => {
+        obj.TP = 0;
+        obj.MainCountCars = obj.MainCountCars.map(() => '');
+        obj.MainCountShift = obj.MainCountShift.map(() => '');
+        obj.MainShiftProduction = obj.MainShiftProduction.map(() => '');
+        obj.AdditionalCountCars = obj.AdditionalCountCars.map(() => '');
+        obj.AdditionalCountShift = obj.AdditionalCountShift.map(() => '');
+        obj.AdditionalShiftProduction = obj.AdditionalShiftProduction.map(
+          () => ''
+        );
+      });
+      // state.data.DataMonthInfo.DATA.map((elem) => elem.map(() => ''));
+      state.isChanged = true;
+    },
     // Основные данные
     setCommonData: (state, { payload }: PayloadAction<CommonInputData>) => {
       state.data.DataCalculated = payload;
@@ -247,6 +274,8 @@ export const inputSlice = createSlice({
 });
 
 export const {
+  clearAllData,
+  clearCarsData,
   setCommonData,
   changeCommonData,
   changeDataMonthInfo,

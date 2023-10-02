@@ -22,6 +22,7 @@ import {
   changeArrLen,
   changeCommonData,
   changeDataMonthInfo,
+  clearCarsData,
 } from '../store/inputSlice';
 import { CalculatorOutlined, CloseOutlined } from '@ant-design/icons';
 import { setCalculated } from '../store/resultSlice';
@@ -107,6 +108,12 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
   }, [DataCalculated.N]);
 
   useEffect(() => {
+    if (tech.length == 0) {
+      setTech(techSystem[DataCalculated.N].split('+'));
+    }
+  }, []);
+
+  useEffect(() => {
     console.log(
       'Выбранная система (в радио ):' +
         techSystem[DataCalculated.N].split('+').length
@@ -132,7 +139,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
 
   useEffect(() => {
     form.resetFields();
-  }, [DataMonthInfo.MainMarkCars.length]);
+  }, [DataMonthInfo.MainMarkCars?.length]);
 
   // Обработчик изменения значений в форме
   const handleFormValuesChange = (
@@ -143,6 +150,11 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
     isCalculated && dispatch(setCalculated(false));
 
     console.log('handleFormValuesChange: сохранены в redux');
+  };
+
+  const onReset = () => {
+    dispatch(clearCarsData());
+    // setDisabled(false);
   };
 
   return (
@@ -191,6 +203,9 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
           <Title level={3} style={{ textAlign: 'center' }}>
             Введите данные по машинам
           </Title>
+          <Button htmlType='reset' onClick={onReset}>
+            Очистить
+          </Button>
           <Button
             type='primary'
             icon={isCalculated ? '' : <CalculatorOutlined />}
@@ -351,7 +366,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
 
         <Form.List
           name='DATA'
-          initialValue={Array(DataCalculated.CountMonth).fill(null)}>
+          initialValue={Array(DataCalculated.CountMonth).fill('')}>
           {(fields, { add, remove }) => (
             <div
               style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
