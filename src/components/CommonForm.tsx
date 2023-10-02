@@ -113,7 +113,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
         minWidth: 350,
         padding: 20,
         backgroundColor: 'white',
-        margin: '0 auto 20px auto',
+        margin: '0 auto',
         borderRadius: 6,
         height: 'max-content',
         // zIndex: 0,

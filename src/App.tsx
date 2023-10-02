@@ -6,25 +6,18 @@ import {
   SaveFilled,
   SaveOutlined,
 } from '@ant-design/icons';
-import {
-  Breadcrumb,
-  Layout,
-  Menu,
-  theme,
-  Button,
-  Drawer,
-  Empty,
-  Spin,
-} from 'antd';
-import CommonForm from './components/CommonForm';
+import { Breadcrumb, Layout, Menu, Button, message } from 'antd';
 import DataEntry from './pages/DataEntry';
 import ResultsPage from './pages/ResultsPage';
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import generatePDF from 'react-to-pdf';
 import { useTypedSelector } from './store/hooks';
 import HistoryDrawer from './components/HistoryDrawer';
 import Alert from 'antd/es/alert/Alert';
 import SaveModal from './components/SaveModal';
+import { setSaveSuccess } from './store/inputSlice';
+import { AppDispatch } from './store/store';
+import { useDispatch } from 'react-redux';
 
 const { Header, Content, Footer } = Layout;
 
@@ -33,17 +26,56 @@ const breadcrumbNames: Record<string, string> = {
 };
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const ref = useRef<HTMLDivElement | null>(null);
   const { isSuccess, isChanged } = useTypedSelector((store) => store.inputData);
   const data = useTypedSelector((store) => store.inputData.data);
-  const [menu, setMenu] = useState([{ key: 0, label: 'Новое вычисление' }]);
+  const [menu, setMenu] = useState([{ key: 0, label: 'Ввод данных' }]);
+
+  const {
+    isLoading: saveLoading,
+    isSuccess: saveSuccess,
+    error: saveError,
+  } = useTypedSelector((store) => store.inputData.newSave);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const closeModal = () => {
     setOpenModal(false);
   };
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    if (saveLoading) {
+      messageApi.open({
+        key: 'saving',
+        type: 'loading',
+        content: 'Загрузка...',
+        duration: 0,
+      });
+    }
+
+    saveSuccess &&
+      messageApi
+        .open({
+          key: 'saving',
+          type: 'success',
+          content: 'Исходные данные сохранены',
+          duration: 2,
+        })
+        .then(() => {
+          dispatch(setSaveSuccess(false));
+        });
+
+    saveError &&
+      messageApi.open({
+        key: 'saving',
+        type: 'error',
+        content: saveError,
+        duration: 2,
+      });
+  }, [saveLoading]);
 
   const [openHistory, setOpenHistory] = useState<boolean>(false);
   const showDrawer = () => {
@@ -181,6 +213,8 @@ function App() {
             />
           )}
 
+          {contextHolder}
+
           {openModal && (
             <SaveModal open={openModal} handleCancel={closeModal} />
           )}
@@ -191,7 +225,7 @@ function App() {
               width: '100%',
               maxWidth: 'max-content',
               display: 'flex',
-              margin: '0 auto',
+              margin: '0 auto 20px',
               justifyContent: 'center',
               columnGap: 20,
               transition: 'width 0.5s ease-in-out',

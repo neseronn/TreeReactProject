@@ -9,6 +9,18 @@ import { getSaveById } from './asyncActions.ts/inputData';
 import { EditSave, Save } from '../types/history-types';
 import { saveCalculated } from './asyncActions.ts/history';
 
+let DataCalculated1 = {
+  CountMonth: 1,
+  FirstMonth: 1,
+  AvgStock: 240,
+  markCar: 'Маз',
+  N: 1,
+  replaceableMachinePerfomance: 56,
+  ShiftsNumber: 2,
+  TotalStock: 555555,
+  ZoneLength: 50,
+};
+
 const primer1 = {
   MainMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
   AdditionalMarkCars: ['МП', 'ТТ-4', 'Тайга', 'ПЛ-1'],
@@ -31,15 +43,6 @@ const primer1 = {
       AdditionalShiftProduction: [64, 87, 48, 200],
       TP: 20,
     },
-    // {
-    //   MainCountCars: [64.0, 87.0, 48.0, 200.0],
-    //   MainCountShift: [1.0, 1.0, 2.0, 1.0],
-    //   MainShiftProduction: [1.0, 1.0, 1.0, 0.5],
-    //   AdditionalCountCars: [64.0, 87.0, 48.0, 200.0],
-    //   AdditionalCountShift: [1.0, 1.0, 2.0, 1.0],
-    //   AdditionalShiftProduction: [1.0, 1.0, 1.0, 0.5],
-    //   TP: 24,
-    // },
   ],
 };
 
@@ -69,17 +72,6 @@ const initialState: InputState = {
       date: null,
     },
     DataCalculated: {} as CommonInputData,
-    // DataCalculated: {
-    //   CountMonth: 1,
-    //   FirstMonth: 1,
-    //   AvgStock: 240,
-    //   markCar: 'Маз',
-    //   N: 1,
-    //   replaceableMachinePerfomance: 56,
-    //   ShiftsNumber: 2,
-    //   TotalStock: 555555,
-    //   ZoneLength: 50,
-    // },
     DataMonthInfo:
       // {} as AllMonthInputData,
       {
@@ -195,6 +187,10 @@ export const inputSlice = createSlice({
     setIsVisible: (state, { payload }: PayloadAction<boolean>) => {
       state.isVisible = payload;
     },
+
+    setSaveSuccess: (state, { payload }: PayloadAction<boolean>) => {
+      state.newSave.isLoading = payload;
+    },
   },
 
   extraReducers(builder) {
@@ -258,6 +254,7 @@ export const {
   setIsVisible,
   setIsChanged,
   setDataAboutRecord,
+  setSaveSuccess,
 } = inputSlice.actions;
 
 export default inputSlice.reducer;

@@ -144,7 +144,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
 
     console.log('handleFormValuesChange: сохранены в redux');
   };
-  
+
   return (
     <div
       style={{
@@ -156,7 +156,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
         overflow: 'hidden',
         padding: 20,
         backgroundColor: 'white',
-        margin: '0 auto 20px auto',
+        margin: '0 auto',
         borderRadius: 6,
       }}>
       <Form
@@ -371,7 +371,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                       <Typography.Text
                         strong
                         style={{ textTransform: 'capitalize' }}>
-                        {monthNames[i]}, {field.key}
+                        {monthNames[i] + ', '}
                       </Typography.Text>
                       <Form.Item
                         initialValue={

@@ -193,12 +193,16 @@ const MonthResultDisplay = ({
   return (
     <>
       <Divider
-        orientation='left'
+        orientation='center'
         children={
-          <Typography.Text strong style={{ fontSize: '16px' }}>
-            <span style={{ textTransform: 'capitalize' }}>{monthName}</span>,{' '}
-            {TP} дней работы
-          </Typography.Text>
+          <Typography.Title
+            level={4}
+            // style={{ fontSize: '16px' }}
+          >
+            <span style={{ textTransform: 'capitalize' }}>{monthName}</span>,
+            дней работы:
+            {' ' + TP}
+          </Typography.Title>
         }
       />
       <Descriptions

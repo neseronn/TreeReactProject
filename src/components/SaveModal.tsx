@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { EditSave } from '../types/history-types';
 import { Button, Form, Input, Modal, Space } from 'antd';
 import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
-import { setDataAboutRecord } from '../store/inputSlice';
 import { useTypedSelector } from '../store/hooks';
 import { saveCalculated } from '../store/asyncActions.ts/history';
 
@@ -15,7 +14,7 @@ interface SaveModalProps {
 const SaveModal = ({ open, handleCancel }: SaveModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [form] = Form.useForm<EditSave>();
-  const { isLoading, isSuccess, error } = useTypedSelector(
+  const { isLoading, isSuccess } = useTypedSelector(
     (store) => store.inputData.newSave
   );
   const { data } = useTypedSelector((store) => store.inputData);
@@ -23,15 +22,15 @@ const SaveModal = ({ open, handleCancel }: SaveModalProps) => {
   const onFinish = (values: EditSave) => {
     console.log(values);
     const newData = { ...data, DataAboutRecord: values };
-    // dispatch(setDataAboutRecord(newData));
     console.log(newData);
     dispatch(saveCalculated(newData));
-    if (isSuccess) {
-      console.log('Успешно сохранено');
-    } else {
-      console.log(error);
-    }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleCancel();
+    }
+  }, [isSuccess]);
 
   const onReset = () => {
     form.resetFields();
@@ -41,10 +40,6 @@ const SaveModal = ({ open, handleCancel }: SaveModalProps) => {
     <Modal
       title='Введите данные для сохранения'
       open={open}
-      // onOk={handleOk}
-      // okText='Сохранить'
-      // cancelText='Отмена'
-      // confirmLoading={confirmLoading}
       onCancel={handleCancel}
       footer={[]}>
       <Form
