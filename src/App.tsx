@@ -6,7 +6,7 @@ import {
   SaveFilled,
   SaveOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, Button, message } from 'antd';
+import { Breadcrumb, Layout, Menu, Button, message, Spin } from 'antd';
 import DataEntry from './pages/DataEntry';
 import ResultsPage from './pages/ResultsPage';
 import { useRef, useEffect, useState } from 'react';
@@ -35,9 +35,15 @@ function App() {
   const [menu, setMenu] = useState([{ key: 0, label: 'Ввод данных' }]);
 
   const {
-    isLoading: saveLoading,
-    isSuccess: saveSuccess,
-    error: saveError,
+    isLoading: isSaveLoading,
+    isSuccess: isSaveSuccess,
+    error: errorSave,
+  } = useTypedSelector((store) => store.inputData);
+
+  const {
+    isLoading: newSaveLoading,
+    isSuccess: newSaveSuccess,
+    error: newSaveError,
   } = useTypedSelector((store) => store.inputData.newSave);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -47,7 +53,7 @@ function App() {
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    if (saveLoading) {
+    if (newSaveLoading) {
       messageApi.open({
         key: 'saving',
         type: 'loading',
@@ -56,7 +62,7 @@ function App() {
       });
     }
 
-    saveSuccess &&
+    newSaveSuccess &&
       messageApi
         .open({
           key: 'saving',
@@ -68,14 +74,45 @@ function App() {
           dispatch(setSaveSuccess(false));
         });
 
-    saveError &&
+    newSaveError &&
       messageApi.open({
         key: 'saving',
         type: 'error',
-        content: saveError,
+        content: newSaveError,
         duration: 2,
       });
-  }, [saveLoading]);
+  }, [newSaveLoading]);
+
+  useEffect(() => {
+    if (isSaveLoading) {
+      messageApi.open({
+        key: 'saving',
+        type: 'loading',
+        content: 'Загрузка...',
+        duration: 0,
+      });
+    }
+
+    isSaveSuccess &&
+      messageApi
+        .open({
+          key: 'saving',
+          type: 'success',
+          content: 'Исходные данные получены',
+          duration: 2,
+        })
+        .then(() => {
+          dispatch(setSaveSuccess(false));
+        });
+
+    errorSave &&
+      messageApi.open({
+        key: 'saving',
+        type: 'error',
+        content: 'Ошибка при получении исходных данных: ' + errorSave,
+        duration: 2,
+      });
+  }, [isSaveLoading]);
 
   const [openHistory, setOpenHistory] = useState<boolean>(false);
   const showDrawer = () => {
@@ -219,23 +256,25 @@ function App() {
             <SaveModal open={openModal} handleCancel={closeModal} />
           )}
 
-          <div
-            ref={ref}
-            style={{
-              width: '100%',
-              maxWidth: 'max-content',
-              display: 'flex',
-              margin: '0 auto 20px',
-              justifyContent: 'center',
-              columnGap: 20,
-              transition: 'width 0.5s ease-in-out',
-            }}>
-            <Routes>
-              <Route path='/' element={<DataEntry />} />
-              {/* <Route path='/:id' element={<DataEntry />} /> */}
-              <Route path='/results' element={<ResultsPage />} />
-            </Routes>
-          </div>
+          <Spin size='large' tip='Загрузка...' spinning={isSaveLoading}>
+            <div
+              ref={ref}
+              style={{
+                width: '100%',
+                maxWidth: 'max-content',
+                margin: '0 auto 20px',
+                display: 'flex',
+                justifyContent: 'center',
+                columnGap: 20,
+                transition: 'width 0.5s ease-in-out',
+              }}>
+              <Routes>
+                <Route path='/' element={<DataEntry />} />
+                {/* <Route path='/:id' element={<DataEntry />} /> */}
+                <Route path='/results' element={<ResultsPage />} />
+              </Routes>
+            </div>
+          </Spin>
         </div>
       </Content>
       <HistoryDrawer open={openHistory} onClose={onClose} />

@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Save } from '../types/history-types';
-import { getSaves } from './asyncActions.ts/history';
+import { deleteSaveById, getSaves } from './asyncActions.ts/history';
 
 interface HistoryState {
   saves: Save[];
   isSuccess: boolean;
   isLoading: boolean;
   error: null | string | any;
+  deleteLoading: boolean;
+  deleteSuccess: boolean;
+  deleteError: null | string | any;
+  deleteStatus: string;
 }
 
 const initialState: HistoryState = {
@@ -14,6 +18,10 @@ const initialState: HistoryState = {
   isSuccess: false,
   isLoading: false,
   error: null,
+  deleteLoading: false,
+  deleteSuccess: false,
+  deleteError: null,
+  deleteStatus: '',
 };
 
 export const historySlice = createSlice({
@@ -49,6 +57,32 @@ export const historySlice = createSlice({
         state.error = action.payload;
       } else {
         state.error = action.error.message;
+      }
+    });
+
+    builder.addCase(
+      deleteSaveById.fulfilled,
+      (state, { payload }: PayloadAction<string>) => {
+        state.deleteLoading = false;
+        state.deleteSuccess = true;
+        // state.deleteStatus = payload;
+        state.deleteError = null;
+      }
+    );
+    builder.addCase(deleteSaveById.pending, (state) => {
+      // state.deleteStatus = '';
+      state.deleteLoading = true;
+      state.deleteSuccess = false;
+      state.deleteError = null;
+    });
+    builder.addCase(deleteSaveById.rejected, (state, action) => {
+      state.deleteLoading = false;
+      state.deleteSuccess = false;
+      // state.deleteStatus = '';
+      if (action.payload) {
+        state.deleteError = action.payload;
+      } else {
+        state.deleteError = action.error.message;
       }
     });
   },

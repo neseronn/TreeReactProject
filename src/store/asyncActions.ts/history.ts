@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { instance } from '../../api';
 import { Save } from '../../types/history-types';
 import { InputData, SaveInputData } from '../../types/index-types';
+import { AxiosResponse } from 'axios';
 
 // interface Error {
 //   errorMessage: string;
@@ -23,6 +24,7 @@ export const getSaves = createAsyncThunk<
   }
 });
 
+// можно переместить в inputData
 export const saveCalculated = createAsyncThunk<
   InputData,
   SaveInputData,
@@ -34,6 +36,22 @@ export const saveCalculated = createAsyncThunk<
     const response = await instance.post('/save_calculated/', data);
     console.log(response);
     return response.data;
+  } catch (error: any) {
+    return thunkApi.rejectWithValue(error.message);
+  }
+});
+
+export const deleteSaveById = createAsyncThunk<
+  any,
+  number,
+  {
+    rejectValue: string;
+  }
+>('historyData/deleteSaveById', async (id, thunkApi) => {
+  try {
+    const response = await instance.delete(`/save_calculated/${id}/`);
+    console.log(response);
+    return response.status;
   } catch (error: any) {
     return thunkApi.rejectWithValue(error.message);
   }

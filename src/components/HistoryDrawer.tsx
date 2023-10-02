@@ -40,7 +40,11 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
 
   const onSelectSavedData = (id: number | null) => {
     id && dispatch(getSaveById(id));
-    navigate('/');
+  };
+
+  const handleDeleteSave = (id: number | null) => {
+    // id && dispatch(getSaveById(id));
+    // navigate('/');
   };
 
   return (
@@ -71,6 +75,7 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
                   currentId={id}
                   item={item}
                   selectSave={onSelectSavedData}
+                  handleDelete={handleDeleteSave}
                 />
               )}
             />

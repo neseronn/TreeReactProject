@@ -5,7 +5,7 @@ import MonthsFormList from '../components/MonthsFormList';
 import { setIsVisible } from '../store/inputSlice';
 import { useNavigate } from 'react-router-dom';
 import { AllMonthInputData } from '../types/index-types';
-import { message } from 'antd';
+import { Spin, message } from 'antd';
 import { calculateData } from '../store/asyncActions.ts/inputData';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
@@ -18,6 +18,7 @@ const DataEntry: React.FC = () => {
   const { isLoading, error, isSuccess, isCalculated } = useTypedSelector(
     (store) => store.resultData
   );
+
   const [messageApi, contextHolder] = message.useMessage();
   const [load, setLoad] = useState<boolean>(false);
 
