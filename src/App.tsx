@@ -46,6 +46,8 @@ function App() {
     error: newSaveError,
   } = useTypedSelector((store) => store.inputData.newSave);
 
+  const { isCalculated } = useTypedSelector((store) => store.resultData);
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const closeModal = () => {
     setOpenModal(false);
@@ -192,7 +194,7 @@ function App() {
           items={menu}
         />
 
-        {location.pathname === '/results' && (
+        {(location.pathname === '/results' && isCalculated) && (
           <Button
             type='primary'
             icon={<SaveFilled />}
@@ -203,7 +205,7 @@ function App() {
           </Button>
         )}
 
-        {location.pathname === '/results' && (
+        {(location.pathname === '/results' && isCalculated) && (
           <Button
             type='primary'
             icon={<DownloadOutlined />}
