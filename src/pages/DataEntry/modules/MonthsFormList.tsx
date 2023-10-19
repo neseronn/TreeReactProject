@@ -106,7 +106,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
   }, [DataCalculated.CountMonth, DataCalculated.FirstMonth]);
 
   useEffect(() => {
-    if (tech.length == 0) {
+    if (tech.length === 0) {
       setTech(techSystem[DataCalculated.N].split('+'));
     }
     // Ставим предыдущую длину
@@ -119,7 +119,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
   }, [DataCalculated.N]);
 
   useEffect(() => {
-    if (tech.length == 0) {
+    if (tech.length === 0) {
       setTech(techSystem[DataCalculated.N].split('+'));
     }
   }, []);
