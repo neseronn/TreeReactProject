@@ -12,27 +12,27 @@ import {
   Popconfirm,
 } from 'antd';
 import Title from 'antd/es/typography/Title';
-import { useTypedSelector } from '../store/hooks';
+import { useTypedSelector } from '../../../store/hooks';
 import {
   AllMonthInputData,
   ChangedAllMonthInputData,
-} from '../types/index-types';
-import { AppDispatch } from '../store/store';
+} from '../../../types/index-types';
+import { AppDispatch } from '../../../store/store';
 import { useDispatch } from 'react-redux';
 import {
   changeArrLen,
   changeCommonData,
   changeDataMonthInfo,
   clearCarsData,
-} from '../store/inputSlice';
+} from '../../../store/inputSlice';
 import {
   CalculatorOutlined,
   ClearOutlined,
   CloseOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { setCalculated } from '../store/resultSlice';
-import { techSystem, calcMonthNames } from '../common/index';
+import { setCalculated } from '../../../store/resultSlice';
+import { techSystem, calcMonthNames } from '../../../common/index';
 
 const gridStyleHead: React.CSSProperties = {
   width: '20%',

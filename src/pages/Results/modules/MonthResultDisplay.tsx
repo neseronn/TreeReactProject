@@ -4,13 +4,13 @@ import {
   MonthPairData,
   Pair,
   RowTable,
-} from '../types/result-types';
+} from '../../../types/result-types';
 import style from '../styles/descriptionItem.module.css';
-import { useTypedSelector } from '../store/hooks';
+import { useTypedSelector } from '../../../store/hooks';
 import { Descriptions, Divider, Space, Typography } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
-import { MonthInputData } from '../types/index-types';
-import { techSystem, calcMonthNames } from '../common/index';
+import { MonthInputData } from '../../../types/index-types';
+import { techSystem, calcMonthNames } from '../../../common/index';
 
 interface MonthResultDisplayProps {
   monthData: MonthData;
@@ -31,7 +31,6 @@ const DescriptionItem = ({ title, content, unit }: DescriptionItemProps) => (
   </div>
 );
 
-// 2 блока (исходные и вычисления) для одного (каждого) месяца
 const MonthResultDisplay = ({
   monthData,
   initialData,

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import CommonForm from '../components/CommonForm';
-import { useTypedSelector } from '../store/hooks';
-import MonthsFormList from '../components/MonthsFormList';
-import { setIsVisible } from '../store/inputSlice';
+import CommonForm from './modules/CommonForm';
+import { useTypedSelector } from '../../store/hooks';
+import MonthsFormList from './modules/MonthsFormList';
+import { setIsVisible } from '../../store/inputSlice';
 import { useNavigate } from 'react-router-dom';
-import { AllMonthInputData } from '../types/index-types';
+import { AllMonthInputData } from '../../types/index-types';
 import { Spin, message } from 'antd';
-import { calculateData } from '../store/asyncActions.ts/inputData';
+import { calculateData } from '../../store/asyncActions.ts/inputData';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store';
-import { setSuccess } from '../store/resultSlice';
+import { AppDispatch } from '../../store/store';
+import { setSuccess } from '../../store/resultSlice';
 
 const DataEntry: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

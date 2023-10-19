@@ -1,7 +1,7 @@
-import { useTypedSelector } from '../store/hooks';
+import { useTypedSelector } from '../../store/hooks';
 import { Button, Empty, Typography } from 'antd';
-import MonthResultDisplay from '../components/MonthResultDisplay';
-import { calcMonthNames } from '../common';
+import MonthResultDisplay from './modules/MonthResultDisplay';
+import { calcMonthNames } from '../../common';
 import { useNavigate } from 'react-router-dom';
 
 const ResultsPage = () => {

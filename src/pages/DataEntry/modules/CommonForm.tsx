@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
-import { ChangedCommonInputData, CommonInputData } from '../types/index-types';
+import { ChangedCommonInputData, CommonInputData } from '../../../types/index-types';
 import {
   changeCommonData,
   clearAllData,
   setIsChanged,
-} from '../store/inputSlice';
-import { useTypedSelector } from '../store/hooks';
+} from '../../../store/inputSlice';
+import { useTypedSelector } from '../../../store/hooks';
 import { Typography } from 'antd';
-import { AppDispatch } from '../store/store';
+import { AppDispatch } from '../../../store/store';
 import { useDispatch } from 'react-redux';
-import { techSystem } from '../common/index';
-import { setCalculated } from '../store/resultSlice';
+import { techSystem } from '../../../common/index';
+import { setCalculated } from '../../../store/resultSlice';
 import { ClearOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 

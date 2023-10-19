@@ -4,11 +4,10 @@ import {
   HistoryOutlined,
   HomeOutlined,
   SaveFilled,
-  SaveOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, Button, message, Spin } from 'antd';
-import DataEntry from './pages/DataEntry';
-import ResultsPage from './pages/ResultsPage';
+import DataEntry from './pages/DataEntry/DataEntryPage';
+import ResultsPage from './pages/Results/ResultsPage';
 import { useRef, useEffect, useState } from 'react';
 import generatePDF from 'react-to-pdf';
 import { useTypedSelector } from './store/hooks';
