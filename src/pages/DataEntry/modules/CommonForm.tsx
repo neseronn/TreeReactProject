@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
-import { ChangedCommonInputData, CommonInputData } from '../../../types/index-types';
+import {
+  ChangedCommonInputData,
+  CommonInputData,
+} from '../../../types/index-types';
 import {
   changeCommonData,
   clearAllData,
@@ -126,11 +129,44 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
         margin: '0 auto',
         borderRadius: 6,
         height: 'max-content',
-        // zIndex: 0,
       }}>
       <Title level={4} style={{ textAlign: 'center' }}>
         Введите общие данные
       </Title>
+
+      <Form.Item
+        label='Предприятие'
+        name='CuttingArea'
+        rules={[
+          {
+            required: true,
+            message: 'Заполните предприятие!',
+          },
+        ]}>
+        <Input
+          value={DataCalculated?.CuttingArea}
+          style={{
+            width: '100%',
+          }}
+        />
+      </Form.Item>
+
+      <Form.Item
+        label='Лесосека, номер квартала'
+        name='Company'
+        rules={[
+          {
+            required: true,
+            message: 'Заполните лесосеку и номер квартала!',
+          },
+        ]}>
+        <Input
+          value={DataCalculated?.Company}
+          style={{
+            width: '100%',
+          }}
+        />
+      </Form.Item>
 
       <Form.Item
         label='Количество месяцев'

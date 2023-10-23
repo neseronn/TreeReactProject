@@ -5,7 +5,7 @@ import {
   Pair,
   RowTable,
 } from '../../../types/result-types';
-import style from '../styles/descriptionItem.module.css';
+import style from '../../../styles/descriptionItem.module.css';
 import { useTypedSelector } from '../../../store/hooks';
 import { Descriptions, Divider, Space, Typography } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';

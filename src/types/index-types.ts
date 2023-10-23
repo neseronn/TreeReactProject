@@ -16,6 +16,8 @@ export enum TECH_SYSTEM_VAL {
 }
 
 export interface CommonInputData {
+  Company: string;
+  CuttingArea: string;
   CountMonth: number;
   FirstMonth: number;
   markCar: string;
@@ -28,6 +30,8 @@ export interface CommonInputData {
 }
 
 export interface ChangedCommonInputData {
+  Company?: string | undefined;
+  CuttingArea?: string | undefined;
   CountMonth?: number | undefined;
   FirstMonth?: number | undefined;
   markCar?: string | undefined;
