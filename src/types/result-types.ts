@@ -1,5 +1,3 @@
-import { type } from 'os';
-
 // Объем производства
 export interface ProductionVolume {
   Tp: number;
@@ -21,28 +19,60 @@ export interface Pair {
 // Массив из объектов данных в одном месяце
 export type MonthPairData = Pair[];
 
-// Данные по необходимому числу дополнительных дней работы машин
-
+// Вычисленные данные по месяцам
 export interface MonthData {
   production_volume: ProductionVolume;
   about_additional_work_with: Pair[];
   about_additional_work_without: Pair[];
 }
 
-// export type ResultData = MonthData[];
-export type ResultData = {
-  res_for_months: {
-    
-  }
-  graph_for_month: {
-    all_pairs: string[];
-    graph_all_months_with: ;
-    graph_all_months_without: ;
-  }
+//// Графики по месяцам
+// Точка графика по месяцу
+export interface GraphPointMonth {
+  name: 'Zt' | 'Zg';
+  Tp: number;
+  volumeStocks: number;
 }
+// Данные по паре и массив точек для нее
+export interface GraphPairDataMonth {
+  pair: string;
+  data: GraphPointMonth[];
+}
+// Массив данных для графика для одного месяца по парам
+export type GraphDataMonth = GraphPointMonth[];
 
-// для вывода в таблицу
+//// Большие общие графики
+// Точка графика большого
+export interface GraphPointCommon {
+  name: 'Zt' | 'Zg' | 'Zc';
+  daysCount: number;
+  volumeStocks: number;
+}
+// Точка графика большого
+export type PairGraphPoints = GraphPointCommon[];
 
+// Результаты
+export type ResultData = {
+  // Числовые данные по месяцам
+  res_for_months: MonthData[];
+  // Большие общие графики
+  common_graphs: {
+    // все пары машин
+    all_pairs: string[];
+    // точки по всем парам
+    graph_all_months_with: PairGraphPoints[];
+    graph_all_months_without: PairGraphPoints[];
+  };
+  // Освоенный запас
+  remaining_stock: number;
+  // Данные для графиков по каждому месяцу
+  graphs_for_every_month: {
+    graph_with: GraphDataMonth[];
+    graph_without: GraphDataMonth[];
+  };
+};
+
+// Для вывода в таблицу
 export interface RowTable {
   car: string;
   MainMarkCars: string;

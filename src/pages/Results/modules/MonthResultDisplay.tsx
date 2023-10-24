@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  GraphDataMonth,
   MonthData,
   MonthPairData,
   Pair,
@@ -15,6 +16,8 @@ import { techSystem, calcMonthNames } from '../../../common/index';
 interface MonthResultDisplayProps {
   monthData: MonthData;
   initialData: MonthInputData;
+  graphWith: GraphDataMonth;
+  graphWithout: GraphDataMonth;
   monthName: string;
 }
 
@@ -23,6 +26,7 @@ interface DescriptionItemProps {
   content: React.ReactNode;
   unit?: string;
 }
+
 const DescriptionItem = ({ title, content, unit }: DescriptionItemProps) => (
   <div className={style.descriptionItemWrapper}>
     <p className={style.descriptionItemP}>{title}:</p>
@@ -34,6 +38,8 @@ const DescriptionItem = ({ title, content, unit }: DescriptionItemProps) => (
 const MonthResultDisplay = ({
   monthData,
   initialData,
+  graphWith,
+  graphWithout,
   monthName,
 }: MonthResultDisplayProps) => {
   const {

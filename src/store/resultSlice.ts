@@ -11,7 +11,7 @@ interface ResultState {
 }
 
 const initialState: ResultState = {
-  result: [] as ResultData,
+  result: {} as ResultData,
   isCalculated: false,
   isSuccess: false,
   isLoading: false,

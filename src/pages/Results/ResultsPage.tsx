@@ -1,5 +1,5 @@
 import { useTypedSelector } from '../../store/hooks';
-import { Button, Empty, Typography } from 'antd';
+import { Alert, Button, Empty, Typography } from 'antd';
 import MonthResultDisplay from './modules/MonthResultDisplay';
 import { calcMonthNames } from '../../common';
 import { useNavigate } from 'react-router-dom';
@@ -62,14 +62,34 @@ const ResultsPage = () => {
               </span>
             </Typography.Title>
 
-            {result.map((item, i) => (
+            {result.res_for_months.map((item, i) => (
               <MonthResultDisplay
                 key={i}
                 monthData={item}
+                graphWith={result.graphs_for_every_month.graph_with[i]}
+                graphWithout={result.graphs_for_every_month.graph_without[i]}
                 initialData={DATA[i]}
                 monthName={monthNames[i]}
               />
             ))}
+
+            <Alert
+              message={
+                result.remaining_stock < 0
+                  ? 'Не хватает запаса. Уменьшите срок освоения.'
+                  : result.remaining_stock > 0
+                  ? `Остался неосвоенный запас: ${result.remaining_stock} кбм.`
+                  : 'Запас освоен полностью.'
+              }
+              type={
+                result.remaining_stock < 0
+                  ? 'warning'
+                  : result.remaining_stock > 0
+                  ? 'info'
+                  : 'success'
+              }
+              showIcon
+            />
 
             {/* <Typography>
         <pre>{JSON.stringify(result, null, 2)}</pre>
