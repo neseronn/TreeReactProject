@@ -29,7 +29,19 @@ export interface MonthData {
   about_additional_work_without: Pair[];
 }
 
-export type ResultData = MonthData[];
+// export type ResultData = MonthData[];
+export type ResultData = {
+  res_for_months: {
+    
+  }
+  graph_for_month: {
+    all_pairs: string[];
+    graph_all_months_with: ;
+    graph_all_months_without: ;
+  }
+}
+
+// для вывода в таблицу
 
 export interface RowTable {
   car: string;

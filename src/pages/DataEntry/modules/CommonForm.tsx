@@ -54,6 +54,8 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
     dispatch(changeCommonData(changedValues));
     if (isCalculated) {
       if (
+        'Company' in changedValues ||
+        'CuttingArea' in changedValues ||
         'N' in changedValues ||
         'TotalStock' in changedValues ||
         'AvgStock' in changedValues ||

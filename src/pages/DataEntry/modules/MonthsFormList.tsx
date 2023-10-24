@@ -82,6 +82,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
 
   // Названия месяцев для карточек
   const [monthNames, setMonthNames] = useState<string[]>([]);
+  // Массив букв тех. системы
   const [tech, setTech] = useState<string[]>([]);
 
   const [form] = Form.useForm<AllMonthInputData>();
