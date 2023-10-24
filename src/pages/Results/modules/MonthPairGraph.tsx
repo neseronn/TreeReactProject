@@ -1,4 +1,4 @@
-import { Line } from '@ant-design/charts';
+import { Line } from '@ant-design/plots';
 import React from 'react';
 import {
   GraphPairDataMonth,
