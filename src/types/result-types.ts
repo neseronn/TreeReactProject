@@ -38,8 +38,8 @@ export interface GraphPairDataMonth {
   pair: string;
   data: GraphPointMonth[];
 }
-// Массив данных для графика для одного месяца по парам
-export type GraphDataMonth = GraphPointMonth[];
+// Массив данных для графика для одного месяца по всем парам
+export type GraphDataMonth = GraphPairDataMonth[];
 
 //// Большие общие графики
 // Точка графика большого

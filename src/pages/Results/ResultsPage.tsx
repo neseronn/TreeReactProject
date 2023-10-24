@@ -1,8 +1,10 @@
 import { useTypedSelector } from '../../store/hooks';
-import { Alert, Button, Empty, Typography } from 'antd';
+import { Alert, Button, Col, Empty, Row, Typography } from 'antd';
 import MonthResultDisplay from './modules/MonthResultDisplay';
 import { calcMonthNames } from '../../common';
 import { useNavigate } from 'react-router-dom';
+import Title from 'antd/es/typography/Title';
+import CommonPairGraph from './modules/CommonPairGraph';
 
 const ResultsPage = () => {
   const navigate = useNavigate();
@@ -72,6 +74,39 @@ const ResultsPage = () => {
                 monthName={monthNames[i]}
               />
             ))}
+
+            <Row>
+              {/* {result.common_graphs.all_pairs.map((pair) => (
+                <Title
+                  // style={{ textAlign: 'center' }}
+                  level={4}>
+                  {pair}
+                </Title>
+              ))} */}
+            </Row>
+            <Row>
+              <Col span={2} style={{display: 'flex', alignItems: 'space-evenly', flexDirection: 'column', height: '100%'}}>
+                {result.common_graphs.all_pairs.map((pair) => (
+                  <Title
+                    style={{  }}
+                    level={4}>
+                    {pair}
+                  </Title>
+                ))}
+              </Col>
+              <Col span={11}>
+                {result.common_graphs.graph_all_months_with.map((graph, i) => (
+                  <CommonPairGraph key={'s' + i} data={graph} />
+                ))}
+              </Col>
+              <Col span={11}>
+                {result.common_graphs.graph_all_months_without.map(
+                  (graph, i) => (
+                    <CommonPairGraph key={'w' + i} data={graph} />
+                  )
+                )}
+              </Col>
+            </Row>
 
             <Alert
               message={

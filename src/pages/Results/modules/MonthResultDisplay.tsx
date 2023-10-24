@@ -12,6 +12,7 @@ import { Descriptions, Divider, Space, Typography } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import { MonthInputData } from '../../../types/index-types';
 import { techSystem, calcMonthNames } from '../../../common/index';
+import MonthPairGraph from './MonthPairGraph';
 
 interface MonthResultDisplayProps {
   monthData: MonthData;
@@ -273,6 +274,22 @@ const MonthResultDisplay = ({
         size='small'
         pagination={false}
       />
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'space-evenly',
+          padding: '10px 0',
+        }}>
+        {graphWith.map((graph, index) => (
+          <MonthPairGraph
+            key={'graph' + graph.pair + index}
+            pair={graph.pair}
+            data={graph.data}
+          />
+        ))}
+      </div>
+
       <Table
         title={() => (
           <Typography.Text strong>
@@ -288,6 +305,21 @@ const MonthResultDisplay = ({
         size='small'
         pagination={false}
       />
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'space-evenly',
+          padding: '10px 0',
+        }}>
+        {graphWithout.map((graph, index) => (
+          <MonthPairGraph
+            key={'graph' + graph.pair + index}
+            pair={graph.pair}
+            data={graph.data}
+          />
+        ))}
+      </div>
 
       <Descriptions
         size='small'
