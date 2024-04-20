@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { techSystem } from '../../../common/index';
 import { setCalculated } from '../../../store/resultSlice';
 import { ClearOutlined } from '@ant-design/icons';
+import style from './CommonForm.module.scss'
 import _ from 'lodash';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 const { Title } = Typography;
@@ -157,6 +158,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
       onValuesChange={handleFormValuesChange}
       autoComplete='off'
       layout='vertical'
+      className={style.form}
       style={{
         width: 350,
         minWidth: 350,
@@ -178,7 +180,8 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             required: true,
             message: 'Заполните предприятие!',
           },
-        ]}>
+        ]}
+        >
         <Input
           value={DataCalculated?.Company}
           style={{

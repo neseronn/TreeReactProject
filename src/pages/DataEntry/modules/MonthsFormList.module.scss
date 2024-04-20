@@ -1,0 +1,44 @@
+.formContainer {
+  width: 100%;
+  min-height: 100px;
+  display: flex;
+  row-gap: 16px;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px;
+  background-color: white;
+  border-radius: 6px;
+  margin: 0 auto;
+  position: relative;
+
+  .disabled {
+    /* opacity: 0.5; */
+    pointer-events: none;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+  }
+
+  @media (min-width: 992px) {
+    max-width: 562px;
+  }
+  @media (min-width: 1200px) {
+    max-width: 770px;
+  }
+  @media (min-width: 1400px) {
+    max-width: 970px;
+  }  
+}
+
+.card {
+  &_month {
+    padding: 20px !important;
+  }
+
+  &_grid {
+    padding: 20px !important;
+  }
+}
