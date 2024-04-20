@@ -8,16 +8,10 @@ import CommonPairGraph from './modules/CommonPairGraph';
 
 const ResultsPage = () => {
   const navigate = useNavigate();
-  const { result, isCalculated } = useTypedSelector(
-    (store) => store.resultData
-  );
+  const { result, isCalculated } = useTypedSelector((store) => store.resultData);
 
-  const { DATA } = useTypedSelector(
-    (store) => store.inputData.data.DataMonthInfo
-  );
-  const { FirstMonth, CountMonth } = useTypedSelector(
-    (store) => store.inputData.data.DataCalculated
-  );
+  const { DATA } = useTypedSelector((store) => store.inputData.data.DataMonthInfo);
+  const { FirstMonth, CountMonth } = useTypedSelector((store) => store.inputData.data.DataCalculated);
   const monthNames = calcMonthNames(FirstMonth, CountMonth);
 
   if (!isCalculated) {
@@ -55,23 +49,22 @@ const ResultsPage = () => {
               padding: '16px',
             }}>
             <Typography.Title level={4}>
-              <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
-                Математические модели расчета объемов запасов{' '}
-              </span>
+              <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>Математические модели расчета объемов запасов </span>
               {' с учетом и без учета наложения '}
-              <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
-                времени работы дополнительных машин на смежных операциях
-              </span>
+              <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>времени работы дополнительных машин на смежных операциях</span>
             </Typography.Title>
 
-            {result.res_for_months.map((item, i) => (
+            {/* Для каждого месяца выводим данные по нему  */}
+            {result.data_with.res_for_months.map((_, index) => (
               <MonthResultDisplay
-                key={i}
-                monthData={item}
-                graphWith={result.graphs_for_every_month.graph_with[i]}
-                graphWithout={result.graphs_for_every_month.graph_without[i]}
-                initialData={DATA[i]}
-                monthName={monthNames[i]}
+                key={'MonthResDisp' + index}
+                monthDataWith={result.data_with.res_for_months[index].about_additional_work_with}
+                monthDataWithout={result.data_without.res_for_months[index].about_additional_work_without}
+                productionVolume={result.data_with.res_for_months[index].production_volume}
+                graphWith={result.graphs_for_every_month.graph_with[index]}
+                graphWithout={result.graphs_for_every_month.graph_without[index]}
+                initialData={DATA[index]}
+                monthName={monthNames[index]}
               />
             ))}
 
@@ -93,41 +86,33 @@ const ResultsPage = () => {
                   flexDirection: 'column',
                   height: '100%',
                 }}>
-                {result.common_graphs.all_pairs.map((pair) => (
-                  <Title style={{}} level={4}>
+                {result.data_with.common_graphs.all_pairs.map((pair) => (
+                  <Title key={`Titlepair${pair}`} style={{}} level={4}>
                     {pair}
                   </Title>
                 ))}
               </Col>
               <Col span={11}>
-                {result.common_graphs.graph_all_months_with.map((graph, i) => (
+                {result.data_with.common_graphs.graph_all_months_with.map((graph, i) => (
                   <CommonPairGraph key={'s' + i} data={graph} />
                 ))}
               </Col>
               <Col span={11}>
-                {result.common_graphs.graph_all_months_without.map(
-                  (graph, i) => (
-                    <CommonPairGraph key={'w' + i} data={graph} />
-                  )
-                )}
+                {result.data_without.common_graphs.graph_all_months_without.map((graph, i) => (
+                  <CommonPairGraph key={'w' + i} data={graph} />
+                ))}
               </Col>
             </Row>
 
             <Alert
               message={
-                result.remaining_stock < 0
+                result.data_with.remaining_stock < 0
                   ? 'Не хватает запаса. Уменьшите срок освоения.'
-                  : result.remaining_stock > 0
-                  ? `Остался неосвоенный запас: ${result.remaining_stock} кбм.`
+                  : result.data_with.remaining_stock > 0
+                  ? `Остался неосвоенный запас: ${result.data_with.remaining_stock} кбм.`
                   : 'Запас освоен полностью.'
               }
-              type={
-                result.remaining_stock < 0
-                  ? 'warning'
-                  : result.remaining_stock > 0
-                  ? 'info'
-                  : 'success'
-              }
+              type={result.data_with.remaining_stock < 0 ? 'warning' : result.data_with.remaining_stock > 0 ? 'info' : 'success'}
               showIcon
             />
           </div>

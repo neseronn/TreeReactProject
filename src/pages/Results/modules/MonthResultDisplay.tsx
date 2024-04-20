@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  GraphDataMonth,
-  MonthData,
-  MonthPairData,
-  Pair,
-  RowTable,
-} from '../../../types/result-types';
+import { GraphDataMonth, MonthNumDataWith, MonthNumDataWithout, MonthPairData, Pair, ProductionVolume, RowTable } from '../../../types/result-types';
 import style from '../../../styles/descriptionItem.module.css';
 import { useTypedSelector } from '../../../store/hooks';
 import { Descriptions, Divider, Space, Typography } from 'antd';
@@ -15,7 +9,9 @@ import { techSystem, calcMonthNames } from '../../../common/index';
 import MonthPairGraph from './MonthPairGraph';
 
 interface MonthResultDisplayProps {
-  monthData: MonthData;
+  monthDataWith: Pair[];
+  monthDataWithout: Pair[];
+  productionVolume: ProductionVolume;
   initialData: MonthInputData;
   graphWith: GraphDataMonth;
   graphWithout: GraphDataMonth;
@@ -37,23 +33,18 @@ const DescriptionItem = ({ title, content, unit }: DescriptionItemProps) => (
 );
 
 const MonthResultDisplay = ({
-  monthData,
+  monthDataWith,
+  monthDataWithout,
+  productionVolume,
   initialData,
   graphWith,
   graphWithout,
   monthName,
 }: MonthResultDisplayProps) => {
-  const {
-    N,
-    TotalStock,
-    AvgStock,
-    ZoneLength,
-    ShiftsNumber,
-    replaceableMachinePerfomance,
-  } = useTypedSelector((store) => store.inputData.data.DataCalculated);
-  const { MainMarkCars, AdditionalMarkCars } = useTypedSelector(
-    (store) => store.inputData.data.DataMonthInfo
+  const { N, TotalStock, AvgStock, ZoneLength, ShiftsNumber, replaceableMachinePerfomance } = useTypedSelector(
+    (store) => store.inputData.data.DataCalculated
   );
+  const { MainMarkCars, AdditionalMarkCars } = useTypedSelector((store) => store.inputData.data.DataMonthInfo);
   const { id, TP, ...monthInput } = initialData;
   const carsArr = techSystem[N].split('+');
 
@@ -159,13 +150,13 @@ const MonthResultDisplay = ({
   };
 
   let children: Array<{ title: string; dataIndex: string; key: string }> = [];
-  if ('t1' in monthData.about_additional_work_with[0]) {
+  if ('t1' in monthDataWith[0]) {
     children.push(t1Col);
   }
-  if ('t3' in monthData.about_additional_work_with[0]) {
+  if ('t3' in monthDataWith[0]) {
     children.push(t3Col);
   }
-  if ('t4' in monthData.about_additional_work_with[0]) {
+  if ('t4' in monthDataWith[0]) {
     children.push(t4Col);
   }
 
@@ -205,8 +196,7 @@ const MonthResultDisplay = ({
             level={4}
             // style={{ fontSize: '16px' }}
           >
-            <span style={{ textTransform: 'capitalize' }}>{monthName}</span>,
-            дней работы:
+            <span style={{ textTransform: 'capitalize' }}>{monthName}</span>, дней работы:
             {' ' + TP}
           </Typography.Title>
         }
@@ -221,55 +211,27 @@ const MonthResultDisplay = ({
             label: 'Исходные данные',
             children: (
               <>
-                <DescriptionItem
-                  title='Общий запас на лесосеке'
-                  content={TotalStock}
-                  unit='кбм'
-                />
-                <DescriptionItem
-                  title='Средний запас на лесосеке'
-                  content={AvgStock}
-                  unit='кбм'
-                />
-                <DescriptionItem
-                  title='Длина зоны вырубки'
-                  content={ZoneLength}
-                  unit='м'
-                />
-                <DescriptionItem
-                  title='Число смен в один день на вывозке'
-                  content={ShiftsNumber}
-                />
-                <DescriptionItem
-                  title='Сменная производительность машин на вывозке'
-                  content={replaceableMachinePerfomance}
-                  unit='кбм в смену'
-                />
+                <DescriptionItem title='Общий запас на лесосеке' content={TotalStock} unit='кбм' />
+                <DescriptionItem title='Средний запас на лесосеке' content={AvgStock} unit='кбм' />
+                <DescriptionItem title='Длина зоны вырубки' content={ZoneLength} unit='м' />
+                <DescriptionItem title='Число смен в один день на вывозке' content={ShiftsNumber} />
+                <DescriptionItem title='Сменная производительность машин на вывозке' content={replaceableMachinePerfomance} unit='кбм в смену' />
               </>
             ),
           },
         ]}
       />
 
-      <Table
-        columns={columns}
-        dataSource={rows}
-        bordered
-        size='small'
-        pagination={false}
-      />
+      <Table columns={columns} dataSource={rows} bordered size='small' pagination={false} />
 
       <Table
         title={() => (
           <Typography.Text strong>
-            <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
-              Необходимое число дополнительных дней работы машин
-            </span>{' '}
-            (С УЧЕТОМ НАЛОЖЕНИЯ)
+            <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>Необходимое число дополнительных дней работы машин</span> (С УЧЕТОМ НАЛОЖЕНИЯ)
           </Typography.Text>
         )}
         columns={columnsDop}
-        dataSource={monthData.about_additional_work_with}
+        dataSource={monthDataWith}
         bordered
         size='small'
         pagination={false}
@@ -282,25 +244,18 @@ const MonthResultDisplay = ({
           padding: '10px 0',
         }}>
         {graphWith.map((graph, index) => (
-          <MonthPairGraph
-            key={'graph' + graph.pair + index}
-            pair={graph.pair}
-            data={graph.data}
-          />
+          <MonthPairGraph key={'graph' + graph.pair + index} pair={graph.pair} data={graph.data} />
         ))}
       </div>
 
       <Table
         title={() => (
           <Typography.Text strong>
-            <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>
-              Необходимое число дополнительных дней работы машин
-            </span>{' '}
-            (БЕЗ УЧЕТА НАЛОЖЕНИЯ)
+            <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>Необходимое число дополнительных дней работы машин</span> (БЕЗ УЧЕТА НАЛОЖЕНИЯ)
           </Typography.Text>
         )}
         columns={columnsDop}
-        dataSource={monthData.about_additional_work_without}
+        dataSource={monthDataWithout}
         bordered
         size='small'
         pagination={false}
@@ -313,11 +268,7 @@ const MonthResultDisplay = ({
           padding: '10px 0',
         }}>
         {graphWithout.map((graph, index) => (
-          <MonthPairGraph
-            key={'graph' + graph.pair + index}
-            pair={graph.pair}
-            data={graph.data}
-          />
+          <MonthPairGraph key={'graph' + graph.pair + index} pair={graph.pair} data={graph.data} />
         ))}
       </div>
 
@@ -331,26 +282,10 @@ const MonthResultDisplay = ({
             label: 'Объём производства',
             children: (
               <>
-                <DescriptionItem
-                  title='Объём производства основных машин'
-                  content={monthData.production_volume.Qo}
-                  unit='м³'
-                />
-                <DescriptionItem
-                  title='Объём производства дополнительных машин'
-                  content={monthData.production_volume.Qd}
-                  unit='м³'
-                />
-                <DescriptionItem
-                  title='Итого объём производства'
-                  content={monthData.production_volume.Pm}
-                  unit='м³'
-                />
-                <DescriptionItem
-                  title='Ежедневная потребность машин на вывозке'
-                  content={monthData.production_volume.Nm}
-                  unit='м³'
-                />
+                <DescriptionItem title='Объём производства основных машин' content={productionVolume.Qo} unit='м³' />
+                <DescriptionItem title='Объём производства дополнительных машин' content={productionVolume.Qd} unit='м³' />
+                <DescriptionItem title='Итого объём производства' content={productionVolume.Pm} unit='м³' />
+                <DescriptionItem title='Ежедневная потребность машин на вывозке' content={productionVolume.Nm} unit='м³' />
               </>
             ),
           },
