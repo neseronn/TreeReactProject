@@ -71,6 +71,10 @@ export interface InputData {
   DataCalculated: CommonInputData;
   DataMonthInfo: AllMonthInputData;
 }
+export interface EnteredData {
+  DataCalculated: CommonInputData;
+  DataMonthInfo: AllMonthInputData;
+}
 
 export interface SaveInputData {
   DataAboutRecord: EditSave;

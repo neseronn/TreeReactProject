@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Button, Form, Input, InputNumber, Radio, Space } from 'antd';
-import {
-  ChangedCommonInputData,
-  CommonInputData,
-} from '../../../types/index-types';
-import {
-  changeCommonData,
-  clearAllData,
-  setIsChanged,
-} from '../../../store/inputSlice';
+import { Button, Form, Input, InputNumber, Radio, Space, FormInstance } from 'antd';
+import { ChangedCommonInputData, CommonInputData } from '../../../types/index-types';
+import { changeCommonData, clearAllData, setIsChanged } from '../../../store/inputSlice';
 import { useTypedSelector } from '../../../store/hooks';
 import { Typography } from 'antd';
 import { AppDispatch } from '../../../store/store';
@@ -16,42 +9,66 @@ import { useDispatch } from 'react-redux';
 import { techSystem } from '../../../common/index';
 import { setCalculated } from '../../../store/resultSlice';
 import { ClearOutlined } from '@ant-design/icons';
+import _ from 'lodash';
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 const { Title } = Typography;
 
-const CommonForm: React.FC<any> = ({ setIsVisible }) => {
+interface CommonFormProps {
+  form: FormInstance<CommonInputData>;
+  isVisible: boolean;
+  setIsVisible: ActionCreatorWithPayload<boolean, 'inputData/setIsVisible'>;
+  setDisableForm: (disableForm: boolean) => void;
+}
+
+const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, setDisableForm }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { DataCalculated, DataAboutRecord } = useTypedSelector(
-    (store) => store.inputData.data
-  );
+  const { DataCalculated, DataAboutRecord } = useTypedSelector((store) => store.inputData.data);
   const isSuccess = useTypedSelector((store) => store.inputData.isSuccess);
   const isChanged = useTypedSelector((store) => store.inputData.isChanged);
-  const isCalculated = useTypedSelector(
-    (store) => store.resultData.isCalculated
-  );
+  const isCalculated = useTypedSelector((store) => store.resultData.isCalculated);
 
-  const [form] = Form.useForm<CommonInputData>();
   const values = Form.useWatch([], form);
-  const [submittable, setSubmittable] = useState(true);
+  // submittable - активна ли кнопка отправки формы
+  const [submittable, setSubmittable] = useState(false);
+  // disabled - активно ли поле CountMonth (Количество месяцев)
   const [disabled, setDisabled] = useState(isCalculated || false);
-
+  // Данные, загруженные из истории, для проверки их изменения
   const [savedValues, setSavedValues] = useState<null | CommonInputData>(null);
 
   // Обработчик изменения значений в форме
-  const handleFormValuesChange = (
-    changedValues: ChangedCommonInputData,
-    allValues: CommonInputData
-  ) => {
+  const handleFormValuesChange = (changedValues: ChangedCommonInputData, allValues: CommonInputData) => {
     if (isSuccess) {
-      if (JSON.stringify(allValues) !== JSON.stringify(savedValues)) {
+      // console.log();
+      console.log(_.isEqual(allValues, savedValues));
+      // Если данные из истории, то проверяем их изменения
+      // if (JSON.stringify(allValues) !== JSON.stringify(savedValues)) {
+      if (!_.isEqual(allValues, savedValues)) {
+        console.log('savedValues', savedValues);
+        console.log('allValues', allValues);
         dispatch(setIsChanged(true));
-      } else if (
-        isChanged &&
-        JSON.stringify(allValues) === JSON.stringify(savedValues)
-      ) {
+        setSubmittable(true);
+      } else if (isChanged && _.isEqual(allValues, savedValues)) {
+        console.log('savedValues', savedValues);
+        console.log('allValues', allValues);
         dispatch(setIsChanged(false));
+        setSubmittable(false);
+        setDisableForm(false);
       }
     }
-    dispatch(changeCommonData(changedValues));
+
+    if (isVisible && changedValues && !_.isEqual(allValues, savedValues)) {
+      console.log('changedValues', changedValues);
+      console.log('DataCalculated', DataCalculated);
+      console.log('allValues', allValues);
+      setDisableForm(true);
+      // СДЕЛАТЬ ТУТ УВЕДОМЛЕНИЕ ЧТО ДАННЫЕ ИЗМЕНЕНЫ, ПОДТВЕРДИТЕ ИХ !!!
+    } else if (isVisible) {
+      setDisableForm(false);
+    }
+
+    // console.log('changedValues', changedValues)
+    // dispatch(changeCommonData(changedValues));
+
     if (isCalculated) {
       if (
         'Company' in changedValues ||
@@ -65,7 +82,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
       )
         dispatch(setCalculated(false));
     }
-    console.log('handleFormValuesChange: сохранены в redux');
+    // console.log('handleFormValuesChange: сохранены в redux');
   };
 
   // Для обновления количества месяцев при добавлении/удалении карточки месяца
@@ -76,15 +93,16 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   // Валидация, открытие второй формы
   useEffect(() => {
     console.log(values);
+    // disable/undisable кнопки 1-й формы
     form.validateFields({ validateOnly: true }).then(
       () => {
-        setSubmittable(true);
+        !isSuccess && setSubmittable(true);
         console.log('Всё введено, можно подтверждать');
         // console.log('Данные сохранены в redux');
       },
       () => {
         setSubmittable(false);
-        // ставить таблицу disabled
+        console.log('не все заполнено');
       }
     );
   }, [values]);
@@ -95,19 +113,35 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
   }, []);
 
   useEffect(() => {
+    // Когда даные загружены из истории
     if (isSuccess) {
+      //
       // form.resetFields();
+      setSubmittable(false);
       setSavedValues(DataCalculated);
       setDisabled(true);
       form.setFieldsValue(DataCalculated);
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    console.log('submittable = ', submittable);
+  }, [submittable]);
+
   const onFinish = (values: CommonInputData) => {
-    setDisabled(true);
-    // console.log(values);
+    // setDisabled(true);
+    console.log('onFinish', values);
+    submittable && dispatch(changeCommonData(values));
+    !isVisible && !!submittable && dispatch(setIsVisible(true));
+    setDisableForm(false);
+    console.log('onFinish: сохранены в redux');
+    setSubmittable(false);
     // dispatch(addTechSystem(values));
     // form.resetFields();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // плавная анимация скролла
+    });
   };
 
   const onReset = () => {
@@ -119,7 +153,7 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
     <Form
       form={form}
       onFinish={onFinish}
-      initialValues={DataCalculated}
+      initialValues={DataCalculated} //при возврате с рассчетов чтоб заполнялось
       onValuesChange={handleFormValuesChange}
       autoComplete='off'
       layout='vertical'
@@ -331,18 +365,14 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
           </Space>
           <Space direction='vertical'>
             {techSystem.slice(4, 8).map((val) => (
-              <Radio
-                key={techSystem.indexOf(val)}
-                value={techSystem.indexOf(val)}>
+              <Radio key={techSystem.indexOf(val)} value={techSystem.indexOf(val)}>
                 {val}
               </Radio>
             ))}
           </Space>
           <Space direction='vertical'>
             {techSystem.slice(8, 12).map((val, i) => (
-              <Radio
-                key={techSystem.indexOf(val)}
-                value={techSystem.indexOf(val)}>
+              <Radio key={techSystem.indexOf(val)} value={techSystem.indexOf(val)}>
                 {val}
               </Radio>
             ))}
@@ -358,10 +388,14 @@ const CommonForm: React.FC<any> = ({ setIsVisible }) => {
           }}>
           <Button
             type='primary'
-            disabled={!submittable || disabled}
+            disabled={
+              !submittable
+              // || disabled
+            }
             htmlType='submit'
             onClick={(e) => {
-              submittable && dispatch(setIsVisible(true));
+              // submittable && dispatch(setIsVisible(true));
+              console.log('clicked');
               window.scrollTo({
                 top: 0,
                 behavior: 'smooth', // плавная анимация скролла

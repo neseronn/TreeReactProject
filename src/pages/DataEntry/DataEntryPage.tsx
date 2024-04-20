@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import CommonForm from './modules/CommonForm';
 import { useTypedSelector } from '../../store/hooks';
 import MonthsFormList from './modules/MonthsFormList';
-import { setIsVisible } from '../../store/inputSlice';
+import { changeDataMonthInfo, setIsVisible } from '../../store/inputSlice';
 import { useNavigate } from 'react-router-dom';
-import { AllMonthInputData } from '../../types/index-types';
-import { Spin, message } from 'antd';
+import { AllMonthInputData, CommonInputData } from '../../types/index-types';
+import { Form, message } from 'antd';
 import { calculateData } from '../../store/asyncActions.ts/inputData';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
@@ -13,11 +13,15 @@ import { setSuccess } from '../../store/resultSlice';
 
 const DataEntry: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [commonForm] = Form.useForm<CommonInputData>();
+  const [monthsForm] = Form.useForm<AllMonthInputData>();
   const { data } = useTypedSelector((store) => store.inputData);
   const { isVisible } = useTypedSelector((store) => store.inputData);
   const { isLoading, error, isSuccess, isCalculated } = useTypedSelector(
     (store) => store.resultData
   );
+
+  const [disableForm, setDisableForm] = useState<boolean>(false);
 
   const [messageApi, contextHolder] = message.useMessage();
   const [load, setLoad] = useState<boolean>(false);
@@ -67,16 +71,31 @@ const DataEntry: React.FC = () => {
         });
   }, [isLoading]);
 
+  /**
+   * (onFinish) При отправке 2-й формы. Отправляет свои данные в redux. Если расчитано, переводит на /results, иначе делает запрос для расчета, передавая данные из двух форм
+   * @param values - данные 2-й формы
+   */
   const onFinish = (values: AllMonthInputData) => {
     console.log('FINISH');
-    console.log(data);
+    // Отправка данных по 2й форме в редакс
+    dispatch(changeDataMonthInfo(values));
     if (isCalculated) {
       navigate('/results');
     } else {
-      dispatch(calculateData({ ...data }));
+      // в запрос передаем данные из двух форм
+      dispatch(
+        calculateData({
+          DataCalculated: commonForm.getFieldsValue(),
+          DataMonthInfo: monthsForm.getFieldsValue(),
+        })
+      );
     }
   };
 
+  /**
+   * (onFinishFailed) При ошибке отправки 2-й формы показывает уведомление об этом
+   * @param errorInfo - информация об ошибке
+   */
   const onFinishFailed = (errorInfo: any) => {
     console.log(errorInfo);
     messageApi.open({
@@ -89,13 +108,22 @@ const DataEntry: React.FC = () => {
     <>
       {contextHolder}
 
-      <CommonForm setIsVisible={setIsVisible} />
+      <CommonForm
+        form={commonForm}
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        setDisableForm={setDisableForm}
+      />
 
       {isVisible && (
         <MonthsFormList
+          form={monthsForm}
+          isVisible={isVisible}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           loadBtn={load}
+          disableForm={disableForm}
+          setDisableForm={setDisableForm}
         />
       )}
     </>

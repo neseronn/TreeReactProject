@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosResponse } from 'axios';
 import { instance } from '../../api';
 import { ResultData } from '../../types/result-types';
-import { AllMonthInputData, InputData } from '../../types/index-types';
+import { AllMonthInputData, EnteredData, InputData } from '../../types/index-types';
 
-export const calculateData = createAsyncThunk<ResultData, InputData>(
+export const calculateData = createAsyncThunk<ResultData, InputData | EnteredData>(
   'resultData/calculate',
   async (data, thunkApi) => {
     try {

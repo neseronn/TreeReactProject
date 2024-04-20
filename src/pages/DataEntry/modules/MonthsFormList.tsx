@@ -1,36 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Input,
-  Form,
-  Typography,
-  Card,
-  Space,
-  Affix,
-  InputNumber,
-  Popconfirm,
-} from 'antd';
+import style from './MonthsFormList.module.css';
+import { Button, Input, Form, Typography, Card, Space, Affix, InputNumber, Popconfirm, FormInstance } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { useTypedSelector } from '../../../store/hooks';
-import {
-  AllMonthInputData,
-  ChangedAllMonthInputData,
-} from '../../../types/index-types';
+import { AllMonthInputData, ChangedAllMonthInputData } from '../../../types/index-types';
 import { AppDispatch } from '../../../store/store';
 import { useDispatch } from 'react-redux';
-import {
-  changeArrLen,
-  changeCommonData,
-  changeDataMonthInfo,
-  clearCarsData,
-} from '../../../store/inputSlice';
-import {
-  CalculatorOutlined,
-  ClearOutlined,
-  CloseOutlined,
-  QuestionCircleOutlined,
-} from '@ant-design/icons';
+import { changeArrLen, changeCommonData, changeDataMonthInfo, clearCarsData } from '../../../store/inputSlice';
+import { CalculatorOutlined, ClearOutlined, CloseOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { setCalculated } from '../../../store/resultSlice';
 import { techSystem, calcMonthNames } from '../../../common/index';
 
@@ -61,23 +38,19 @@ const flexCenter = {
 };
 
 interface MonthsFormListProps {
+  form: FormInstance<AllMonthInputData>;
+  isVisible: boolean;
   onFinish: (values: AllMonthInputData) => void;
   onFinishFailed: (errorInfo: any) => void;
   loadBtn: boolean;
+  disableForm: boolean;
+  setDisableForm: (disableForm: boolean) => void;
 }
 
-const MonthsFormList: React.FC<MonthsFormListProps> = ({
-  onFinish,
-  onFinishFailed,
-  loadBtn,
-}) => {
-  const { DataCalculated, DataMonthInfo } = useTypedSelector(
-    (store) => store.inputData.data
-  );
+const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFinish, onFinishFailed, loadBtn, disableForm, setDisableForm }) => {
+  const { DataCalculated, DataMonthInfo } = useTypedSelector((store) => store.inputData.data);
   const isSuccess = useTypedSelector((store) => store.inputData.isSuccess);
-  const { isCalculated, isLoading } = useTypedSelector(
-    (store) => store.resultData
-  );
+  const { isCalculated, isLoading } = useTypedSelector((store) => store.resultData);
   const dispatch = useDispatch<AppDispatch>();
 
   // Названия месяцев для карточек
@@ -85,8 +58,9 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
   // Массив букв тех. системы
   const [tech, setTech] = useState<string[]>([]);
 
-  const [form] = Form.useForm<AllMonthInputData>();
+  /** Данные 2-й формы */
   const values = Form.useWatch([], form);
+  /** (?) Предыдущая длина тех.системы */
   const [some, setSome] = useState<number>(0);
 
   useEffect(() => {
@@ -99,23 +73,26 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
     form.setFieldsValue(DataMonthInfo);
   }, [isSuccess]);
 
+  // При изменении кол-ва месяцев или первого месяца на 1-й форме меняем названия месяцев на 2-й форме
   useEffect(() => {
-    setMonthNames(
-      calcMonthNames(DataCalculated.FirstMonth, DataCalculated.CountMonth)
-    );
+    setMonthNames(calcMonthNames(DataCalculated.FirstMonth, DataCalculated.CountMonth));
     console.log('DataCalculated.CountMonth: reset fields');
   }, [DataCalculated.CountMonth, DataCalculated.FirstMonth]);
 
   useEffect(() => {
     if (tech.length === 0) {
       setTech(techSystem[DataCalculated.N].split('+'));
+    } else {
+      dispatch(changeDataMonthInfo(values));
     }
     // Ставим предыдущую длину
     setSome(tech.length);
     // Обновляем на текущую (текущий массив с новой длиной)
     setTech(techSystem[DataCalculated.N].split('+'));
-    console.log('Я увидел изменение N');
-    console.log(some);
+    console.log('Увидели изменение N');
+    console.log('some = ', some);
+    console.log('isVisible', isVisible);
+    console.log('tech', tech);
     // form.resetFields();
   }, [DataCalculated.N]);
 
@@ -123,14 +100,14 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
     if (tech.length === 0) {
       setTech(techSystem[DataCalculated.N].split('+'));
     }
+
+    console.log(disableForm);
   }, []);
 
   useEffect(() => {
-    console.log(
-      'Выбранная система (в радио ):' +
-        techSystem[DataCalculated.N].split('+').length
-    );
+    console.log('Выбранная система (в радио ):' + techSystem[DataCalculated.N].split('+').length);
     console.log('some (предыдущая длина массива букв): ' + some);
+    console.log('tech.length', tech.length);
 
     if (some > techSystem[DataCalculated.N].split('+').length) {
       dispatch(
@@ -149,19 +126,17 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
     }
   }, [tech.length]);
 
+  // Ресет формы, чтобы пропали лишние из 4х поля / добавились новые
   useEffect(() => {
     form.resetFields();
   }, [DataMonthInfo.MainMarkCars?.length]);
 
   // Обработчик изменения значений в форме
-  const handleFormValuesChange = (
-    changedValues: ChangedAllMonthInputData,
-    allValues: AllMonthInputData
-  ) => {
-    dispatch(changeDataMonthInfo(allValues));
+  const handleFormValuesChange = (changedValues: ChangedAllMonthInputData, allValues: AllMonthInputData) => {
+    // dispatch(changeDataMonthInfo(allValues));
     isCalculated && dispatch(setCalculated(false));
 
-    console.log('handleFormValuesChange: сохранены в redux');
+    // console.log('handleFormValuesChange: сохранены в redux');
   };
 
   const onReset = () => {
@@ -181,29 +156,27 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
         backgroundColor: 'white',
         margin: '0 auto',
         borderRadius: 6,
-      }}>
+        position: 'relative',
+      }}
+      className={disableForm ? style.secFormDisabled : ''}>
+      {/* {disableForm && (
+        <div className={style.secFormDisabledContent}>
+          
+        </div>
+      )} */}
       <Form
+        disabled={disableForm}
         onValuesChange={handleFormValuesChange}
-        labelCol={
-          tech.length === 4
-            ? { flex: '1 0 20%' }
-            : tech.length === 3
-            ? { flex: '1 0 25%' }
-            : { flex: '1 0 calc(100% / 3)' }
-        }
-        wrapperCol={
-          tech.length === 4
-            ? { flex: '1 0 80%' }
-            : tech.length === 3
-            ? { flex: '1 0 75%' }
-            : { flex: '1 0 calc(200% / 3)' }
-        }
+        labelCol={tech.length === 4 ? { flex: '1 0 20%' } : tech.length === 3 ? { flex: '1 0 25%' } : { flex: '1 0 calc(100% / 3)' }}
+        wrapperCol={tech.length === 4 ? { flex: '1 0 80%' } : tech.length === 3 ? { flex: '1 0 75%' } : { flex: '1 0 calc(200% / 3)' }}
         form={form}
         name='AllMonthInputData'
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        // initialValues={DataMonthInfo}
         labelWrap
         autoComplete='off'
+        preserve={false}
         style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
         <div
           style={{
@@ -218,11 +191,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
             <Button htmlType='reset' onClick={onReset} icon={<ClearOutlined />}>
               Очистить
             </Button>
-            <Button
-              type='primary'
-              icon={isCalculated ? '' : <CalculatorOutlined />}
-              htmlType='submit'
-              loading={loadBtn}>
+            <Button type='primary' icon={isCalculated ? '' : <CalculatorOutlined />} htmlType='submit' loading={loadBtn}>
               {isCalculated ? 'Перейти к расчетам' : 'Выполнить расчеты'}
             </Button>
           </Space>
@@ -279,9 +248,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
               </Card.Grid>
             ))}
 
-            <Card.Grid
-              hoverable={false}
-              style={{ ...gridStyleTop, flexBasis: '10%', flexGrow: 1 }}>
+            <Card.Grid hoverable={false} style={{ ...gridStyleTop, flexBasis: '10%', flexGrow: 1 }}>
               <Typography.Text strong>Параметры</Typography.Text>
             </Card.Grid>
             {tech.map((car, index) => (
@@ -308,14 +275,9 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
               boxShadow: 'none',
             }}>
             <Form.Item label='Марка машины' style={{ marginBottom: '0px' }}>
-              {/* Массив MainMarkCars */}
               <Form.List
                 name='MainMarkCars'
-                initialValue={
-                  DataMonthInfo.MainMarkCars
-                    ? DataMonthInfo.MainMarkCars
-                    : Array.from({ length: tech.length }, () => '')
-                }>
+                initialValue={DataMonthInfo.MainMarkCars ? DataMonthInfo.MainMarkCars : Array.from({ length: tech.length }, () => '')}>
                 {(fields, { add, remove }) => (
                   <Space.Compact block>
                     {fields.map((field, i) => (
@@ -348,11 +310,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
             <Form.Item label='Марка машины' style={{ marginBottom: '0px' }}>
               <Form.List
                 name='AdditionalMarkCars'
-                initialValue={
-                  DataMonthInfo.AdditionalMarkCars
-                    ? DataMonthInfo.AdditionalMarkCars
-                    : Array(tech.length).fill('')
-                }>
+                initialValue={DataMonthInfo.AdditionalMarkCars ? DataMonthInfo.AdditionalMarkCars : Array(tech.length).fill('')}>
                 {(fields, { add, remove }) => (
                   <Space.Compact block>
                     {fields.map((field, i) => (
@@ -377,12 +335,9 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
           </Card.Grid>
         </Card>
 
-        <Form.List
-          name='DATA'
-          initialValue={Array(DataCalculated.CountMonth).fill('')}>
+        <Form.List name='DATA' initialValue={Array(DataCalculated.CountMonth).fill('')}>
           {(fields, { add, remove }) => (
-            <div
-              style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
+            <div style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
               {fields.map((field, i) => (
                 <Card
                   key={field.key}
@@ -396,17 +351,11 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                         justifyContent: 'start',
                         width: '100%',
                       }}>
-                      <Typography.Text
-                        strong
-                        style={{ textTransform: 'capitalize' }}>
+                      <Typography.Text strong style={{ textTransform: 'capitalize' }}>
                         {monthNames[i] + ', '}
                       </Typography.Text>
                       <Form.Item
-                        initialValue={
-                          DataMonthInfo.DATA[field.key]?.TP
-                            ? DataMonthInfo.DATA[field.key].TP
-                            : ''
-                        }
+                        initialValue={DataMonthInfo.DATA[field.key]?.TP ? DataMonthInfo.DATA[field.key].TP : ''}
                         labelCol={{ flex: '0 0 14%' }}
                         wrapperCol={{ flex: '0 0 60%' }}
                         label='число рабочих дней'
@@ -427,23 +376,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                     </div>
                   }
                   extra={
-                    fields.indexOf(field) === fields.length - 1 &&
-                    fields.length > 1 ? (
+                    fields.indexOf(field) === fields.length - 1 && fields.length > 1 ? (
                       <Popconfirm
-                        title={
-                          <Typography.Title level={5}>
-                            Вы действительно хотите удалить месяц? Данные по
-                            нему также удалятся
-                          </Typography.Title>
-                        }
+                        title={<Typography.Title level={5}>Вы действительно хотите удалить месяц? Данные по нему также удалятся</Typography.Title>}
                         okText='Да'
                         cancelText='Отмена'
                         placement='left'
-                        icon={
-                          <QuestionCircleOutlined
-                            style={{ color: 'red', fontSize: '20px' }}
-                          />
-                        }
+                        icon={<QuestionCircleOutlined style={{ color: 'red', fontSize: '20px' }} />}
                         okButtonProps={{ danger: true, size: 'large' }}
                         cancelButtonProps={{ size: 'large' }}
                         onConfirm={() => {
@@ -479,12 +418,8 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                     <Form.Item label='Число машин' style={{ marginBottom: 0 }}>
                       <Form.List
                         name={[field.name, 'MainCountCars']}
-                        initialValue={
-                          DataMonthInfo.DATA[field.key]
-                            ? DataMonthInfo.DATA[field.key].MainCountCars
-                            : Array(tech.length).fill(null)
-                        }>
-                        {(subfields, subOps) => (
+                        initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainCountCars : Array(tech.length).fill(null)}>
+                        {(subfields) => (
                           <Space.Compact block>
                             {subfields.map((subfield) => (
                               <Form.Item
@@ -501,10 +436,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                                     message: '',
                                   },
                                 ]}>
-                                <InputNumber
-                                  style={{ width: '100%' }}
-                                  placeholder={`${tech[subfield.key]}`}
-                                />
+                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
                               </Form.Item>
                             ))}
                           </Space.Compact>
@@ -524,9 +456,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                       <Form.List
                         name={[field.name, 'AdditionalCountCars']}
                         initialValue={
-                          DataMonthInfo.DATA[field.key]
-                            ? DataMonthInfo.DATA[field.key].AdditionalCountCars
-                            : Array(tech.length).fill(null)
+                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalCountCars : Array(tech.length).fill(null)
                         }>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
@@ -545,10 +475,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                                     message: '',
                                   },
                                 ]}>
-                                <InputNumber
-                                  style={{ width: '100%' }}
-                                  placeholder={`${tech[subfield.key]}`}
-                                />
+                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
                               </Form.Item>
                             ))}
                           </Space.Compact>
@@ -567,11 +494,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                     <Form.Item label='Число смен' style={{ marginBottom: 0 }}>
                       <Form.List
                         name={[field.name, 'MainCountShift']}
-                        initialValue={
-                          DataMonthInfo.DATA[field.key]
-                            ? DataMonthInfo.DATA[field.key].MainCountShift
-                            : Array(tech.length).fill(null)
-                        }>
+                        initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainCountShift : Array(tech.length).fill(null)}>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
                             {subfields.map((subfield) => (
@@ -589,10 +512,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                                     message: '',
                                   },
                                 ]}>
-                                <InputNumber
-                                  style={{ width: '100%' }}
-                                  placeholder={`${tech[subfield.key]}`}
-                                />
+                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
                               </Form.Item>
                             ))}
                           </Space.Compact>
@@ -612,9 +532,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                       <Form.List
                         name={[field.name, 'AdditionalCountShift']}
                         initialValue={
-                          DataMonthInfo.DATA[field.key]
-                            ? DataMonthInfo.DATA[field.key].AdditionalCountShift
-                            : Array(tech.length).fill(null)
+                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalCountShift : Array(tech.length).fill(null)
                         }>
                         {(subfields, subOps) => (
                           <Space.Compact block>
@@ -633,10 +551,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                                     message: '',
                                   },
                                 ]}>
-                                <InputNumber
-                                  style={{ width: '100%' }}
-                                  placeholder={`${tech[subfield.key]}`}
-                                />
+                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
                               </Form.Item>
                             ))}
                           </Space.Compact>
@@ -652,15 +567,11 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                       padding: '20px 5px',
                       boxShadow: 'none',
                     }}>
-                    <Form.Item
-                      label='Сменная выработка'
-                      style={{ marginBottom: 0 }}>
+                    <Form.Item label='Сменная выработка' style={{ marginBottom: 0 }}>
                       <Form.List
                         name={[field.name, 'MainShiftProduction']}
                         initialValue={
-                          DataMonthInfo.DATA[field.key]
-                            ? DataMonthInfo.DATA[field.key].MainShiftProduction
-                            : Array(tech.length).fill(null)
+                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainShiftProduction : Array(tech.length).fill(null)
                         }>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
@@ -676,10 +587,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                                     message: '',
                                   },
                                 ]}>
-                                <InputNumber
-                                  style={{ width: '100%' }}
-                                  placeholder={`${tech[subfield.key]}`}
-                                />
+                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
                               </Form.Item>
                             ))}
                           </Space.Compact>
@@ -695,16 +603,11 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                       padding: '20px 5px',
                       boxShadow: 'none',
                     }}>
-                    <Form.Item
-                      label='Сменная выработка'
-                      style={{ marginBottom: 0 }}>
+                    <Form.Item label='Сменная выработка' style={{ marginBottom: 0 }}>
                       <Form.List
                         name={[field.name, 'AdditionalShiftProduction']}
                         initialValue={
-                          DataMonthInfo.DATA[field.key]
-                            ? DataMonthInfo.DATA[field.key]
-                                .AdditionalShiftProduction
-                            : Array(tech.length).fill(null)
+                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalShiftProduction : Array(tech.length).fill(null)
                         }>
                         {(subfields, subOps) => (
                           <Space.Compact block style={flexCenter}>
@@ -720,10 +623,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
                                     message: '',
                                   },
                                 ]}>
-                                <InputNumber
-                                  style={{ width: '100%' }}
-                                  placeholder={`${tech[subfield.key]}`}
-                                />
+                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
                               </Form.Item>
                             ))}
                           </Space.Compact>
@@ -751,13 +651,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({
           )}
         </Form.List>
 
-        {/* <Form.Item noStyle shouldUpdate>
+        <Form.Item noStyle shouldUpdate>
           {() => (
             <Typography>
               <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
             </Typography>
           )}
-        </Form.Item> */}
+        </Form.Item>
       </Form>
     </div>
   );

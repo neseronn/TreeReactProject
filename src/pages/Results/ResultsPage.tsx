@@ -25,7 +25,7 @@ const ResultsPage = () => {
       <Empty
         image='https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
         imageStyle={{ height: 400 }}
-        description={<span>Рассчёты не обнаружены</span>}>
+        description={<span>Расчёты не обнаружены</span>}>
         <Button type='primary' onClick={() => navigate('/')}>
           Ввести исходные данные
         </Button>
@@ -85,11 +85,16 @@ const ResultsPage = () => {
               ))} */}
             </Row>
             <Row>
-              <Col span={2} style={{display: 'flex', alignItems: 'space-evenly', flexDirection: 'column', height: '100%'}}>
+              <Col
+                span={2}
+                style={{
+                  display: 'flex',
+                  alignItems: 'space-evenly',
+                  flexDirection: 'column',
+                  height: '100%',
+                }}>
                 {result.common_graphs.all_pairs.map((pair) => (
-                  <Title
-                    style={{  }}
-                    level={4}>
+                  <Title style={{}} level={4}>
                     {pair}
                   </Title>
                 ))}
@@ -125,10 +130,6 @@ const ResultsPage = () => {
               }
               showIcon
             />
-
-            {/* <Typography>
-        <pre>{JSON.stringify(result, null, 2)}</pre>
-      </Typography> */}
           </div>
         </div>
       </>
