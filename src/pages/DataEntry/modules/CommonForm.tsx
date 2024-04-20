@@ -172,7 +172,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
 
       <Form.Item
         label='Предприятие'
-        name='CuttingArea'
+        name='Company'
         rules={[
           {
             required: true,
@@ -180,7 +180,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
           },
         ]}>
         <Input
-          value={DataCalculated?.CuttingArea}
+          value={DataCalculated?.Company}
           style={{
             width: '100%',
           }}
@@ -189,7 +189,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
 
       <Form.Item
         label='Лесосека, номер квартала'
-        name='Company'
+        name='CuttingArea'
         rules={[
           {
             required: true,
@@ -197,7 +197,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
           },
         ]}>
         <Input
-          value={DataCalculated?.Company}
+          value={DataCalculated?.CuttingArea}
           style={{
             width: '100%',
           }}

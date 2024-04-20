@@ -1,0 +1,39 @@
+.top {
+  display: flex;
+  justify-content: space-between;
+
+  &_Company,
+  &_CuttingArea {
+    display: flex;
+    flex-direction: column;
+    span {
+      font-size: 16px !important;
+      letter-spacing: 1.5px;
+    }
+
+    &_label {
+      opacity: 0.8;
+    }
+
+    &_value {
+      font-weight: 700;
+    }
+  }
+
+  &_CuttingArea {
+    text-align: right;
+  }
+}
+
+.pairColumn {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &_block {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+}

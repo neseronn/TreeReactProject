@@ -130,7 +130,7 @@ const CommonPairGraph = ({ data }: CommonPairGraphProps) => {
   };
 
   return (
-    <div style={{ minWidth: '32em' }}>
+    <div style={{ minWidth: '32em'}}>
       <Line
         height={300}
         {...config}

@@ -41,7 +41,7 @@ const MonthResultDisplay = ({
   graphWithout,
   monthName,
 }: MonthResultDisplayProps) => {
-  const { N, TotalStock, AvgStock, ZoneLength, ShiftsNumber, replaceableMachinePerfomance } = useTypedSelector(
+  const { N, TotalStock, AvgStock, ZoneLength, ShiftsNumber, replaceableMachinePerfomance, markCar } = useTypedSelector(
     (store) => store.inputData.data.DataCalculated
   );
   const { MainMarkCars, AdditionalMarkCars } = useTypedSelector((store) => store.inputData.data.DataMonthInfo);
@@ -282,10 +282,10 @@ const MonthResultDisplay = ({
             label: 'Объём производства',
             children: (
               <>
-                <DescriptionItem title='Объём производства основных машин' content={productionVolume.Qo} unit='м³' />
-                <DescriptionItem title='Объём производства дополнительных машин' content={productionVolume.Qd} unit='м³' />
-                <DescriptionItem title='Итого объём производства' content={productionVolume.Pm} unit='м³' />
-                <DescriptionItem title='Ежедневная потребность машин на вывозке' content={productionVolume.Nm} unit='м³' />
+                <DescriptionItem title='Объём производства основных машин' content={productionVolume.Qo} unit='м³ на шт.' />
+                <DescriptionItem title='Объём производства дополнительных машин' content={productionVolume.Qd} unit='м³ на шт.' />
+                <DescriptionItem title='Итого объём производства' content={productionVolume.Pm} unit='м³ на шт.' />
+                <DescriptionItem title={`Ежедневная потребность ${markCar} на вывозке`} content={productionVolume.Nm} unit='шт.' />
               </>
             ),
           },

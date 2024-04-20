@@ -5,13 +5,14 @@ import { calcMonthNames } from '../../common';
 import { useNavigate } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import CommonPairGraph from './modules/CommonPairGraph';
+import style from './ResultPage.module.scss';
 
 const ResultsPage = () => {
   const navigate = useNavigate();
   const { result, isCalculated } = useTypedSelector((store) => store.resultData);
 
   const { DATA } = useTypedSelector((store) => store.inputData.data.DataMonthInfo);
-  const { FirstMonth, CountMonth } = useTypedSelector((store) => store.inputData.data.DataCalculated);
+  const { FirstMonth, CountMonth, Company, CuttingArea } = useTypedSelector((store) => store.inputData.data.DataCalculated);
   const monthNames = calcMonthNames(FirstMonth, CountMonth);
 
   if (!isCalculated) {
@@ -54,8 +55,19 @@ const ResultsPage = () => {
               <span style={{ color: 'rgba(0, 0, 0, 45%)' }}>времени работы дополнительных машин на смежных операциях</span>
             </Typography.Title>
 
-            {/* Для каждого месяца выводим данные по нему  */}
-            {result.data_with.res_for_months.map((_, index) => (
+            <div className={style.top}>
+              <div className={style.top_Company}>
+                <Typography.Text className={style.top_Company_label}>Предприятие</Typography.Text>
+                <Typography.Text className={style.top_Company_value}>{Company}</Typography.Text>
+              </div>
+              <div className={style.top_CuttingArea}>
+                <Typography.Text className={style.top_CuttingArea_label}>Лесосека, номер квартала</Typography.Text>
+                <Typography.Text className={style.top_CuttingArea_value}>{CuttingArea}</Typography.Text>
+              </div>
+            </div>
+
+            {/* Для каждого месяца выводим данные по нему */}
+            {result.data_with.res_for_months.map((_: any, index) => (
               <MonthResultDisplay
                 key={'MonthResDisp' + index}
                 monthDataWith={result.data_with.res_for_months[index].about_additional_work_with}
@@ -78,18 +90,13 @@ const ResultsPage = () => {
               ))} */}
             </Row>
             <Row>
-              <Col
-                span={2}
-                style={{
-                  display: 'flex',
-                  alignItems: 'space-evenly',
-                  flexDirection: 'column',
-                  height: '100%',
-                }}>
+              <Col span={2} className={style.pairColumn}>
                 {result.data_with.common_graphs.all_pairs.map((pair) => (
-                  <Title key={`Titlepair${pair}`} style={{}} level={4}>
-                    {pair}
-                  </Title>
+                  <div key={`TitlePair${pair}`} className={style.pairColumn_block}>
+                    <Title level={4}>
+                      {pair}
+                    </Title>
+                  </div>
                 ))}
               </Col>
               <Col span={11}>
