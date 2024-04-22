@@ -7,6 +7,7 @@ import { deleteSaveById, getSaves } from '../store/asyncActions.ts/history';
 import { getSaveById } from '../store/asyncActions.ts/inputData';
 import SaveItem from './SaveItem';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { setDeleteError, setDeleteSuccess } from '../store/historySlice';
 
 interface HistoryDrawerProps {
@@ -16,6 +17,8 @@ interface HistoryDrawerProps {
 
 const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { isLoading, isSuccess, saves } = useTypedSelector(
     (store) => store.historyData
   );
@@ -41,7 +44,12 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
   }, [open]);
 
   useEffect(() => {
-    onClose();
+    if (!!isSaveSuccess) {
+      if (location.pathname !== '/') {
+        navigate('/');
+      }
+      onClose();
+    }
   }, [isSaveSuccess]);
 
   useEffect(() => {
