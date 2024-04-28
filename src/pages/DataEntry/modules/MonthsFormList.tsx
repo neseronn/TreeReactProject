@@ -83,7 +83,9 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
     if (tech.length === 0) {
       setTech(techSystem[DataCalculated.N].split('+'));
     } else {
-      dispatch(changeDataMonthInfo(values));
+      if (!isSuccess) {
+        dispatch(changeDataMonthInfo(values));
+      }
     }
     // Ставим предыдущую длину
     setSome(tech.length);

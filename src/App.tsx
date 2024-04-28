@@ -14,7 +14,7 @@ import { useTypedSelector } from './store/hooks';
 import HistoryDrawer from './components/HistoryDrawer';
 import Alert from 'antd/es/alert/Alert';
 import SaveModal from './components/SaveModal';
-import { setSaveSuccess } from './store/inputSlice';
+import { setNewSaveDefault, setSaveSuccess } from './store/inputSlice';
 import { AppDispatch } from './store/store';
 import { useDispatch } from 'react-redux';
 
@@ -198,6 +198,7 @@ function App() {
             type='primary'
             icon={<SaveFilled />}
             onClick={() => {
+              dispatch(setNewSaveDefault());
               setOpenModal(true);
             }}>
             Сохранить расчёт
@@ -265,6 +266,7 @@ function App() {
                 maxWidth: 'max-content',
                 margin: '0 auto 20px',
                 display: 'flex',
+                position: 'relative',
                 justifyContent: 'center',
                 columnGap: 20,
                 transition: 'width 0.5s ease-in-out',

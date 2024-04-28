@@ -216,6 +216,10 @@ export const inputSlice = createSlice({
     setSaveSuccess: (state, { payload }: PayloadAction<boolean>) => {
       state.newSave.isLoading = payload;
     },
+
+    setNewSaveDefault: (state) => {
+      state.newSave = {} as NewSave;
+    },
   },
 
   extraReducers(builder) {
@@ -282,6 +286,7 @@ export const {
   setIsChanged,
   setDataAboutRecord,
   setSaveSuccess,
+  setNewSaveDefault,
 } = inputSlice.actions;
 
 export default inputSlice.reducer;
