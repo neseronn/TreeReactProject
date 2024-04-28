@@ -16,6 +16,7 @@ interface MonthResultDisplayProps {
   graphWith: GraphDataMonth;
   graphWithout: GraphDataMonth;
   monthName: string;
+  maxМolumeStocks: number;
 }
 
 interface DescriptionItemProps {
@@ -40,40 +41,32 @@ const MonthResultDisplay = ({
   graphWith,
   graphWithout,
   monthName,
+  maxМolumeStocks,
 }: MonthResultDisplayProps) => {
   const { N, TotalStock, AvgStock, ZoneLength, ShiftsNumber, replaceableMachinePerfomance, markCar } = useTypedSelector(
     (store) => store.inputData.data.DataCalculated
   );
   const { MainMarkCars, AdditionalMarkCars } = useTypedSelector((store) => store.inputData.data.DataMonthInfo);
   const { id, TP, ...monthInput } = initialData;
+
   const carsArr = techSystem[N].split('+');
-
-  // props
-  const props = [
-    'MainMarkCars',
-    'MainCountCars',
-    'MainCountShift',
-    'MainShiftProduction',
-    'AdditionalMarkCars',
-    'AdditionalCountCars',
-    'AdditionalCountShift',
-    'AdditionalShiftProduction',
-  ];
   // values
-  let arr: (number | string)[][] = Object.values(monthInput);
-  arr.splice(0, 0, MainMarkCars);
-  arr.splice(4, 0, AdditionalMarkCars);
-
   const rows: RowTable[] = [];
-  carsArr.forEach((car, index) => {
-    let obj: any = { car: car };
-    props.forEach((prop, i) => {
-      obj[prop] = arr[i][index];
-    });
-    rows.push(obj);
-  });
-
-  console.log(rows);
+  for (let i = 0; i < carsArr.length; i++) {
+    const row = {
+      key: i,
+      car: carsArr[i],
+      MainMarkCars: MainMarkCars[i],
+      MainCountCars: monthInput!.MainCountCars[i],
+      MainCountShift: monthInput.MainCountShift[i],
+      MainShiftProduction: monthInput.MainShiftProduction[i],
+      AdditionalMarkCars: AdditionalMarkCars[i],
+      AdditionalCountCars: monthInput.AdditionalCountCars[i],
+      AdditionalCountShift: monthInput.AdditionalCountShift[i],
+      AdditionalShiftProduction: monthInput.AdditionalShiftProduction[i],
+    };
+    rows.push(row);
+  }
 
   const columns: ColumnsType<RowTable> = [
     {
@@ -244,7 +237,7 @@ const MonthResultDisplay = ({
           padding: '10px 0',
         }}>
         {graphWith.map((graph, index) => (
-          <MonthPairGraph key={'graph' + graph.pair + index} pair={graph.pair} data={graph.data} />
+          <MonthPairGraph key={'graph' + graph.pair + index} pair={graph.pair} data={graph.data} maxМolumeStocks={maxМolumeStocks} />
         ))}
       </div>
 
@@ -268,7 +261,7 @@ const MonthResultDisplay = ({
           padding: '10px 0',
         }}>
         {graphWithout.map((graph, index) => (
-          <MonthPairGraph key={'graph' + graph.pair + index} pair={graph.pair} data={graph.data} />
+          <MonthPairGraph key={'graph' + graph.pair + index} pair={graph.pair} data={graph.data} maxМolumeStocks={maxМolumeStocks} />
         ))}
       </div>
 

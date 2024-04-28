@@ -1,12 +1,9 @@
 import { Line } from '@ant-design/plots';
 import React from 'react';
-import {
-  GraphPairDataMonth,
-  GraphPointMonth,
-} from '../../../types/result-types';
+import { GraphPairDataMonth, GraphPointMonth } from '../../../types/result-types';
 import Title from 'antd/es/typography/Title';
 
-const MonthPairGraph = ({ pair, data }: GraphPairDataMonth) => {
+const MonthPairGraph = ({ pair, data, maxМolumeStocks }: GraphPairDataMonth) => {
   const config = {
     data,
     xField: 'Tp',
@@ -55,7 +52,7 @@ const MonthPairGraph = ({ pair, data }: GraphPairDataMonth) => {
       },
     },
     yAxis: {
-      max: 1000,
+      max: maxМolumeStocks,
       label: {
         autoRotate: false,
         style: {
@@ -111,8 +108,8 @@ const MonthPairGraph = ({ pair, data }: GraphPairDataMonth) => {
   };
 
   return (
-    <div style={{minWidth: '32em'}}>
-      <Title style={{textAlign: 'center'}} level={4}>
+    <div style={{ minWidth: '32em' }}>
+      <Title style={{ textAlign: 'center' }} level={4}>
         {pair}
       </Title>
       <Line

@@ -49,6 +49,7 @@ export interface GraphPointMonth {
 export interface GraphPairDataMonth {
   pair: string;
   data: GraphPointMonth[];
+  maxМolumeStocks: number;
 }
 // Массив данных для графика для одного месяца по всем парам
 export type GraphDataMonth = GraphPairDataMonth[];
@@ -98,17 +99,20 @@ export type ResultData = {
     graph_with: GraphDataMonth[];
     graph_without: GraphDataMonth[];
   };
+  // Максимальное значение volume_stocks
+  max_volume_stocks: number;
 };
 
 // Для вывода в таблицу
 export interface RowTable {
+  key: number,
   car: string;
   MainMarkCars: string;
-  MainCountCars: number;
-  MainCountShift: number;
-  MainShiftProduction: number;
+  MainCountCars: number | "";
+  MainCountShift: number | "";
+  MainShiftProduction: number | "";
   AdditionalMarkCars: string;
-  AdditionalCountCars: number;
-  AdditionalCountShift: number;
-  AdditionalShiftProduction: number;
+  AdditionalCountCars: number | "";
+  AdditionalCountShift: number | "";
+  AdditionalShiftProduction: number | "";
 }

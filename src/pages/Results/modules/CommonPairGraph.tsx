@@ -1,12 +1,12 @@
 import { Line } from '@ant-design/plots';
-import React from 'react';
 import { GraphPointCommon, PairGraphPoints } from '../../../types/result-types';
 
 interface CommonPairGraphProps {
   data: PairGraphPoints;
+  maxМolumeStocks: number;
 }
 
-const CommonPairGraph = ({ data }: CommonPairGraphProps) => {
+const CommonPairGraph = ({ data, maxМolumeStocks }: CommonPairGraphProps) => {
   const config = {
     data,
     xField: 'daysCount',
@@ -67,7 +67,7 @@ const CommonPairGraph = ({ data }: CommonPairGraphProps) => {
       },
     },
     yAxis: {
-      max: 1000,
+      max: maxМolumeStocks,
       label: {
         autoRotate: false,
         style: {
@@ -130,7 +130,7 @@ const CommonPairGraph = ({ data }: CommonPairGraphProps) => {
   };
 
   return (
-    <div style={{ minWidth: '32em'}}>
+    <div style={{ minWidth: '32em' }}>
       <Line
         height={300}
         {...config}

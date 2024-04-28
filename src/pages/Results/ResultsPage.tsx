@@ -77,6 +77,7 @@ const ResultsPage = () => {
                 graphWithout={result.graphs_for_every_month.graph_without[index]}
                 initialData={DATA[index]}
                 monthName={monthNames[index]}
+                maxМolumeStocks={result.max_volume_stocks}
               />
             ))}
 
@@ -93,20 +94,18 @@ const ResultsPage = () => {
               <Col span={2} className={style.pairColumn}>
                 {result.data_with.common_graphs.all_pairs.map((pair) => (
                   <div key={`TitlePair${pair}`} className={style.pairColumn_block}>
-                    <Title level={4}>
-                      {pair}
-                    </Title>
+                    <Title level={4}>{pair}</Title>
                   </div>
                 ))}
               </Col>
               <Col span={11}>
                 {result.data_with.common_graphs.graph_all_months_with.map((graph, i) => (
-                  <CommonPairGraph key={'s' + i} data={graph} />
+                  <CommonPairGraph key={'s' + i} data={graph} maxМolumeStocks={result.max_volume_stocks} />
                 ))}
               </Col>
               <Col span={11}>
                 {result.data_without.common_graphs.graph_all_months_without.map((graph, i) => (
-                  <CommonPairGraph key={'w' + i} data={graph} />
+                  <CommonPairGraph key={'w' + i} data={graph} maxМolumeStocks={result.max_volume_stocks} />
                 ))}
               </Col>
             </Row>
