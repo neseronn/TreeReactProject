@@ -9,6 +9,7 @@ import SaveItem from './SaveItem';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { setDeleteError, setDeleteSuccess } from '../store/historySlice';
+import { setCalculated } from '../store/resultSlice';
 
 interface HistoryDrawerProps {
   open: boolean;
@@ -43,9 +44,14 @@ const HistoryDrawer = ({ open, onClose }: HistoryDrawerProps) => {
     }
   }, [open]);
 
+  // Отслеживание загрузки выбранного сохранения
   useEffect(() => {
+    // если успешно загрузилось
     if (!!isSaveSuccess) {
+      // ставим isCalculated = false
+      dispatch(setCalculated(false));
       if (location.pathname !== '/') {
+        // перенаправляем на '/', если находились на '/results'
         navigate('/');
       }
       onClose();

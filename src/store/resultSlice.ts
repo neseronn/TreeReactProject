@@ -25,8 +25,9 @@ export const resultSlice = createSlice({
     setSuccess: (state, { payload }: PayloadAction<boolean>) => {
       state.isSuccess = false;
     },
+    // обновление isCalculated
     setCalculated: (state, { payload }: PayloadAction<boolean>) => {
-      state.isCalculated = false;
+      state.isCalculated = payload;
     },
   },
   extraReducers(builder) {
