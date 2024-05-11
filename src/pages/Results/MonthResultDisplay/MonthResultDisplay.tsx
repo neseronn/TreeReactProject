@@ -1,12 +1,12 @@
 import React from 'react';
 import { GraphDataMonth, MonthNumDataWith, MonthNumDataWithout, MonthPairData, Pair, ProductionVolume, RowTable } from '../../../types/result-types';
-import style from '../../../styles/descriptionItem.module.css';
 import { useTypedSelector } from '../../../store/hooks';
 import { Descriptions, Divider, Space, Typography } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import { MonthInputDataWithoutTP } from '../../../types/index-types';
 import { techSystem, calcMonthNames } from '../../../common/index';
-import MonthPairGraph from './MonthPairGraph';
+import MonthPairGraph from '../Charts/MonthPairGraph';
+import DescriptionItem from '../Components/DescriptionItem';
 
 interface MonthResultDisplayProps {
   monthDataWith: Pair[];
@@ -19,20 +19,6 @@ interface MonthResultDisplayProps {
   monthName: string;
   maxМolumeStocks: number;
 }
-
-interface DescriptionItemProps {
-  title: string;
-  content: React.ReactNode;
-  unit?: string;
-}
-
-const DescriptionItem = ({ title, content, unit }: DescriptionItemProps) => (
-  <div className={style.descriptionItemWrapper}>
-    <p className={style.descriptionItemP}>{title}:</p>
-    {content}
-    <span className={style.descriptionItemP}>{unit}</span>
-  </div>
-);
 
 const MonthResultDisplay = ({
   monthDataWith,
@@ -188,7 +174,6 @@ const MonthResultDisplay = ({
         children={
           <Typography.Title
             level={4}
-            // style={{ fontSize: '16px' }}
           >
             <span style={{ textTransform: 'capitalize' }}>{monthName}</span>, дней работы:
             {' ' + TP}

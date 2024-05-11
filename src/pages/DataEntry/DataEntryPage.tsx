@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import CommonForm from './modules/CommonForm';
+import CommonForm from './CommonForm/CommonForm';
+import MonthsFormList from './MonthsFormList/MonthsFormList';
 import { useTypedSelector } from '../../store/hooks';
-import MonthsFormList from './modules/MonthsFormList';
 import { changeDataMonthInfo, setIsVisible } from '../../store/inputSlice';
 import { useNavigate } from 'react-router-dom';
 import { AllMonthInputData, CommonInputData } from '../../types/index-types';

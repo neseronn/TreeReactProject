@@ -1,10 +1,10 @@
 import { useTypedSelector } from '../../store/hooks';
 import { Alert, Button, Col, Empty, Row, Typography } from 'antd';
-import MonthResultDisplay from './modules/MonthResultDisplay';
+import MonthResultDisplay from './components/MonthResultDisplay';
 import { calcMonthNames } from '../../common';
 import { useNavigate } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
-import CommonPairGraph from './modules/CommonPairGraph';
+import CommonPairGraph from './components/CommonPairGraph';
 import style from './ResultPage.module.scss';
 import { useEffect } from 'react';
 import { MonthInputData } from '../../types/index-types';
