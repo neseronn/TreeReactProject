@@ -1,12 +1,11 @@
 import { useTypedSelector } from '../../store/hooks';
 import { Alert, Button, Col, Empty, Row, Typography } from 'antd';
-import MonthResultDisplay from './components/MonthResultDisplay';
+import MonthResultDisplay from './MonthResultDisplay/MonthResultDisplay';
+import CommonPairGraph from './Charts/CommonPairGraph';
 import { calcMonthNames } from '../../common';
 import { useNavigate } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
-import CommonPairGraph from './components/CommonPairGraph';
 import style from './ResultPage.module.scss';
-import { useEffect } from 'react';
 import { MonthInputData } from '../../types/index-types';
 
 const ResultsPage = () => {

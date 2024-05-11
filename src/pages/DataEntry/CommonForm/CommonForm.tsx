@@ -48,11 +48,11 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
         console.log('allValues', allValues);
         dispatch(setIsChanged(true));
         // setSubmittable(true);
-      } 
+      }
       // Иначе возвращаем ее на неизменную
       else if (isChanged && _.isEqual(allValues, savedValues)) {
-        console.log('isChanged', isChanged)
-        console.log('_.isEqual(allValues, savedValues)', _.isEqual(allValues, savedValues))
+        console.log('isChanged', isChanged);
+        console.log('_.isEqual(allValues, savedValues)', _.isEqual(allValues, savedValues));
         console.log('savedValues', savedValues);
         console.log('allValues', allValues);
         dispatch(setIsChanged(false));
@@ -62,7 +62,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
     }
 
     // if (isVisible && changedValues && !_.isEqual(allValues, savedValues)) {
-    // Если видима вторая форма и есть измененные данные на первой, 
+    // Если видима вторая форма и есть измененные данные на первой,
     // то блокируем вторую форму чтобы применить изменения на первой
     if (isVisible && changedValues && !_.isEqual(allValues, DataCalculated)) {
       console.log('changedValues', changedValues);
@@ -92,7 +92,6 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
       )
         dispatch(setCalculated(false));
     }
-    // console.log('handleFormValuesChange: сохранены в redux');
   };
 
   // Для обновления количества месяцев при добавлении/удалении карточки месяца
@@ -125,8 +124,6 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
   useEffect(() => {
     // Когда даные загружены из истории
     if (isSuccess) {
-      //
-      // form.resetFields();
       setSubmittable(false);
       setSavedValues(DataCalculated);
       setDisabled(true);
@@ -174,7 +171,6 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
         </Title>
 
         <Form.Item
-          className='form_item'
           label='Предприятие'
           name='Company'
           rules={[

@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import style from './MonthsFormList.module.scss';
+import MonthDataItemList from './Components/MonthDataItemList';
+import AffixCard from './Components/AffixCard';
 import { Button, Input, Form, Typography, Card, Space, Affix, InputNumber, Popconfirm, FormInstance } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { useTypedSelector } from '../../../store/hooks';
@@ -9,23 +12,6 @@ import { changeArrLen, changeCommonData, changeDataMonthInfo, clearCarsData } fr
 import { CalculatorOutlined, ClearOutlined, CloseOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { setCalculated } from '../../../store/resultSlice';
 import { techSystem, calcMonthNames } from '../../../common/index';
-import style from './MonthsFormList.module.scss';
-
-const gridStyleTop: React.CSSProperties = {
-  width: '20%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  textAlign: 'center',
-  height: 40,
-  padding: 0,
-};
-
-const flexCenter = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
 
 interface MonthsFormListProps {
   form: FormInstance<AllMonthInputData>;
@@ -57,6 +43,11 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
     form.resetFields();
     console.log('fields reset (bc tech.length changed)');
   }, [tech.length]);
+
+  // Для заполнения второй формы после ввода вручную, а после выбора данных из истории (загрузки из истории), чтобы форма заполнилась
+  useEffect(() => {
+    form.setFieldsValue(DataMonthInfo);
+  }, [isSuccess]);
 
   // При изменении кол-ва месяцев или первого месяца на 1-й форме меняем названия месяцев на 2-й форме
   useEffect(() => {
@@ -132,7 +123,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
   };
 
   return (
-    <div className={disableForm ? style.formContainer + ' ' + style.disabled : style.formContainer}>
+    <div className={disableForm ? style.Container + ' ' + style.disabled : style.Container}>
       <Form
         disabled={disableForm}
         onValuesChange={handleFormValuesChange}
@@ -146,14 +137,9 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
         labelWrap
         autoComplete='off'
         preserve={false}
-        style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <Title level={3} style={{ textAlign: 'center' }}>
+        className={style.Container_form}>
+        <div className={style.Container_form_header}>
+          <Title level={3} className={style.Container_form_header_title}>
             Введите данные по машинам
           </Title>
           <Space>
@@ -166,73 +152,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
           </Space>
         </div>
 
-        <Affix offsetTop={16}>
-          <Card
-            size='small'
-            style={{
-              overflow: 'hidden',
-              backgroundColor: '#fafafa',
-              boxSizing: 'border-box',
-            }}>
-            <div style={{ display: 'flex', width: '100%' }}>
-              <Card.Grid
-                hoverable={false}
-                style={{
-                  ...gridStyleTop,
-                  flexBasis: '50%',
-                }}>
-                <Typography.Text strong>Основные</Typography.Text>
-              </Card.Grid>
-
-              <Card.Grid
-                hoverable={false}
-                style={{
-                  ...gridStyleTop,
-                  flexBasis: '50%',
-                }}>
-                <Typography.Text strong>Дополнительные</Typography.Text>
-              </Card.Grid>
-            </div>
-
-            <Card.Grid
-              hoverable={false}
-              style={{
-                ...gridStyleTop,
-                flexBasis: '10%',
-                flexGrow: 1,
-              }}>
-              <Typography.Text strong>Параметры</Typography.Text>
-            </Card.Grid>
-            {tech.map((car, index) => (
-              <Card.Grid
-                key={index}
-                hoverable={false}
-                style={{
-                  ...gridStyleTop,
-                  flexBasis: '10%',
-                  flexGrow: 1,
-                }}>
-                <Typography.Text strong>{car}</Typography.Text>
-              </Card.Grid>
-            ))}
-
-            <Card.Grid hoverable={false} style={{ ...gridStyleTop, flexBasis: '10%', flexGrow: 1 }}>
-              <Typography.Text strong>Параметры</Typography.Text>
-            </Card.Grid>
-            {tech.map((car, index) => (
-              <Card.Grid
-                key={index}
-                hoverable={false}
-                style={{
-                  ...gridStyleTop,
-                  flexBasis: '10%',
-                  flexGrow: 1,
-                }}>
-                <Typography.Text strong>{car}</Typography.Text>
-              </Card.Grid>
-            ))}
-          </Card>
-        </Affix>
+        <AffixCard tech={tech} />
 
         <Card size='small' style={{ overflow: 'hidden' }}>
           <Card.Grid
@@ -305,28 +225,22 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
         <Form.List name='DATA' initialValue={Array(DataCalculated.CountMonth).fill('')}>
           {(fields, { add, remove }) => (
-            <div style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}>
+            <div className={style.data}>
               {fields.map((field, i) => (
                 <Card
                   key={field.key}
                   size='default'
                   style={{ overflow: 'hidden' }}
                   title={
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'start',
-                        width: '100%',
-                      }}>
+                    <div className={style.cardinner}>
                       <Typography.Text strong style={{ textTransform: 'capitalize' }}>
-                        {monthNames[i] + ', '}
+                        {monthNames[i]}
                       </Typography.Text>
                       <Form.Item
                         initialValue={DataMonthInfo.DATA[field.key]?.TP ? DataMonthInfo.DATA[field.key].TP : ''}
                         labelCol={{ flex: '0 0 14%' }}
                         wrapperCol={{ flex: '0 0 60%' }}
-                        label='число рабочих дней'
+                        label='Число рабочих дней'
                         name={[field.name, 'TP']}
                         style={{
                           flex: 'auto',
@@ -372,34 +286,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
-                    <Form.Item label='Число машин' style={{ marginBottom: 0 }}>
-                      <Form.List
-                        name={[field.name, 'MainCountCars']}
-                        initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainCountCars : Array(tech.length).fill(null)}>
-                        {(subfields) => (
-                          <Space.Compact block>
-                            {subfields.map((subfield) => (
-                              <Form.Item
-                                style={{
-                                  flex: '1 0 20%',
-                                  marginBottom: 0,
-                                }}
-                                preserve={false}
-                                key={subfield.key}
-                                name={subfield.name}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: '',
-                                  },
-                                ]}>
-                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
-                              </Form.Item>
-                            ))}
-                          </Space.Compact>
-                        )}
-                      </Form.List>
-                    </Form.Item>
+                    <MonthDataItemList
+                      label='Число машин'
+                      fieldName='MainCountCars'
+                      field={field}
+                      initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainCountCars : Array(tech.length).fill(null)}
+                      tech={tech}
+                    />
                   </Card.Grid>
 
                   <Card.Grid
@@ -409,36 +302,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
-                    <Form.Item label='Число машин' style={{ marginBottom: 0 }}>
-                      <Form.List
-                        name={[field.name, 'AdditionalCountCars']}
-                        initialValue={
-                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalCountCars : Array(tech.length).fill(null)
-                        }>
-                        {(subfields, subOps) => (
-                          <Space.Compact block style={flexCenter}>
-                            {subfields.map((subfield) => (
-                              <Form.Item
-                                style={{
-                                  flex: '1 0 20%',
-                                  marginBottom: 0,
-                                }}
-                                preserve={false}
-                                key={subfield.key}
-                                name={subfield.name}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: '',
-                                  },
-                                ]}>
-                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
-                              </Form.Item>
-                            ))}
-                          </Space.Compact>
-                        )}
-                      </Form.List>
-                    </Form.Item>
+                    <MonthDataItemList
+                      label='Число машин'
+                      fieldName='AdditionalCountCars'
+                      field={field}
+                      initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalCountCars : Array(tech.length).fill(null)}
+                      tech={tech}
+                    />
                   </Card.Grid>
 
                   <Card.Grid
@@ -448,34 +318,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
-                    <Form.Item label='Число смен' style={{ marginBottom: 0 }}>
-                      <Form.List
-                        name={[field.name, 'MainCountShift']}
-                        initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainCountShift : Array(tech.length).fill(null)}>
-                        {(subfields, subOps) => (
-                          <Space.Compact block style={flexCenter}>
-                            {subfields.map((subfield) => (
-                              <Form.Item
-                                style={{
-                                  flex: '1 0 20%',
-                                  marginBottom: 0,
-                                }}
-                                preserve={false}
-                                key={subfield.key}
-                                name={subfield.name}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: '',
-                                  },
-                                ]}>
-                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
-                              </Form.Item>
-                            ))}
-                          </Space.Compact>
-                        )}
-                      </Form.List>
-                    </Form.Item>
+                    <MonthDataItemList
+                      label='Число смен'
+                      fieldName='MainCountShift'
+                      field={field}
+                      initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainCountShift : Array(tech.length).fill(null)}
+                      tech={tech}
+                    />
                   </Card.Grid>
 
                   <Card.Grid
@@ -485,36 +334,15 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
-                    <Form.Item label='Число смен' style={{ marginBottom: 0 }}>
-                      <Form.List
-                        name={[field.name, 'AdditionalCountShift']}
-                        initialValue={
-                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalCountShift : Array(tech.length).fill(null)
-                        }>
-                        {(subfields, subOps) => (
-                          <Space.Compact block>
-                            {subfields.map((subfield) => (
-                              <Form.Item
-                                style={{
-                                  flex: '1 0 20%',
-                                  marginBottom: 0,
-                                }}
-                                preserve={false}
-                                key={subfield.key}
-                                name={subfield.name}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: '',
-                                  },
-                                ]}>
-                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
-                              </Form.Item>
-                            ))}
-                          </Space.Compact>
-                        )}
-                      </Form.List>
-                    </Form.Item>
+                    <MonthDataItemList
+                      label='Число смен'
+                      fieldName='AdditionalCountShift'
+                      field={field}
+                      initialValue={
+                        DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalCountShift : Array(tech.length).fill(null)
+                      }
+                      tech={tech}
+                    />
                   </Card.Grid>
 
                   <Card.Grid
@@ -524,33 +352,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
-                    <Form.Item label='Сменная выработка' style={{ marginBottom: 0 }}>
-                      <Form.List
-                        name={[field.name, 'MainShiftProduction']}
-                        initialValue={
-                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainShiftProduction : Array(tech.length).fill(null)
-                        }>
-                        {(subfields, subOps) => (
-                          <Space.Compact block style={flexCenter}>
-                            {subfields.map((subfield) => (
-                              <Form.Item
-                                style={{ flex: '1 0 20%', marginBottom: 0 }}
-                                preserve={false}
-                                key={subfield.key}
-                                name={subfield.name}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: '',
-                                  },
-                                ]}>
-                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
-                              </Form.Item>
-                            ))}
-                          </Space.Compact>
-                        )}
-                      </Form.List>
-                    </Form.Item>
+                    <MonthDataItemList
+                      label='Сменная выработка'
+                      fieldName='MainShiftProduction'
+                      field={field}
+                      initialValue={DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].MainShiftProduction : Array(tech.length).fill(null)}
+                      tech={tech}
+                    />
                   </Card.Grid>
 
                   <Card.Grid
@@ -560,33 +368,15 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
-                    <Form.Item label='Сменная выработка' style={{ marginBottom: 0 }}>
-                      <Form.List
-                        name={[field.name, 'AdditionalShiftProduction']}
-                        initialValue={
-                          DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalShiftProduction : Array(tech.length).fill(null)
-                        }>
-                        {(subfields, subOps) => (
-                          <Space.Compact block style={flexCenter}>
-                            {subfields.map((subfield) => (
-                              <Form.Item
-                                style={{ flex: '1 0 20%', marginBottom: 0 }}
-                                preserve={false}
-                                key={subfield.key}
-                                name={subfield.name}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: '',
-                                  },
-                                ]}>
-                                <InputNumber style={{ width: '100%' }} placeholder={`${tech[subfield.key]}`} />
-                              </Form.Item>
-                            ))}
-                          </Space.Compact>
-                        )}
-                      </Form.List>
-                    </Form.Item>
+                    <MonthDataItemList
+                      label='Сменная выработка'
+                      fieldName='AdditionalShiftProduction'
+                      field={field}
+                      initialValue={
+                        DataMonthInfo.DATA[field.key] ? DataMonthInfo.DATA[field.key].AdditionalShiftProduction : Array(tech.length).fill(null)
+                      }
+                      tech={tech}
+                    />
                   </Card.Grid>
                 </Card>
               ))}

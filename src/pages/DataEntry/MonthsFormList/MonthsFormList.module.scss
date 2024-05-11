@@ -1,4 +1,4 @@
-.formContainer {
+.Container {
   // width: 100%;
   min-height: 100px;
   display: flex;
@@ -36,7 +36,54 @@
   }
   @media (min-width: 1400px) {
     max-width: 970px;
-  }  
+  }
+
+  &_form {
+    display: flex;
+    row-gap: 16px;
+    flex-direction: column;
+
+    &_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &_title {
+        text-align: center;
+        white-space: nowrap;
+      }
+    }
+
+    &_card {
+      overflow: hidden;
+      background-color: #fafafa;
+      box-sizing: border-box;
+
+      .gridTop {
+        width: 20%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        height: 40px;
+        padding: 0;
+      }
+    }
+  }
+}
+
+.data {
+  display: flex;
+  row-gap: 16px;
+  flex-direction: column;
+
+  .cardinner {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 16px;
+    width: 100%;
+  }
 }
 
 .card {
