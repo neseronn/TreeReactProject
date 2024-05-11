@@ -153,12 +153,13 @@ export const inputSlice = createSlice({
     },
     changeArrLen: (
       state,
-      { payload }: PayloadAction<{ isIncrease: boolean; len: number }>
+      { payload }: PayloadAction<{ isIncrease: boolean; len: number }> // isIncrease - увеличиваем или нет (уменьшаем)
     ) => {
       // if (state.data.DataMonthInfo.AdditionalMarkCars.length > payload.length) {
       //   state.data.DataMonthInfo.AdditionalMarkCars.pop();
       // }
       let data = state.data.DataMonthInfo;
+      let count = state.data.DataCalculated.CountMonth;
       if (payload.isIncrease) {
         // Увеличить размер массива
         while (payload.len > data.MainMarkCars.length) {
@@ -166,7 +167,7 @@ export const inputSlice = createSlice({
           data.AdditionalMarkCars.push('');
         }
 
-        for (let i = 0; i < data.DATA.length; i++) {
+        for (let i = 0; i < count; i++) {
           try {
             while (payload.len > data?.DATA[i].MainCountCars.length) {
               data.DATA[i].MainCountCars.push('');
@@ -182,7 +183,7 @@ export const inputSlice = createSlice({
         // Уменьшить размер массива
         data.MainMarkCars = data.MainMarkCars.slice(0, payload.len);
         data.AdditionalMarkCars = data.AdditionalMarkCars.slice(0, payload.len);
-        for (let i = 0; i < data.DATA.length; i++) {
+        for (let i = 0; i < count; i++) {
           try {
             data.DATA[i].MainCountCars = data.DATA[i].MainCountCars.slice(
               0,

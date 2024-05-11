@@ -130,7 +130,6 @@ function App() {
 
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-    console.log(url);
     return {
       key: url,
       title: <Link to={url}>{breadcrumbNames[url]}</Link>,
@@ -147,21 +146,6 @@ function App() {
       key: 'Entry',
     },
   ].concat(extraBreadcrumbItems);
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setMenu([
-  //       {
-  //         key: 0,
-  //         label: `Вычисление от ${new Date(
-  //           DataAboutRecord.date
-  //         ).toLocaleString()}`,
-  //       },
-  //     ]);
-  //   }
-  // }, [isSuccess]);
-
-  useEffect(() => {}, [isChanged]);
 
   return (
     <Layout
@@ -273,7 +257,6 @@ function App() {
               }}>
               <Routes>
                 <Route path='/' element={<DataEntry />} />
-                {/* <Route path='/:id' element={<DataEntry />} /> */}
                 <Route path='/results' element={<ResultsPage />} />
               </Routes>
             </div>

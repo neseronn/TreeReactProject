@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import CommonPairGraph from './modules/CommonPairGraph';
 import style from './ResultPage.module.scss';
+import { useEffect } from 'react';
+import { MonthInputData } from '../../types/index-types';
 
 const ResultsPage = () => {
   const navigate = useNavigate();
@@ -15,20 +17,23 @@ const ResultsPage = () => {
   const { FirstMonth, CountMonth, Company, CuttingArea } = useTypedSelector((store) => store.inputData.data.DataCalculated);
   const monthNames = calcMonthNames(FirstMonth, CountMonth);
 
-  if (!isCalculated) {
-    return (
-      <Empty
-        image='https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
-        imageStyle={{ height: 400 }}
-        description={<span>Расчёты не обнаружены</span>}>
-        <Button type='primary' onClick={() => navigate('/')}>
-          Ввести исходные данные
-        </Button>
-      </Empty>
-    );
-  } else
-    return (
-      <>
+  const getData = (data: MonthInputData) => {
+    let { TP, ...restData } = data;
+    return restData;
+  };
+
+  return (
+    <>
+      {!isCalculated ? (
+        <Empty
+          image='https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
+          imageStyle={{ height: 400 }}
+          description={<span>Расчёты не обнаружены</span>}>
+          <Button type='primary' onClick={() => navigate('/')}>
+            Ввести исходные данные
+          </Button>
+        </Empty>
+      ) : (
         <div
           style={{
             display: 'flex',
@@ -67,29 +72,26 @@ const ResultsPage = () => {
             </div>
 
             {/* Для каждого месяца выводим данные по нему */}
-            {result.data_with.res_for_months.map((_: any, index) => (
-              <MonthResultDisplay
-                key={'MonthResDisp' + index}
-                monthDataWith={result.data_with.res_for_months[index].about_additional_work_with}
-                monthDataWithout={result.data_without.res_for_months[index].about_additional_work_without}
-                productionVolume={result.data_with.res_for_months[index].production_volume}
-                graphWith={result.graphs_for_every_month.graph_with[index]}
-                graphWithout={result.graphs_for_every_month.graph_without[index]}
-                initialData={DATA[index]}
-                monthName={monthNames[index]}
-                maxМolumeStocks={result.max_volume_stocks}
-              />
-            ))}
+            {!!result.data_with.res_for_months &&
+              result.data_with.res_for_months.map((elem: any, index) => {
+                if (!!DATA[index])
+                  return (
+                    <MonthResultDisplay
+                      key={'MonthResDisp' + index}
+                      monthDataWith={result.data_with?.res_for_months[index].about_additional_work_with}
+                      monthDataWithout={result.data_without?.res_for_months[index].about_additional_work_without}
+                      productionVolume={result.data_with?.res_for_months[index].production_volume}
+                      graphWith={result.graphs_for_every_month?.graph_with[index]}
+                      graphWithout={result.graphs_for_every_month?.graph_without[index]}
+                      monthInput={getData(DATA[index])}
+                      TP={DATA[index].TP}
+                      monthName={monthNames[index]}
+                      maxМolumeStocks={result.max_volume_stocks}
+                    />
+                  );
+              })}
 
-            <Row>
-              {/* {result.common_graphs.all_pairs.map((pair) => (
-                <Title
-                  // style={{ textAlign: 'center' }}
-                  level={4}>
-                  {pair}
-                </Title>
-              ))} */}
-            </Row>
+            <Row></Row>
             <Row>
               <Col span={2} className={style.pairColumn}>
                 {result.data_with.common_graphs.all_pairs.map((pair) => (
@@ -123,8 +125,9 @@ const ResultsPage = () => {
             />
           </div>
         </div>
-      </>
-    );
+      )}
+    </>
+  );
 };
 
 export default ResultsPage;

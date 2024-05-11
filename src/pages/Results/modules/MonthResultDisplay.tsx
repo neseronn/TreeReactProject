@@ -4,7 +4,7 @@ import style from '../../../styles/descriptionItem.module.css';
 import { useTypedSelector } from '../../../store/hooks';
 import { Descriptions, Divider, Space, Typography } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
-import { MonthInputData } from '../../../types/index-types';
+import { MonthInputDataWithoutTP } from '../../../types/index-types';
 import { techSystem, calcMonthNames } from '../../../common/index';
 import MonthPairGraph from './MonthPairGraph';
 
@@ -12,7 +12,8 @@ interface MonthResultDisplayProps {
   monthDataWith: Pair[];
   monthDataWithout: Pair[];
   productionVolume: ProductionVolume;
-  initialData: MonthInputData;
+  monthInput: MonthInputDataWithoutTP;
+  TP: number;
   graphWith: GraphDataMonth;
   graphWithout: GraphDataMonth;
   monthName: string;
@@ -37,7 +38,8 @@ const MonthResultDisplay = ({
   monthDataWith,
   monthDataWithout,
   productionVolume,
-  initialData,
+  monthInput,
+  TP,
   graphWith,
   graphWithout,
   monthName,
@@ -47,7 +49,6 @@ const MonthResultDisplay = ({
     (store) => store.inputData.data.DataCalculated
   );
   const { MainMarkCars, AdditionalMarkCars } = useTypedSelector((store) => store.inputData.data.DataMonthInfo);
-  const { id, TP, ...monthInput } = initialData;
 
   const carsArr = techSystem[N].split('+');
   // values
@@ -57,7 +58,7 @@ const MonthResultDisplay = ({
       key: i,
       car: carsArr[i],
       MainMarkCars: MainMarkCars[i],
-      MainCountCars: monthInput!.MainCountCars[i],
+      MainCountCars: monthInput.MainCountCars[i],
       MainCountShift: monthInput.MainCountShift[i],
       MainShiftProduction: monthInput.MainShiftProduction[i],
       AdditionalMarkCars: AdditionalMarkCars[i],
@@ -286,6 +287,9 @@ const MonthResultDisplay = ({
       />
     </>
   );
+  // } else {
+  //   return null;
+  // }
 };
 
 export default MonthResultDisplay;

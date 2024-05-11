@@ -44,7 +44,6 @@ export interface ChangedCommonInputData {
 }
 
 export interface MonthInputData {
-  id?: number;
   MainCountCars: Array<number | ''>;
   MainCountShift: Array<number | ''>;
   MainShiftProduction: Array<number | ''>;
@@ -53,6 +52,8 @@ export interface MonthInputData {
   AdditionalShiftProduction: Array<number | ''>;
   TP: number;
 }
+
+export type MonthInputDataWithoutTP = Omit<MonthInputData, 'TP'>;
 
 export interface AllMonthInputData {
   MainMarkCars: string[];

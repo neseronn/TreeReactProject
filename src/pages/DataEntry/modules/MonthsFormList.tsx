@@ -11,16 +11,6 @@ import { setCalculated } from '../../../store/resultSlice';
 import { techSystem, calcMonthNames } from '../../../common/index';
 import style from './MonthsFormList.module.scss';
 
-const gridStyleHead: React.CSSProperties = {
-  width: '20%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  textAlign: 'center',
-  height: 30,
-  padding: 0,
-};
-
 const gridStyleTop: React.CSSProperties = {
   width: '20%',
   display: 'flex',
@@ -60,18 +50,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
   /** Данные 2-й формы */
   const values = Form.useWatch([], form);
-  /** (?) Предыдущая длина тех.системы */
+  /** Предыдущая длина тех.системы */
   const [some, setSome] = useState<number>(0);
 
   useEffect(() => {
     form.resetFields();
     console.log('fields reset (bc tech.length changed)');
   }, [tech.length]);
-
-  // Для удаления лишних пустых форм месяцев
-  useEffect(() => {
-    form.setFieldsValue(DataMonthInfo);
-  }, [isSuccess]);
 
   // При изменении кол-ва месяцев или первого месяца на 1-й форме меняем названия месяцев на 2-й форме
   useEffect(() => {
@@ -95,7 +80,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
     console.log('some = ', some);
     console.log('isVisible', isVisible);
     console.log('tech', tech);
-    // form.resetFields();
   }, [DataCalculated.N]);
 
   useEffect(() => {
@@ -110,6 +94,10 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
     console.log('Выбранная система (в радио ):' + techSystem[DataCalculated.N].split('+').length);
     console.log('some (предыдущая длина массива букв): ' + some);
     console.log('tech.length', tech.length);
+
+    // При загрузке данных если другая тех система и кол-во месяцев меньше
+    // Убираются формы по лишним месяцам путём выреза массива до кол-ва месяцев в исходных данных
+    form.setFieldValue('DATA', values?.DATA.splice(0, DataCalculated.CountMonth));
 
     if (some > techSystem[DataCalculated.N].split('+').length) {
       dispatch(
@@ -135,38 +123,16 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
   // Обработчик изменения значений в форме
   const handleFormValuesChange = (changedValues: ChangedAllMonthInputData, allValues: AllMonthInputData) => {
-    // dispatch(changeDataMonthInfo(allValues));
     isCalculated && dispatch(setCalculated(false));
-
-    // console.log('handleFormValuesChange: сохранены в redux');
   };
 
+  // Функция очистки формы
   const onReset = () => {
     dispatch(clearCarsData());
   };
 
   return (
-    <div
-      // style={{
-      //   width: '100%',
-      //   minHeight: 100,
-      //   // maxWidth: '1200px',
-      //   display: 'flex',
-      //   rowGap: 16,
-      //   flexDirection: 'column',
-      //   overflow: 'hidden',
-      //   padding: 20,
-      //   backgroundColor: 'white',
-      //   margin: '0 auto',
-      //   borderRadius: 6,
-      //   position: 'relative',
-      // }}
-      className={disableForm ? style.formContainer + ' ' + style.disabled : style.formContainer}>
-      {/* {disableForm && (
-        <div className={style.secFormDisabledContent}>
-          
-        </div>
-      )} */}
+    <div className={disableForm ? style.formContainer + ' ' + style.disabled : style.formContainer}>
       <Form
         disabled={disableForm}
         onValuesChange={handleFormValuesChange}
@@ -205,7 +171,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
             size='small'
             style={{
               overflow: 'hidden',
-              // padding: 0,
               backgroundColor: '#fafafa',
               boxSizing: 'border-box',
             }}>
@@ -274,7 +239,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
             hoverable={false}
             style={{
               width: '50%',
-              // padding: '20px 0px',
               boxShadow: 'none',
             }}
             className={style.card_grid}>
@@ -308,7 +272,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
             hoverable={false}
             style={{
               width: '50%',
-              // padding: '20px 0px',
               boxShadow: 'none',
             }}
             className={style.card_grid}>
@@ -397,19 +360,8 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                               CountMonth: DataCalculated.CountMonth - 1,
                             })
                           );
-                        }}
-                        // okButtonProps={{ loading: confirmLoading }}
-                      >
-                        <CloseOutlined
-                        // onClick={() => {
-                        //   remove(field.name);
-                        //   dispatch(
-                        //     changeCommonData({
-                        //       CountMonth: DataCalculated.CountMonth - 1,
-                        //     })
-                        //   );
-                        // }}
-                        />
+                        }}>
+                        <CloseOutlined />
                       </Popconfirm>
                     ) : null
                   }>
@@ -417,7 +369,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     hoverable={false}
                     style={{
                       width: '50%',
-                      // padding: '20px 0',
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
@@ -455,7 +406,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     hoverable={false}
                     style={{
                       width: '50%',
-                      // padding: '20px 0px',
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
@@ -495,7 +445,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     hoverable={false}
                     style={{
                       width: '50%',
-                      // padding: '20px 0px',
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
@@ -533,7 +482,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     hoverable={false}
                     style={{
                       width: '50%',
-                      // padding: '20px 0px',
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
@@ -573,7 +521,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     hoverable={false}
                     style={{
                       width: '50%',
-                      // padding: '20px 5px',
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
@@ -610,7 +557,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     hoverable={false}
                     style={{
                       width: '50%',
-                      // padding: '20px 5px',
                       boxShadow: 'none',
                     }}
                     className={style.card_grid}>
