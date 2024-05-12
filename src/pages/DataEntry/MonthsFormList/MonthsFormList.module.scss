@@ -54,6 +54,26 @@
       }
     }
 
+    .card {
+      &_month {
+        padding: 20px !important;
+      }
+
+      &_grid {
+        padding: 20px !important;
+        width: 50%;
+        box-shadow: none;
+
+        @media (max-width: 1199px) {
+          width: 100%;
+        }
+
+        .formItem:not(:last-child) {
+          border-right: 1px solid #ced6c9; /* Замените #000 на ваш цвет границы */
+        }
+      }
+    }
+
     &_card {
       overflow: hidden;
       background-color: #fafafa;
@@ -84,6 +104,20 @@
     gap: 16px;
     width: 100%;
   }
+
+  .grid {
+    // padding: 20px !important;
+    width: 50%;
+    box-shadow: none;
+
+    @media (max-width: 1199px) {
+      width: 100%;
+    }
+
+    .formItem:not(:last-child) {
+      border-right: 1px solid #ced6c9; /* Замените #000 на ваш цвет границы */
+    }
+  }
 }
 
 .card {
@@ -93,5 +127,15 @@
 
   &_grid {
     padding: 20px !important;
+    width: 50%;
+    box-shadow: none;
+
+    @media (max-width: 1199px) {
+      width: 100%;
+    }
+
+    .formItem:not(:last-child) {
+      border-right: 1px solid #ced6c9; /* Замените #000 на ваш цвет границы */
+    }
   }
 }

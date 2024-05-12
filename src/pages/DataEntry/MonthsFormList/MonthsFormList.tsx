@@ -52,6 +52,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
   // При изменении кол-ва месяцев или первого месяца на 1-й форме меняем названия месяцев на 2-й форме
   useEffect(() => {
     setMonthNames(calcMonthNames(DataCalculated.FirstMonth, DataCalculated.CountMonth));
+    // form.setFieldsValue(DataMonthInfo);
     console.log('DataCalculated.CountMonth: reset fields');
   }, [DataCalculated.CountMonth, DataCalculated.FirstMonth]);
 
@@ -125,10 +126,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
   return (
     <div className={disableForm ? style.Container + ' ' + style.disabled : style.Container}>
       <Form
+        variant='filled'
         disabled={disableForm}
         onValuesChange={handleFormValuesChange}
-        labelCol={tech.length === 4 ? { flex: '1 0 20%' } : tech.length === 3 ? { flex: '1 0 25%' } : { flex: '1 0 calc(100% / 3)' }}
-        wrapperCol={tech.length === 4 ? { flex: '1 0 80%' } : tech.length === 3 ? { flex: '1 0 75%' } : { flex: '1 0 calc(200% / 3)' }}
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 24 }}
+        // labelCol={tech.length === 4 ? { flex: '1 0 20%' } : tech.length === 3 ? { flex: '1 0 25%' } : { flex: '1 0 calc(100% / 3)' }}
+        // wrapperCol={tech.length === 4 ? { flex: '1 0 80%' } : tech.length === 3 ? { flex: '1 0 75%' } : { flex: '1 0 calc(200% / 3)' }}
         form={form}
         name='AllMonthInputData'
         onFinish={onFinish}
@@ -154,7 +158,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
         <AffixCard tech={tech} />
 
-        <Card size='small' style={{ overflow: 'hidden' }}>
+        <Card size='small' style={{ overflow: 'hidden' }} className={style.card}>
           <Card.Grid
             hoverable={false}
             style={{
@@ -190,10 +194,10 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
           <Card.Grid
             hoverable={false}
-            style={{
-              width: '50%',
-              boxShadow: 'none',
-            }}
+            // style={{
+            //   width: '50%',
+            //   boxShadow: 'none',
+            // }}
             className={style.card_grid}>
             <Form.Item label='Марка машины' style={{ marginBottom: '0px' }}>
               <Form.List
@@ -240,7 +244,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                         initialValue={DataMonthInfo.DATA[field.key]?.TP ? DataMonthInfo.DATA[field.key].TP : ''}
                         labelCol={{ flex: '0 0 14%' }}
                         wrapperCol={{ flex: '0 0 60%' }}
-                        label='Число рабочих дней'
+                        noStyle
                         name={[field.name, 'TP']}
                         style={{
                           flex: 'auto',
@@ -253,7 +257,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                             message: '',
                           },
                         ]}>
-                        <InputNumber min={1} max={31} />
+                        <InputNumber addonAfter='рабочих дней' placeholder='число' min={1} max={31} width={20} />
                       </Form.Item>
                     </div>
                   }
@@ -281,11 +285,8 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                   }>
                   <Card.Grid
                     hoverable={false}
-                    style={{
-                      width: '50%',
-                      boxShadow: 'none',
-                    }}
-                    className={style.card_grid}>
+                    className={style.grid}
+                  >
                     <MonthDataItemList
                       label='Число машин'
                       fieldName='MainCountCars'
@@ -297,11 +298,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
                   <Card.Grid
                     hoverable={false}
-                    style={{
-                      width: '50%',
-                      boxShadow: 'none',
-                    }}
-                    className={style.card_grid}>
+                    className={style.grid}>
                     <MonthDataItemList
                       label='Число машин'
                       fieldName='AdditionalCountCars'
@@ -313,11 +310,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
                   <Card.Grid
                     hoverable={false}
-                    style={{
-                      width: '50%',
-                      boxShadow: 'none',
-                    }}
-                    className={style.card_grid}>
+                    className={style.grid}>
                     <MonthDataItemList
                       label='Число смен'
                       fieldName='MainCountShift'
@@ -329,11 +322,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
                   <Card.Grid
                     hoverable={false}
-                    style={{
-                      width: '50%',
-                      boxShadow: 'none',
-                    }}
-                    className={style.card_grid}>
+                    className={style.grid}>
                     <MonthDataItemList
                       label='Число смен'
                       fieldName='AdditionalCountShift'
@@ -347,11 +336,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
                   <Card.Grid
                     hoverable={false}
-                    style={{
-                      width: '50%',
-                      boxShadow: 'none',
-                    }}
-                    className={style.card_grid}>
+                    className={style.grid}>
                     <MonthDataItemList
                       label='Сменная выработка'
                       fieldName='MainShiftProduction'
@@ -363,11 +348,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
                   <Card.Grid
                     hoverable={false}
-                    style={{
-                      width: '50%',
-                      boxShadow: 'none',
-                    }}
-                    className={style.card_grid}>
+                    className={style.grid}>
                     <MonthDataItemList
                       label='Сменная выработка'
                       fieldName='AdditionalShiftProduction'

@@ -159,12 +159,13 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
   return (
     <div className={style.commonForm_container}>
       <Form
+        variant='filled'
         form={form}
         onFinish={onFinish}
         initialValues={DataCalculated} //при возврате с рассчетов чтоб заполнялось
         onValuesChange={handleFormValuesChange}
         autoComplete='off'
-        layout='vertical'
+        layout={isVisible ? 'vertical' : 'horizontal'}
         className={style.form}>
         <Title level={4} style={{ textAlign: 'center' }}>
           Введите общие данные
@@ -180,6 +181,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             },
           ]}>
           <Input
+            placeholder='Предприятие'
             value={DataCalculated?.Company}
             style={{
               width: '100%',
@@ -197,6 +199,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             },
           ]}>
           <Input
+            placeholder='Лесосека, номер квартала'
             value={DataCalculated?.CuttingArea}
             style={{
               width: '100%',
@@ -214,6 +217,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             },
           ]}>
           <InputNumber
+            placeholder='Количество месяцев'
             disabled={disabled}
             min={1}
             max={12}
@@ -234,6 +238,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             },
           ]}>
           <InputNumber
+            placeholder='Первый месяц'
             min={1}
             max={12}
             style={{
@@ -252,6 +257,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             },
           ]}>
           <Input
+            placeholder='Марка'
             style={{
               width: '100%',
             }}
@@ -268,6 +274,8 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             },
           ]}>
           <InputNumber
+            placeholder='Общий запас на лесосеке'
+            min={0}
             addonAfter='кбм'
             style={{
               width: '100%',
@@ -285,6 +293,8 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             },
           ]}>
           <InputNumber
+            placeholder='Средний запас на лесосеке'
+            min={0}
             addonAfter='кбм/га'
             style={{
               width: '100%',
@@ -303,7 +313,9 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
           ]}
           style={{ width: '100%' }}>
           <InputNumber
+            placeholder='Длина зоны вырубки'
             addonAfter='м'
+            min={0}
             style={{
               width: '100%',
             }}
@@ -321,6 +333,8 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
           ]}
           style={{ width: '100%' }}>
           <InputNumber
+            placeholder='Число смен'
+            min={0}
             style={{
               width: '100%',
             }}
@@ -338,7 +352,9 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
           ]}
           style={{ width: '100%' }}>
           <InputNumber
+            placeholder='Сменная производительность машин на вывозке'
             addonAfter='кбм в смену'
+            min={0}
             style={{
               width: '100%',
             }}
