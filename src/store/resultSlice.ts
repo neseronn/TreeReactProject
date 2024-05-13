@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ResultData } from '../types/result-types';
-import { calculateData } from './asyncActions.ts/inputData';
+import { calculateData } from './asyncActions/inputData';
 
 interface ResultState {
   result: ResultData;

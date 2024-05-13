@@ -6,7 +6,7 @@ import { changeDataMonthInfo, setIsVisible } from '../../store/inputSlice';
 import { useNavigate } from 'react-router-dom';
 import { AllMonthInputData, CommonInputData } from '../../types/index-types';
 import { Form, message } from 'antd';
-import { calculateData } from '../../store/asyncActions.ts/inputData';
+import { calculateData } from '../../store/asyncActions/inputData';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { setSuccess } from '../../store/resultSlice';

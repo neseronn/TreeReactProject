@@ -1,5 +1,3 @@
-import { OmitProps } from 'antd/es/transfer/ListBody';
-
 // Объем производства
 export interface ProductionVolume {
   Tp: number;

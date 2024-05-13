@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Save } from '../types/history-types';
-import { deleteSaveById, getSaves } from './asyncActions.ts/history';
+import { deleteSaveById, getSaves } from './asyncActions/history';
 
 interface HistoryState {
   saves: Save[];

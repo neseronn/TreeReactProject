@@ -5,9 +5,9 @@ import {
   CommonInputData,
   InputData,
 } from '../types/index-types';
-import { getSaveById } from './asyncActions.ts/inputData';
+import { getSaveById } from './asyncActions/inputData';
 import { EditSave } from '../types/history-types';
-import { saveCalculated } from './asyncActions.ts/history';
+import { saveCalculated } from './asyncActions/history';
 
 let DataCalculated1 = {
   CountMonth: 1,

@@ -4,7 +4,7 @@ import { Button, Form, Input, Modal, Space } from 'antd';
 import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../store/hooks';
-import { saveCalculated } from '../store/asyncActions.ts/history';
+import { saveCalculated } from '../store/asyncActions/history';
 
 interface SaveModalProps {
   open: boolean;
