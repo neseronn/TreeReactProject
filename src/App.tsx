@@ -1,10 +1,5 @@
-import { Routes, Route, useLocation, Link } from 'react-router-dom';
-import {
-  DownloadOutlined,
-  HistoryOutlined,
-  HomeOutlined,
-  SaveFilled,
-} from '@ant-design/icons';
+import { Routes, Route, useLocation, NavLink } from 'react-router-dom';
+import { DownloadOutlined, HistoryOutlined, HomeOutlined, SaveFilled } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, Button, message, Spin } from 'antd';
 import DataEntry from './pages/DataEntry/DataEntryPage';
 import ResultsPage from './pages/Results/ResultsPage';
@@ -20,30 +15,30 @@ import { useDispatch } from 'react-redux';
 
 const { Header, Content, Footer } = Layout;
 
-const breadcrumbNames: Record<string, string> = {
-  '/results': 'Результаты расчетов',
-};
-
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const pathSnippets = location.pathname.split('/').filter((i) => i);
   const ref = useRef<HTMLDivElement | null>(null);
   const { isChanged } = useTypedSelector((store) => store.inputData);
   const data = useTypedSelector((store) => store.inputData.data);
-  const [menu, setMenu] = useState([{ key: 0, label: 'Ввод данных' }]);
+  const [breadcrumbs, setBreadcrumbs] = useState([
+    {
+      title: <HomeOutlined />,
+      key: 'Home',
+    },
+    {
+      title: (
+        <NavLink to='/' className={({ isActive }) => (isActive ? 'active-class' : '')}>
+          Ввод данных
+        </NavLink>
+      ),
+      key: 'Entry',
+    },
+  ]);
 
-  const {
-    isLoading: isSaveLoading,
-    isSuccess: isSaveSuccess,
-    error: errorSave,
-  } = useTypedSelector((store) => store.inputData);
+  const { isLoading: isSaveLoading, isSuccess: isSaveSuccess, error: errorSave } = useTypedSelector((store) => store.inputData);
 
-  const {
-    isLoading: newSaveLoading,
-    isSuccess: newSaveSuccess,
-    error: newSaveError,
-  } = useTypedSelector((store) => store.inputData.newSave);
+  const { isLoading: newSaveLoading, isSuccess: newSaveSuccess, error: newSaveError } = useTypedSelector((store) => store.inputData.newSave);
 
   const { isCalculated } = useTypedSelector((store) => store.resultData);
 
@@ -124,28 +119,24 @@ function App() {
   };
 
   useEffect(() => {
-    // console.log(extraBreadcrumbItems);
-    // console.log(breadcrumbItems);
-  }, []);
-
-  const extraBreadcrumbItems = pathSnippets.map((_, index) => {
-    const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-    return {
-      key: url,
-      title: <Link to={url}>{breadcrumbNames[url]}</Link>,
-    };
-  });
-
-  const breadcrumbItems = [
-    {
-      title: <HomeOutlined />,
-      key: 'Home',
-    },
-    {
-      title: <Link to='/'>Ввод данных</Link>,
-      key: 'Entry',
-    },
-  ].concat(extraBreadcrumbItems);
+    if (isCalculated) {
+      if (breadcrumbs.length < 3) {
+        setBreadcrumbs([
+          ...breadcrumbs,
+          {
+            key: 'Results',
+            title: (
+              <NavLink to='/results' className={({ isActive }) => (isActive ? 'active-class' : '')}>
+                Результаты расчетов
+              </NavLink>
+            ),
+          },
+        ]);
+      }
+    } else {
+      setBreadcrumbs(breadcrumbs.splice(0, 2));
+    }
+  }, [isCalculated]);
 
   return (
     <Layout
@@ -164,58 +155,49 @@ function App() {
           columnGap: '10px',
           zIndex: 11,
           boxShadow: 'rgba(90, 90, 90, 0.2) 0px -10px 20px 1px',
-        }}>
-        <Menu
-          mode='horizontal'
-          defaultSelectedKeys={['0']}
-          className='menu'
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-          items={menu}
-        />
-
-        {(location.pathname === '/results' && isCalculated) && (
-          <Button
-            type='primary'
-            icon={<SaveFilled />}
-            onClick={() => {
-              dispatch(setNewSaveDefault());
-              setOpenModal(true);
-            }}>
-            Сохранить расчёт
-          </Button>
-        )}
-
-        {(location.pathname === '/results' && isCalculated) && (
-          <Button
-            type='primary'
-            icon={<DownloadOutlined />}
-            onClick={() =>
-              generatePDF(ref, {
-                filename: 'Расчёты от ' + new Date().toLocaleString() + '.pdf',
-              })
-            }>
-            Скачать PDF
-          </Button>
-        )}
-
-        <Button icon={<HistoryOutlined />} onClick={showDrawer}>
-          История
-        </Button>
-      </Header>
-      <Content
-        style={{
-          padding: '12px 30px 0 30px',
+          position: 'fixed',
+          width: '100vw',
+          justifyContent: 'space-between',
         }}>
         <Breadcrumb
           style={{
-            marginBottom: '12px',
+            flexDirection: 'row',
           }}
-          items={breadcrumbItems}
+          items={breadcrumbs}
         />
+        <div style={{ display: 'flex', gap: '16px' }}>
+          {location.pathname === '/results' && isCalculated && (
+            <Button
+              type='primary'
+              icon={<SaveFilled />}
+              onClick={() => {
+                dispatch(setNewSaveDefault());
+                setOpenModal(true);
+              }}>
+              Сохранить расчёт
+            </Button>
+          )}
+          {location.pathname === '/results' && isCalculated && (
+            <Button
+              type='primary'
+              icon={<DownloadOutlined />}
+              onClick={() =>
+                generatePDF(ref, {
+                  filename: 'Расчёты от ' + new Date().toLocaleString() + '.pdf',
+                })
+              }>
+              Скачать PDF
+            </Button>
+          )}
+          <Button icon={<HistoryOutlined />} onClick={showDrawer}>
+            История
+          </Button>
+        </div>
+      </Header>
+      <Content
+        style={{
+          padding: '66px 30px 0 30px',
+        }}>
         <div
           style={{
             display: 'flex',
@@ -224,12 +206,7 @@ function App() {
           }}>
           {data.DataAboutRecord?.date && data.DataAboutRecord?.id && (
             <Alert
-              message={
-                "Исходные данные были взяты из '" +
-                data.DataAboutRecord.name +
-                "' от " +
-                new Date(data.DataAboutRecord.date).toLocaleString()
-              }
+              message={"Исходные данные были взяты из '" + data.DataAboutRecord.name + "' от " + new Date(data.DataAboutRecord.date).toLocaleString()}
               description={data.DataAboutRecord.comment}
               type={isChanged ? 'warning' : 'info'}
               showIcon
@@ -238,9 +215,7 @@ function App() {
 
           {contextHolder}
 
-          {openModal && (
-            <SaveModal open={openModal} handleCancel={closeModal} />
-          )}
+          {openModal && <SaveModal open={openModal} handleCancel={closeModal} />}
 
           <Spin size='large' tip='Загрузка...' spinning={isSaveLoading}>
             <div
@@ -248,7 +223,7 @@ function App() {
               style={{
                 width: '100%',
                 maxWidth: 'max-content',
-                margin: '0 auto 20px',
+                margin: '0 auto',
                 display: 'flex',
                 position: 'relative',
                 justifyContent: 'center',
@@ -264,14 +239,23 @@ function App() {
         </div>
       </Content>
       <HistoryDrawer open={openHistory} onClose={onClose} />
-      {/* <Footer
+      <Footer
         style={{
+          display: 'flex',
+          alignItems: 'center',
           textAlign: 'center',
+          gap: '16px',
+          justifyContent: 'center',
+          borderColor: '',
           color: '#686868',
           padding: '16px',
         }}>
-        ©2023
-      </Footer> */}
+        ©2024
+        <div>Developed by: </div>
+        <br />
+        <div>Frontend: Avdeenko E.E., </div>
+        <div>Backend: Shitiy A.D.</div>
+      </Footer>
     </Layout>
   );
 }

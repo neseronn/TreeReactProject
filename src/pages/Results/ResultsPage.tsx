@@ -100,11 +100,17 @@ const ResultsPage = () => {
                 ))}
               </Col>
               <Col span={11}>
+                <Title level={4} style={{ textAlign: 'center' }}>
+                  С учетом наложения
+                </Title>
                 {result.data_with.common_graphs.graph_all_months_with.map((graph, i) => (
                   <CommonPairGraph key={'s' + i} data={graph} maxМolumeStocks={result.max_volume_stocks} />
                 ))}
               </Col>
               <Col span={11}>
+                <Title level={4} style={{ textAlign: 'center' }}>
+                  Без учета наложения
+                </Title>
                 {result.data_without.common_graphs.graph_all_months_without.map((graph, i) => (
                   <CommonPairGraph key={'w' + i} data={graph} maxМolumeStocks={result.max_volume_stocks} />
                 ))}

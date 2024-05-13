@@ -142,7 +142,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
           <Title level={3} className={style.Container_form_header_title}>
             Введите данные по машинам
           </Title>
-          <Space>
+          <Space size={'large'}>
             <Button htmlType='reset' onClick={onReset} icon={<ClearOutlined />}>
               Очистить
             </Button>
@@ -221,7 +221,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                   style={{ overflow: 'hidden' }}
                   title={
                     <div className={style.cardinner}>
-                      <Typography.Text strong style={{ textTransform: 'capitalize' }}>
+                      <Typography.Text strong style={{ textTransform: 'capitalize', letterSpacing: '1.3px' }}>
                         {monthNames[i]}
                       </Typography.Text>
                       <Form.Item

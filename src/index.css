@@ -83,3 +83,9 @@ a {
 .menu .ant-menu-item-selected {
   background-color: #f3f3f3;
 }
+
+.active-class {
+  color: black !important;
+  cursor: pointer;
+  pointer-events: none;
+}
