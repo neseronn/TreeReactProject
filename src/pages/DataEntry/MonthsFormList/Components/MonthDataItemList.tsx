@@ -22,9 +22,7 @@ const MonthDataItemList = ({ field, fieldName, label, initialValue, tech }: Form
             {subfields.map((subfield) => (
               <Form.Item
                 style={{
-                  // flex: '1 0 20%',
                   marginBottom: 0,
-                  // textAlign: 'start',
                 }}
                 className={style.formItem}
                 preserve={false}

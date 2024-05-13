@@ -54,6 +54,7 @@
       }
     }
 
+    // для марок машин
     .card {
       &_month {
         padding: 20px !important;
@@ -66,10 +67,6 @@
 
         @media (max-width: 1199px) {
           width: 100%;
-        }
-
-        .formItem:not(:last-child) {
-          border-right: 1px solid #ced6c9; /* Замените #000 на ваш цвет границы */
         }
       }
     }
@@ -100,11 +97,12 @@
   .cardinner {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     gap: 16px;
     width: 100%;
   }
 
+  // грид в карточках по месяцам
   .grid {
     // padding: 20px !important;
     width: 50%;
@@ -112,30 +110,24 @@
 
     @media (max-width: 1199px) {
       width: 100%;
-    }
-
-    .formItem:not(:last-child) {
-      border-right: 1px solid #ced6c9; /* Замените #000 на ваш цвет границы */
-    }
-  }
-}
-
-.card {
-  &_month {
-    padding: 20px !important;
-  }
-
-  &_grid {
-    padding: 20px !important;
-    width: 50%;
-    box-shadow: none;
-
-    @media (max-width: 1199px) {
-      width: 100%;
-    }
-
-    .formItem:not(:last-child) {
-      border-right: 1px solid #ced6c9; /* Замените #000 на ваш цвет границы */
+      &.order0 {
+        order: 0;
+      }
+      &.order1 {
+        order: 1;
+      }
+      &.order2 {
+        order: 2;
+      }
+      &.order3 {
+        order: 3;
+      }
+      &.order4 {
+        order: 4;
+      }
+      &.order5 {
+        order: 5;
+      }
     }
   }
 }

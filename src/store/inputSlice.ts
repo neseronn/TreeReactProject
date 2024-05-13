@@ -6,7 +6,7 @@ import {
   InputData,
 } from '../types/index-types';
 import { getSaveById } from './asyncActions.ts/inputData';
-import { EditSave, Save } from '../types/history-types';
+import { EditSave } from '../types/history-types';
 import { saveCalculated } from './asyncActions.ts/history';
 
 let DataCalculated1 = {
@@ -159,7 +159,6 @@ export const inputSlice = createSlice({
       //   state.data.DataMonthInfo.AdditionalMarkCars.pop();
       // }
       let data = state.data.DataMonthInfo;
-      let count = state.data.DataCalculated.CountMonth;
       if (payload.isIncrease) {
         // Увеличить размер массива
         while (payload.len > data.MainMarkCars.length) {

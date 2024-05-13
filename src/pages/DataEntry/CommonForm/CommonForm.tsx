@@ -23,7 +23,7 @@ interface CommonFormProps {
 
 const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, setDisableForm }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { DataCalculated, DataAboutRecord } = useTypedSelector((store) => store.inputData.data);
+  const { DataCalculated } = useTypedSelector((store) => store.inputData.data);
   const isSuccess = useTypedSelector((store) => store.inputData.isSuccess);
   const isChanged = useTypedSelector((store) => store.inputData.isChanged);
   const isCalculated = useTypedSelector((store) => store.resultData.isCalculated);
@@ -40,7 +40,6 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
   const handleFormValuesChange = (changedValues: ChangedCommonInputData, allValues: CommonInputData) => {
     // Если данные загружены из истории
     if (isSuccess) {
-      // console.log();
       console.log(_.isEqual(allValues, savedValues));
       // Если данные изменились, то меняем плашку вверху на желтую
       if (!_.isEqual(allValues, savedValues)) {
@@ -61,7 +60,6 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
       }
     }
 
-    // if (isVisible && changedValues && !_.isEqual(allValues, savedValues)) {
     // Если видима вторая форма и есть измененные данные на первой,
     // то блокируем вторую форму чтобы применить изменения на первой
     if (isVisible && changedValues && !_.isEqual(allValues, DataCalculated)) {
@@ -70,7 +68,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
       console.log('allValues', allValues);
       setDisableForm(true);
       setSubmittable(true);
-      // СДЕЛАТЬ ТУТ УВЕДОМЛЕНИЕ ЧТО ДАННЫЕ ИЗМЕНЕНЫ, ПОДТВЕРДИТЕ ИХ !!!
+      // Можно добавить уведомление, что данные изменены и нужно их подтвердить
     } else if (isVisible) {
       setDisableForm(false);
       setSubmittable(false);
@@ -136,15 +134,12 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
   }, [submittable]);
 
   const onFinish = (values: CommonInputData) => {
-    // setDisabled(true);
     console.log('onFinish', values);
     submittable && dispatch(changeCommonData(values));
     !isVisible && !!submittable && dispatch(setIsVisible(true));
     setDisableForm(false);
     console.log('onFinish: сохранены в redux');
     setSubmittable(false);
-    // dispatch(addTechSystem(values));
-    // form.resetFields();
     window.scrollTo({
       top: 0,
       behavior: 'smooth', // плавная анимация скролла
@@ -159,7 +154,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
   return (
     <div className={style.commonForm_container}>
       <Form
-        variant='filled'
+        // variant='filled'
         form={form}
         onFinish={onFinish}
         initialValues={DataCalculated} //при возврате с рассчетов чтоб заполнялось
@@ -406,17 +401,14 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
               type='primary'
               disabled={
                 !submittable
-                // || disabled
               }
               htmlType='submit'
               onClick={(e) => {
-                // submittable && dispatch(setIsVisible(true));
                 console.log('clicked');
                 window.scrollTo({
                   top: 0,
                   behavior: 'smooth', // плавная анимация скролла
                 });
-                // console.log(values);
               }}>
               Подтвердить
             </Button>

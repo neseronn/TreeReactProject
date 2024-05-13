@@ -29,7 +29,7 @@ function App() {
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const ref = useRef<HTMLDivElement | null>(null);
-  const { isSuccess, isChanged } = useTypedSelector((store) => store.inputData);
+  const { isChanged } = useTypedSelector((store) => store.inputData);
   const data = useTypedSelector((store) => store.inputData.data);
   const [menu, setMenu] = useState([{ key: 0, label: 'Ввод данных' }]);
 

@@ -15,7 +15,6 @@ const DataEntry: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [commonForm] = Form.useForm<CommonInputData>();
   const [monthsForm] = Form.useForm<AllMonthInputData>();
-  const { data } = useTypedSelector((store) => store.inputData);
   const { isVisible } = useTypedSelector((store) => store.inputData);
   const { isLoading, error, isSuccess, isCalculated } = useTypedSelector(
     (store) => store.resultData

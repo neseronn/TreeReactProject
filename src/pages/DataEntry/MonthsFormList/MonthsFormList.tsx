@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './MonthsFormList.module.scss';
 import MonthDataItemList from './Components/MonthDataItemList';
 import AffixCard from './Components/AffixCard';
-import { Button, Input, Form, Typography, Card, Space, Affix, InputNumber, Popconfirm, FormInstance } from 'antd';
+import { Button, Input, Form, Typography, Card, Space, InputNumber, Popconfirm, FormInstance } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { useTypedSelector } from '../../../store/hooks';
 import { AllMonthInputData, ChangedAllMonthInputData } from '../../../types/index-types';
@@ -26,7 +26,7 @@ interface MonthsFormListProps {
 const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFinish, onFinishFailed, loadBtn, disableForm, setDisableForm }) => {
   const { DataCalculated, DataMonthInfo } = useTypedSelector((store) => store.inputData.data);
   const isSuccess = useTypedSelector((store) => store.inputData.isSuccess);
-  const { isCalculated, isLoading } = useTypedSelector((store) => store.resultData);
+  const { isCalculated } = useTypedSelector((store) => store.resultData);
   const dispatch = useDispatch<AppDispatch>();
 
   // Названия месяцев для карточек
@@ -126,18 +126,14 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
   return (
     <div className={disableForm ? style.Container + ' ' + style.disabled : style.Container}>
       <Form
-        variant='filled'
         disabled={disableForm}
         onValuesChange={handleFormValuesChange}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 24 }}
-        // labelCol={tech.length === 4 ? { flex: '1 0 20%' } : tech.length === 3 ? { flex: '1 0 25%' } : { flex: '1 0 calc(100% / 3)' }}
-        // wrapperCol={tech.length === 4 ? { flex: '1 0 80%' } : tech.length === 3 ? { flex: '1 0 75%' } : { flex: '1 0 calc(200% / 3)' }}
         form={form}
         name='AllMonthInputData'
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        // initialValues={DataMonthInfo}
         labelWrap
         autoComplete='off'
         preserve={false}
@@ -159,13 +155,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
         <AffixCard tech={tech} />
 
         <Card size='small' style={{ overflow: 'hidden' }} className={style.card}>
-          <Card.Grid
-            hoverable={false}
-            style={{
-              width: '50%',
-              boxShadow: 'none',
-            }}
-            className={style.card_grid}>
+          <Card.Grid hoverable={false} className={style.card_grid}>
             <Form.Item label='Марка машины' style={{ marginBottom: '0px' }}>
               <Form.List
                 name='MainMarkCars'
@@ -192,13 +182,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
             </Form.Item>
           </Card.Grid>
 
-          <Card.Grid
-            hoverable={false}
-            // style={{
-            //   width: '50%',
-            //   boxShadow: 'none',
-            // }}
-            className={style.card_grid}>
+          <Card.Grid hoverable={false} className={style.card_grid}>
             <Form.Item label='Марка машины' style={{ marginBottom: '0px' }}>
               <Form.List
                 name='AdditionalMarkCars'
@@ -283,10 +267,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                       </Popconfirm>
                     ) : null
                   }>
-                  <Card.Grid
-                    hoverable={false}
-                    className={style.grid}
-                  >
+                  <Card.Grid hoverable={false} className={`${style.grid} ${style.order0}`}>
                     <MonthDataItemList
                       label='Число машин'
                       fieldName='MainCountCars'
@@ -296,9 +277,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     />
                   </Card.Grid>
 
-                  <Card.Grid
-                    hoverable={false}
-                    className={style.grid}>
+                  <Card.Grid hoverable={false} className={`${style.grid} ${style.order3}`}>
                     <MonthDataItemList
                       label='Число машин'
                       fieldName='AdditionalCountCars'
@@ -308,9 +287,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     />
                   </Card.Grid>
 
-                  <Card.Grid
-                    hoverable={false}
-                    className={style.grid}>
+                  <Card.Grid hoverable={false} className={`${style.grid} ${style.order1}`}>
                     <MonthDataItemList
                       label='Число смен'
                       fieldName='MainCountShift'
@@ -320,9 +297,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     />
                   </Card.Grid>
 
-                  <Card.Grid
-                    hoverable={false}
-                    className={style.grid}>
+                  <Card.Grid hoverable={false} className={`${style.grid} ${style.order4}`}>
                     <MonthDataItemList
                       label='Число смен'
                       fieldName='AdditionalCountShift'
@@ -334,9 +309,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     />
                   </Card.Grid>
 
-                  <Card.Grid
-                    hoverable={false}
-                    className={style.grid}>
+                  <Card.Grid hoverable={false} className={`${style.grid} ${style.order2}`}>
                     <MonthDataItemList
                       label='Сменная выработка'
                       fieldName='MainShiftProduction'
@@ -346,9 +319,7 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                     />
                   </Card.Grid>
 
-                  <Card.Grid
-                    hoverable={false}
-                    className={style.grid}>
+                  <Card.Grid hoverable={false} className={`${style.grid} ${style.order5}`}>
                     <MonthDataItemList
                       label='Сменная выработка'
                       fieldName='AdditionalShiftProduction'
@@ -379,13 +350,13 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
           )}
         </Form.List>
 
-        <Form.Item noStyle shouldUpdate>
+        {/* <Form.Item noStyle shouldUpdate>
           {() => (
             <Typography>
               <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
             </Typography>
           )}
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </div>
   );
