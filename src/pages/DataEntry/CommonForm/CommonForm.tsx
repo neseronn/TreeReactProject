@@ -103,7 +103,7 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
     // disable/undisable кнопки 1-й формы
     form.validateFields({ validateOnly: true }).then(
       () => {
-        !isSuccess && setSubmittable(true);
+        !isSuccess && !isVisible && setSubmittable(true);
         console.log('Всё введено, можно подтверждать');
         // console.log('Данные сохранены в redux');
       },
@@ -399,12 +399,11 @@ const CommonForm: React.FC<CommonFormProps> = ({ form, isVisible, setIsVisible, 
             }}>
             <Button
               type='primary'
-              disabled={
-                !submittable
-              }
+              disabled={!submittable}
               htmlType='submit'
               onClick={(e) => {
                 console.log('clicked');
+                setDisabled(true);
                 window.scrollTo({
                   top: 0,
                   behavior: 'smooth', // плавная анимация скролла

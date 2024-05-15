@@ -89,7 +89,10 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
 
     // При загрузке данных если другая тех система и кол-во месяцев меньше
     // Убираются формы по лишним месяцам путём выреза массива до кол-ва месяцев в исходных данных
-    form.setFieldValue('DATA', values?.DATA.splice(0, DataCalculated.CountMonth));
+    if (form.getFieldValue('DATA').length <= 1) {
+    } else {
+      form.setFieldValue('DATA', form.getFieldValue('DATA').splice(0, DataCalculated.CountMonth));
+    }
 
     if (some > techSystem[DataCalculated.N].split('+').length) {
       dispatch(

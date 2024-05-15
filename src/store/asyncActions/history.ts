@@ -2,11 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { instance } from '../../api';
 import { Save } from '../../types/history-types';
 import { InputData, SaveInputData } from '../../types/index-types';
-import { AxiosResponse } from 'axios';
-
-// interface Error {
-//   errorMessage: string;
-// }
 
 export const getSaves = createAsyncThunk<
   Save[],

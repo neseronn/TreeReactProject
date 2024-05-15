@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  AllMonthInputData,
-  ChangedCommonInputData,
-  CommonInputData,
-  InputData,
-} from '../types/index-types';
+import { AllMonthInputData, ChangedCommonInputData, CommonInputData, InputData } from '../types/index-types';
 import { getSaveById } from './asyncActions/inputData';
 import { EditSave } from '../types/history-types';
 import { saveCalculated } from './asyncActions/history';
@@ -109,10 +104,8 @@ export const inputSlice = createSlice({
       state.newSave = {} as NewSave;
     },
     clearCarsData: (state) => {
-      state.data.DataMonthInfo.MainMarkCars =
-        state.data.DataMonthInfo.MainMarkCars.map(() => '');
-      state.data.DataMonthInfo.AdditionalMarkCars =
-        state.data.DataMonthInfo.AdditionalMarkCars.map(() => '');
+      state.data.DataMonthInfo.MainMarkCars = state.data.DataMonthInfo.MainMarkCars.map(() => '');
+      state.data.DataMonthInfo.AdditionalMarkCars = state.data.DataMonthInfo.AdditionalMarkCars.map(() => '');
       state.data.DataMonthInfo.DATA.forEach((obj) => {
         obj.TP = 0;
         obj.MainCountCars = obj.MainCountCars.map(() => '');
@@ -120,9 +113,7 @@ export const inputSlice = createSlice({
         obj.MainShiftProduction = obj.MainShiftProduction.map(() => '');
         obj.AdditionalCountCars = obj.AdditionalCountCars.map(() => '');
         obj.AdditionalCountShift = obj.AdditionalCountShift.map(() => '');
-        obj.AdditionalShiftProduction = obj.AdditionalShiftProduction.map(
-          () => ''
-        );
+        obj.AdditionalShiftProduction = obj.AdditionalShiftProduction.map(() => '');
       });
       state.isChanged = true;
     },
@@ -130,10 +121,7 @@ export const inputSlice = createSlice({
     setCommonData: (state, { payload }: PayloadAction<CommonInputData>) => {
       state.data.DataCalculated = payload;
     },
-    changeCommonData: (
-      state,
-      { payload }: PayloadAction<ChangedCommonInputData>
-    ) => {
+    changeCommonData: (state, { payload }: PayloadAction<ChangedCommonInputData>) => {
       state.data.DataCalculated = { ...state.data.DataCalculated, ...payload };
     },
     setIsChanged: (state, { payload }: PayloadAction<boolean>) => {
@@ -145,10 +133,7 @@ export const inputSlice = createSlice({
     },
 
     // Данные по машинам (месяцам)
-    changeDataMonthInfo: (
-      state,
-      { payload }: PayloadAction<AllMonthInputData>
-    ) => {
+    changeDataMonthInfo: (state, { payload }: PayloadAction<AllMonthInputData>) => {
       state.data.DataMonthInfo = payload;
     },
     changeArrLen: (
@@ -184,26 +169,12 @@ export const inputSlice = createSlice({
         data.AdditionalMarkCars = data.AdditionalMarkCars.slice(0, payload.len);
         for (let i = 0; i < data.DATA.length; i++) {
           try {
-            data.DATA[i].MainCountCars = data.DATA[i].MainCountCars.slice(
-              0,
-              payload.len
-            );
-            data.DATA[i].MainCountShift = data.DATA[i].MainCountShift.slice(
-              0,
-              payload.len
-            );
-            data.DATA[i].MainShiftProduction = data.DATA[
-              i
-            ].MainShiftProduction.slice(0, payload.len);
-            data.DATA[i].AdditionalCountCars = data.DATA[
-              i
-            ].AdditionalCountCars.slice(0, payload.len);
-            data.DATA[i].AdditionalCountShift = data.DATA[
-              i
-            ].AdditionalCountShift.slice(0, payload.len);
-            data.DATA[i].AdditionalShiftProduction = data.DATA[
-              i
-            ].AdditionalShiftProduction.slice(0, payload.len);
+            data.DATA[i].MainCountCars = data.DATA[i].MainCountCars.slice(0, payload.len);
+            data.DATA[i].MainCountShift = data.DATA[i].MainCountShift.slice(0, payload.len);
+            data.DATA[i].MainShiftProduction = data.DATA[i].MainShiftProduction.slice(0, payload.len);
+            data.DATA[i].AdditionalCountCars = data.DATA[i].AdditionalCountCars.slice(0, payload.len);
+            data.DATA[i].AdditionalCountShift = data.DATA[i].AdditionalCountShift.slice(0, payload.len);
+            data.DATA[i].AdditionalShiftProduction = data.DATA[i].AdditionalShiftProduction.slice(0, payload.len);
           } catch {}
         }
       }
@@ -223,17 +194,14 @@ export const inputSlice = createSlice({
   },
 
   extraReducers(builder) {
-    builder.addCase(
-      getSaveById.fulfilled,
-      (state, { payload }: PayloadAction<InputData>) => {
-        state.data = payload;
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.isVisible = true;
-        state.isChanged = false;
-        state.error = null;
-      }
-    );
+    builder.addCase(getSaveById.fulfilled, (state, { payload }: PayloadAction<InputData>) => {
+      state.data = payload;
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isVisible = true;
+      state.isChanged = false;
+      state.error = null;
+    });
     builder.addCase(getSaveById.pending, (state) => {
       state.isLoading = true;
       state.isSuccess = false;
@@ -249,15 +217,12 @@ export const inputSlice = createSlice({
       }
     });
 
-    builder.addCase(
-      saveCalculated.fulfilled,
-      (state, { payload }: PayloadAction<InputData>) => {
-        state.data = payload;
-        state.newSave.isLoading = false;
-        state.newSave.isSuccess = true;
-        state.newSave.error = null;
-      }
-    );
+    builder.addCase(saveCalculated.fulfilled, (state, { payload }: PayloadAction<InputData>) => {
+      state.data = payload;
+      state.newSave.isLoading = false;
+      state.newSave.isSuccess = true;
+      state.newSave.error = null;
+    });
     builder.addCase(saveCalculated.pending, (state) => {
       state.newSave.isLoading = true;
       state.newSave.isSuccess = false;
