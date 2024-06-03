@@ -75,6 +75,8 @@ export type ResultData = {
     };
     // Освоенный запас
     remaining_stock: number;
+    // Количество дней для освоения запаса
+    remaining_days: number;
     // Числовые данные по месяцам с
     res_for_months: MonthDataWith[];
   };

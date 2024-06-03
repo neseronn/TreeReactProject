@@ -120,9 +120,9 @@ const ResultsPage = () => {
             <Alert
               message={
                 result.data_with.remaining_stock < 0
-                  ? 'Не хватает запаса. Уменьшите срок освоения.'
+                  ? `Не хватает запаса на ${-result.data_with.remaining_stock} кбм. Уменьшите срок освоения на ${-(Math.floor(result.data_with.remaining_days))} дней.`
                   : result.data_with.remaining_stock > 0
-                  ? `Остался неосвоенный запас: ${result.data_with.remaining_stock} кбм.`
+                  ? `Остался неосвоенный запас: ${result.data_with.remaining_stock} кбм. Увеличьте срок освоения на ${Math.ceil(result.data_with.remaining_days)} дней.`
                   : 'Запас освоен полностью.'
               }
               type={result.data_with.remaining_stock < 0 ? 'warning' : result.data_with.remaining_stock > 0 ? 'info' : 'success'}
