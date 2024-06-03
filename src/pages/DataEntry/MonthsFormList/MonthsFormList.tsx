@@ -231,7 +231,6 @@ const MonthsFormList: React.FC<MonthsFormListProps> = ({ form, isVisible, onFini
                         initialValue={DataMonthInfo.DATA[field.key]?.TP ? DataMonthInfo.DATA[field.key].TP : ''}
                         labelCol={{ flex: '0 0 14%' }}
                         wrapperCol={{ flex: '0 0 60%' }}
-                        noStyle
                         name={[field.name, 'TP']}
                         style={{
                           flex: 'auto',
