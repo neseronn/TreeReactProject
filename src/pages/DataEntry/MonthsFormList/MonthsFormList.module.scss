@@ -101,6 +101,16 @@
     width: 50%;
     box-shadow: none;
 
+    &.order0, &.order3 {
+      padding: 20px 20px 8px 20px !important;
+    }
+    &.order1, &.order4 {
+      padding: 8px 20px 8px 20px !important;
+    }
+    &.order2, &.order5 {
+      padding: 8px 20px 20px 20px !important;
+    }
+
     @media (max-width: 1199px) {
       width: 100%;
       &.order0 {
