@@ -208,7 +208,7 @@ function App() {
             <Alert
               message={"Исходные данные были взяты из '" + data.DataAboutRecord.name + "' от " + new Date(data.DataAboutRecord.date).toLocaleString()}
               description={data.DataAboutRecord.comment}
-              type={isChanged ? 'warning' : 'info'}
+              type={'info'}
               showIcon
             />
           )}
@@ -249,6 +249,7 @@ function App() {
           borderColor: '',
           color: '#686868',
           padding: '16px',
+          fontSize: '10px',
         }}>
         ©2024
         <div>Developed by: </div>

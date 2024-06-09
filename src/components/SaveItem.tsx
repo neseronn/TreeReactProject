@@ -4,9 +4,7 @@ import {
   QuestionCircleOutlined,
 } from '@ant-design/icons';
 import { Button, List, Popconfirm, Space, Typography } from 'antd';
-import React, { useState } from 'react';
 import { Save } from '../types/history-types';
-import { useTypedSelector } from '../store/hooks';
 
 interface SaveItemProps {
   item: Save;
@@ -21,9 +19,6 @@ const SaveItem = ({
   currentId,
   handleDelete,
 }: SaveItemProps) => {
-  // const { isLoading: isSaveLoading } = useTypedSelector(
-  //   (store) => store.inputData
-  // );
 
   return (
     <List.Item
@@ -36,13 +31,12 @@ const SaveItem = ({
       extra={[
         <Space key={'Space' + item.id}>
           <Button
-            type='default'
+            type={currentId === item.id ? 'dashed' : 'default'}
             size='large'
             key={'Btn' + item.id}
-            // loading={isSaveLoading}
             // disabled={currentId === item.id && isChanged ?  }
             onClick={() => selectSave(item.id)}>
-            {currentId === item.id ? 'Используется' : 'Получить данные'}
+            {currentId === item.id ? 'Загружено' : 'Получить данные'}
           </Button>
           <Popconfirm
             key={'Popconfirm' + item.id}
@@ -52,7 +46,6 @@ const SaveItem = ({
             placement='left'
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             onConfirm={() => handleDelete(item.id)}
-            // okButtonProps={{ loading: confirmLoading }}
           >
             <Button
               type='default'
